@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link href="css/toolbar.css" rel="stylesheet" type="text/css" />
+    <link href="css/editor.css" rel="stylesheet" type="text/css" />
+    <link href="css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="css/logger.css" rel="stylesheet" type="text/css" />
+
+    <!-- TODO: reimplement layout.js and drop jquery/jquery.ui -->
+    <script type="text/javascript">window.$ = window.jQuery = require('./jquery.min.js');</script>
+    <!-- jquery-ui provides 'resizable' needed by layout.js -->
+    <script src="jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+    <script src="layout.js" type="text/javascript" charset="utf-8"></script>
+
+    <style type="text/css" media="screen">
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="hLayout">
+        <div id="paneMain" style="height: 80%;"></div>
+        <div id="paneLog" style=""></div>
+    </div>
+
+    <script>
+        var Toolbar = require('./toolbar');
+        var Editor = require('./editor');
+        var Logger = require('./logger');
+        var doc = require('./doc');
+        var ipc = require('ipc');
+        var fs = require('fs');
+
+        // toolbar
+        var toolbar = new Toolbar();
+        document.body.insertBefore(toolbar, document.body.firstChild);
+
+        // layout
+        $('#hLayout').layout({
+            type: 'horizontal',
+            resizable: true,
+            helper: 'ui-layout-resize-h',
+            panes: [
+                ['#paneMain', {minHeight: 100}],
+                ['#paneLog']
+            ]
+        });
+
+        // editor
+        var editor = new Editor(); 
+        ipc.on('file-open', function (filename) {
+          fs.readFile(filename, 'utf8', function (err,data) {
+            if (err) {
+              return console.log(err);
+            }
+            editor.setContent(data);
+          });
+        });
+
+        // apidoc div
+        var apiDoc = this.el = document.createElement('div');
+        apiDoc.setAttribute('id', 'apidoc');
+        apiDoc.setAttribute('style', 'display:none;');
+        
+        var innerPaneMain = document.getElementById('paneMain').firstChild;
+        innerPaneMain.appendChild(editor);
+        innerPaneMain.appendChild(apiDoc);
+
+        // docs
+        var docs = doc.init();
+
+        // logger
+        var logger = new Logger();
+        document.getElementById('paneLog').firstChild.appendChild(logger);
+    </script>
+</body>
+</html>

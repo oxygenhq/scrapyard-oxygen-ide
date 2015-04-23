@@ -1,0 +1,70 @@
+.ace_editor {
+    width:100%;
+	height:100%;
+    margin: 0;
+}
+.ace_gutter-cell.ace_breakpoint {
+    border-radius: 20px 0px 0px 20px;
+    background-color:rgba(255,99,99,0.5);
+    box-shadow: 0px 0px 1px 1px red inset;
+}
+.current-line {
+    position:absolute;
+    background:rgba(100,200,100,0.5);
+    z-index:20
+}
+.current-line-bp {
+    position:absolute;
+    background:rgba(255,99,99,0.5);
+    z-index:20
+}
+#apidoc {
+    max-width:480px;
+    word-wrap: break-word;
+    z-index: 10000;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid #abbffe;
+    background-color: #fbfbfb;
+    font-size: 14px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+#apidoc .name {
+    font-weight: bold;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 3px;
+}
+#apidoc .desc {
+    padding-top:15px;
+}
+#apidoc .args {
+    padding-top:20px;
+}
+#apidoc .args .arg-title {
+    padding-bottom:20px;
+    font-weight: bold;
+}
+#apidoc .args .arg-name {
+    background-color: #f9f2f4;
+    border-radius: 4px;
+    color: #c7254e;
+    font-size: 90%;
+    padding: 2px 4px;
+}
+#apidoc .arg-type {
+    color: #aaa;
+    padding-left: 10px;
+}
+#apidoc .args .arg-body {
+    padding-left:40px;
+    padding-top:5px;
+    padding-bottom:8px;
+}
+#apidoc .ret {
+    padding-top:20px;
+}
+#apidoc .ret .ret-title {
+    padding-bottom:15px;
+}
+#apidoc .ret .ret-title span {
+    font-weight: bold;
+}

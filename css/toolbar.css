@@ -1,0 +1,42 @@
+cb-toolbar {
+    background: #e8e8e8;
+    border-top: 1px solid #a0a0a0;
+    border-bottom: 1px solid #a0a0a0;
+    height: 30px;
+    width: 100%;
+    display: block;
+}
+
+.tb {
+    height:22px;
+    width:22px;
+    margin-top:3px;
+    margin-left:5px;
+    border: 1px solid #e8e8e8;
+    float:left;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tb-disabled {
+    -webkit-filter: grayscale(1);
+    pointer-events: none;
+}
+
+.tb.tb-save {
+    background-image: url("../img/tb-save.png");
+}
+
+.tb.tb-start {
+    background-image: url("../img/tb-start.png");
+}
+
+.tb.tb-stop {
+    background-image: url("../img/tb-stop.png");
+}
+
+.tb:hover {
+    border: 1px solid #717171;
+    border-radius: 2px;
+    background-color:#c4c4c4;
+}
