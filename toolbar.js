@@ -82,21 +82,72 @@
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
 
-            // create temp file 
+            // inject boilerplate with the user script
             var script = editor.editor.getValue();
+            var boilerplate = fs.readFileSync(path.resolve(__dirname, 'script-boilerplate.js'))+'';
+            // TODO: should probably optimize this...
+            var boilerplateLines = boilerplate.split('\n');
+            var userScriptOffset;
+            for (var i = 0; i < boilerplateLines.length; i++) {
+                if (boilerplateLines[i].indexOf('%%USER_SCRIPT%%') > -1) {
+                    userScriptOffset = i - 1;
+                    break;
+                }
+            }
+            boilerplate = boilerplate.replace('%%USER_SCRIPT%%', script);
+
+            // and create a tmp file
             var tmpFile = tmp.fileSync();
-            fs.writeFile(tmpFile.name, script, function (err) {
-                logger.add("err", err);
+            fs.writeFile(tmpFile.name, boilerplate, function (err) {
                 if (err) throw err;
-                
             });
 
-            // fork the process. FIXME: debugger not working. see atom-shell PRs for a patch.
+            var dbgPort = 10001;
+
+            // fork new process
             var scriptChild = this.parentElement.scriptChild = fork(
-                path.resolve(__dirname, 'script-boilerplate.js'), 
-                [ tmpFile.name ], 
-                { execArgv: ['--debug-brk=10000'] }   // --debug-brk=11000 to break on first line
+                tmpFile.name, 
+                [ __dirname ],  // setting cwd doesn't work (?) so we pass it as an argument
+                { execArgv: ['--debug-brk=' + dbgPort] }
             ); 
+            
+            // apply the breakpoints and request continue
+            var Ev = require('events').EventEmitter;
+            var Debugger = require('./debugger');
+            var dbg = new Debugger(new Ev());
+
+            dbg.connect(dbgPort).then(function(connection) {
+                for (var bp of editor.breakPoints) {
+                    dbg.request(
+                        'setbreakpoint', 
+                        { type: 'script', target: tmpFile.name, line: userScriptOffset + bp }, 
+                        function(err, response) {
+                            //console.log('dbg setbreakpoint:' + JSON.stringify(response));
+                        }
+                    );
+                }
+                
+                dbg.request('continue', null, function(err, response) {
+                    //console.log('dbg continue:' + JSON.stringify(response));
+                });
+            });
+
+            dbg.on('change', function() {
+                console.log('dbg change');
+            });
+
+            dbg.on('break', function(breakpoint) {
+                //console.log('dbg break:' + JSON.stringify(breakpoint));
+                editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
+            });
+
+            dbg.on('exception', function(exc) {
+                //console.log('dbg exception:' + JSON.stringify(exc));
+            });
+
+            dbg.on('error', function(err) {
+                //console.log('dbg error' + err);
+            });
           
             var self = this;
             scriptChild.on('exit', function () {

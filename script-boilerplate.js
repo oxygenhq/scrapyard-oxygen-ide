@@ -2,24 +2,25 @@
  * Boilerplate code for user scripts. 
  * Provides everything necessary for executing JS scripts.
  */
-var edge = require('electron-edge');
-var fs = require('fs');
+
 var path = require('path');
+var cwd = process.argv[2];
+var edge = require(path.resolve(cwd, 'node_modules/electron-edge'));
+var fs = require('fs');
 
 var multiplexer = edge.func({
-    assemblyFile: path.resolve(__dirname, 'selenium/Selenium.dll'),
+    assemblyFile: path.resolve(cwd, 'selenium/Selenium.dll'),
     typeName: 'CloudBeat.Selenium.JSEngine.Engine',
     methodName: 'Invoke'
 });
 
 multiplexer({module: 'utils', cmd: 'initialize', args: ['chrome', 'http://127.0.0.1:4444/wd/hub'] }, true); 
 
-web = require('./module-web')(execMethod);
-soap = require('./module-soap')(execMethod);
-db = require('./module-db')(execMethod);
-log = require('./module-log');
-assert = require('./module-assert')(execMethod);
-
+web = require(path.resolve(cwd, 'module-web'))(execMethod);
+soap = require(path.resolve(cwd, 'module-soap'))(execMethod);
+db = require(path.resolve(cwd, 'module-db'))(execMethod);
+log = require(path.resolve(cwd, 'module-log'));
+assert = require(path.resolve(cwd, 'module-assert'))(execMethod);
 
 Object.defineProperty(global, '__stack', {
     get: function(){
@@ -51,7 +52,7 @@ function execMethod(module, cmd, args) {
 }
 
 try {
-    eval(fs.readFileSync(process.argv[2])+'');
+%%USER_SCRIPT%%
 } catch (exc) {
     // process.send({ event: 'eval-exception', exc: exc.toString() });
     process.send({ event: 'log-add', level: 'ERROR', msg: JSON.stringify(exc) });

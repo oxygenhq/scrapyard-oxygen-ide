@@ -1,5 +1,9 @@
 /*
  * JavaScript Editor component.
+ *
+ *  NOTE: ext-language-tools.js needs to be patched to support autocomplete on dots '.'
+ *        var ID_REGEX = /[a-zA-Z_0-9\$\-\u00A2-\uFFFF]/; 
+ *        should be var ID_REGEX = /[a-zA-Z_0-9\.\$\-\u00A2-\uFFFF]/
  */ 
 
 (function() {
@@ -32,7 +36,9 @@
      
         function Editor() {
         }
-    
+        
+        Editor.prototype.breakPoints = [];
+        
         Editor.prototype.attached = false;
 
         Editor.prototype.createdCallback = function() {
@@ -62,9 +68,7 @@
                 enableLiveAutocompletion: true
             });
 
-            // NOTE: ext-language-tools.js needs to be patched to support autocomplete on dots '.'
-            //       var ID_REGEX = /[a-zA-Z_0-9\$\-\u00A2-\uFFFF]/; 
-            //       should be var ID_REGEX = /[a-zA-Z_0-9\.\$\-\u00A2-\uFFFF]/
+            var self = this;
             var completer = {
                 getCompletions: function (editor, session, pos, prefix, callback) {
                     if (prefix.length === 0)
@@ -169,10 +173,11 @@
 
                 if (bps.length < row || bps.length == 0 || bps[row] != 'ace_breakpoint') {
                     e.editor.session.setBreakpoint(row);
-                    //  window.external.setBreakpoint(row+1);
+                    self.breakPoints.push(row+1);
                 } else {
                     e.editor.session.clearBreakpoint(row);
-                    // window.external.clearBreakpoint(row+1);
+                    var index = self.breakPoints.indexOf(row+1);
+                    self.breakPoints.splice(index, 1);
                 }
 
                 e.stop();
@@ -202,6 +207,7 @@
          */
         Editor.prototype.setContent = function(data) {
             this.editor.setValue(data, -1);
+            this.clearBreakpoints();
         };
     
         /**
@@ -232,14 +238,16 @@
          * Removes all breakpoints.
          */
         Editor.prototype.clearBreakpoints = function() {
-            var bps = thid.editor.session.getBreakpoints();
+            var bps = this.editor.session.getBreakpoints();
             if (bps.length > 0) {
+                var self = this;
                 bps.forEach(function (v, i) {
                     if (v == 'ace_breakpoint') {
-                        this.editor.session.clearBreakpoint(i);
+                        self.editor.session.clearBreakpoint(i);
                     }
                 });
             }
+            this.breakPoints = [];
         };
     
         /**
