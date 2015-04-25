@@ -1,0 +1,18 @@
+{
+  "name": "CloudBeat Script Recorder",
+  "version": "0.1",
+  "description": "CloudBeat Script Recorder extension",
+  "manifest_version": 2,
+  "permissions": [    
+    "contextMenus",
+    "tabs",
+    "storage",
+    "webNavigation",
+    "<all_urls>"],
+  "content_scripts": [ {
+    "js": [ "content-rec.js" ],
+    "matches": [ "<all_urls>"],
+     "run_at" : "document_end",
+     "all_frames" : true
+  }]
+}
