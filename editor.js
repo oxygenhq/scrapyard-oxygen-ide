@@ -209,6 +209,11 @@
             this.editor.setValue(data, -1);
             this.clearBreakpoints();
         };
+        
+        Editor.prototype.appendText = function(data) {
+            this.editor.navigateFileEnd();
+            this.editor.insert(data);
+        }
     
         /**
          * Disables user interaction.

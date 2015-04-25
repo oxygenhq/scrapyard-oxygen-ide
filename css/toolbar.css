@@ -51,6 +51,16 @@ cb-toolbar {
     background-image: url("../img/tb-stop.png");
 }
 
+.tb.tb-camera {
+    background-image: url("../img/tb-camera.png");
+}
+
+.tb.tb-camera-active {
+    background-color: #b03939;
+    border: 1px solid #717171;
+    border-radius: 50%;
+}
+
 .tb:hover {
     border: 1px solid #717171;
     border-radius: 2px;

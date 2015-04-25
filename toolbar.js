@@ -19,6 +19,7 @@
 
     var Toolbar;
     var ToolbarButton = require('./toolbar-btn');
+    var Recorder = require('./recorder');
     var fs = require('fs');
     var tmp = require('tmp');
     var fork = require('child_process').fork;
@@ -58,7 +59,10 @@
             this.add(btnStart);
             var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false);
             btnStop.onClick = this.stop;
-            this.add(btnStop);
+            this.add(btnStop);       
+            var btnRecord= this.btnRecord = new ToolbarButton('tb-camera', false, true);
+            btnRecord.onClick = this.record;
+            this.add(btnRecord);
         };
     
         /*
@@ -183,7 +187,26 @@
             this.parentElement.btnStop.disable();
             this.parentElement.scriptChild.kill(); 
         };
-
+        
+        /**
+         * Starts/stops the recorder
+         */
+        Toolbar.prototype.record = function() {
+            if (this.recordingActive) {
+                this.recorder.stop();
+                this.parentElement.btnStart.enable();
+                this.parentElement.btnStop.enable();
+                this.recordingActive = false;
+                this.parentElement.btnRecord.deactivate('tb-camera-active');  
+            } else {
+                this.parentElement.btnStart.disable();
+                this.parentElement.btnStop.disable();
+                this.recordingActive = true;
+                this.parentElement.btnRecord.activate('tb-camera-active');
+                this.recorder = new Recorder();
+            }
+        };
+        
         return Toolbar;
     })(HTMLElement);
 
