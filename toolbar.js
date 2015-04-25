@@ -50,13 +50,13 @@
         };
 
         Toolbar.prototype.initializeContent = function() {
-            var btnSave = this.btnSave = new ToolbarButton('tb-save');
+            var btnSave = this.btnSave = new ToolbarButton('tb-save', false, false);
             this.add(btnSave);
-            var btnStart = new ToolbarButton('tb-start', false, 'Run');
+            var btnStart = new ToolbarButton('tb-start', false, false, 'Run');
             this.btnStart = btnStart;
             btnStart.onClick = this.start;
             this.add(btnStart);
-            var btnStop = this.btnStop = new ToolbarButton('tb-stop', true);
+            var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false);
             btnStop.onClick = this.stop;
             this.add(btnStop);
         };

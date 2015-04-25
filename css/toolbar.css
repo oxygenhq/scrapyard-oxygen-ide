@@ -18,6 +18,11 @@ cb-toolbar {
     background-position: 4px center;
 }
 
+.tb.right {
+    float: right !important;
+    margin-right: 5px;
+}
+
 .tb span {
     padding-left: 22px;
     padding-right: 4px;

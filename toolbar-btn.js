@@ -9,15 +9,19 @@
      * Section: Construction and Destruction
      */
      
-    function ToolbarButton(imgClass, disabled, text) {
+    function ToolbarButton(imgClass, disabled, right, text) {
         this.text = text;
+        this.right = right;
         this.imgClass = imgClass;
         this.disabled = disabled;
     }
 
     ToolbarButton.prototype.createComponent = function() {
         var div = this.el = document.createElement('div');
-        div.setAttribute('class', 'tb ' + this.imgClass + (this.disabled ? ' tb-disabled' : ''));
+        var clazz = 'tb ' + this.imgClass;
+        clazz += (this.disabled ? ' tb-disabled' : '');
+        clazz += this.right ? ' right': '';
+        div.setAttribute('class', clazz);
         div.onclick = this.onClick;
         
         if (this.text) {
@@ -46,7 +50,17 @@
     ToolbarButton.prototype.setText = function(text) {
         this.el.firstChild.textContent = text; 
     };
-
+    
+    ToolbarButton.prototype.activate = function(clazz) {
+        this.active = true;
+        this.el.className += ' ' + clazz;
+    };
+    
+    ToolbarButton.prototype.deactivate = function(clazz) {
+        this.active = false;
+        this.el.classList.remove(clazz);
+    };
+    
     ToolbarButton.prototype.onClick = function() {
     };
 }).call(this);
