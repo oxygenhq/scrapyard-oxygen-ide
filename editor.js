@@ -60,8 +60,9 @@
             langTools = ace.require('ace/ext/language_tools');
             langTools.setCompleters(); // remove default completers
             var editor = this.editor = ace.edit(this);
-            editor.setTheme('ace/theme/chaos');
+            editor.setTheme('ace/theme/cloudbeat_dark');
             editor.getSession().setMode('ace/mode/javascript');
+            editor.setPrintMarginColumn(100);
             editor.setOptions({
                 enableBasicAutocompletion: true,
                 enableSnippets: false,
