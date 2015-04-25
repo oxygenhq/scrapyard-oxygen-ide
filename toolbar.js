@@ -52,7 +52,7 @@
         Toolbar.prototype.initializeContent = function() {
             var btnSave = this.btnSave = new ToolbarButton('tb-save');
             this.add(btnSave);
-            var btnStart = new ToolbarButton('tb-start');
+            var btnStart = new ToolbarButton('tb-start', false, 'Run');
             this.btnStart = btnStart;
             btnStart.onClick = this.start;
             this.add(btnStart);
@@ -81,6 +81,8 @@
             logger.clear();
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
+            this.parentElement.btnStart.setText('Continue');
+            editor.disable();
 
             // inject boilerplate with the user script
             var script = editor.editor.getValue();
@@ -133,12 +135,19 @@
             });
 
             dbg.on('change', function() {
-                console.log('dbg change');
+                //console.log('dbg change');
             });
 
+            var self = this;
             dbg.on('break', function(breakpoint) {
                 //console.log('dbg break:' + JSON.stringify(breakpoint));
                 editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
+
+                self.parentElement.btnStart.onClick = function() {
+                    dbg.request('continue', null, function(err, response) {
+                    });
+                };
+                self.parentElement.btnStart.enable();
             });
 
             dbg.on('exception', function(exc) {
@@ -149,22 +158,18 @@
                 //console.log('dbg error' + err);
             });
           
-            var self = this;
             scriptChild.on('exit', function () {
                 self.parentElement.btnStart.enable();
+                self.parentElement.btnStart.setText('Run');
+                self.parentElement.btnStart.onClick = self.start;
                 self.parentElement.btnStop.disable();
+                editor.enable();
             });
 
             scriptChild.on('message', function(m) {
                 if (m.event === 'line-update') {
-                    editor.setCmdHighlight(m.line);
-                } /*else if (m.event === 'eval-exception') {
-                    logger.add('ERROR', m.exc);
-                    alert('Oops! Something went wrong. Please see the log.');
-                } else if (m.event === 'net-exception') {
-                    logger.add('ERROR', m.exc);
-                    alert('Oops! Something went wrong. Please see the log.');
-                }*/ else if (m.event === 'log-add') {
+                    editor.setCmdHighlight(m.line - userScriptOffset - 1);
+                } else if (m.event === 'log-add') {
                     logger.add(m.level, m.msg);
                 }
             });

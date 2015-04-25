@@ -9,13 +9,24 @@ cb-toolbar {
 
 .tb {
     height:22px;
-    width:22px;
+    min-width:22px;
     margin-top:3px;
     margin-left:5px;
     border: 1px solid #e8e8e8;
     float:left;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 4px center;
+}
+
+.tb span {
+    padding-left: 22px;
+    padding-right: 4px;
+    vertical-align: center;
+    font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+.tb-disabled span {
+    opacity: 0.6; 
 }
 
 .tb-disabled {

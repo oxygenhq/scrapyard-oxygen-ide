@@ -235,19 +235,13 @@
         };
 
         /**
-         * Removes all breakpoints.
+         * Removes all breakpoints and line pointers if exist.
          */
         Editor.prototype.clearBreakpoints = function() {
-            var bps = this.editor.session.getBreakpoints();
-            if (bps.length > 0) {
-                var self = this;
-                bps.forEach(function (v, i) {
-                    if (v == 'ace_breakpoint') {
-                        self.editor.session.clearBreakpoint(i);
-                    }
-                });
-            }
+            this.editor.session.clearBreakpoints();
             this.breakPoints = [];
+            this.editor.session.removeMarker(this.lastMarker);
+            this.editor.session.removeGutterDecoration(this.prevCurLine, 'current-line');
         };
     
         /**
@@ -255,23 +249,11 @@
          * @param {Number} line - Index of the line to highlight.
          */
         Editor.prototype.setCmdHighlight = function(line) {
-            if (this.lastMarkerCmd !== undefined) {  // clear previous command marker
-                this.editor.session.removeMarker(this.lastMarkerCmd);
-            }
-            this.lastMarkerCmd = this.editor.session.addMarker(
-                new Range(line - 1, 0, line - 1, 200), 
-                'current-line', 
-                'fullLine');
-        };
-    
-        /**
-         * Removes last line highlight.
-         */
-        Editor.prototype.clearCmdHighlight = function() {
-            if (this.lastMarkerCmd !== undefined) {
-                this.editor.session.removeMarker(this.lastMarkerCmd);
-            }
-            this.lastMarkerCmd = undefined;
+            this.editor.session.removeGutterDecoration(this.prevCurLine, 'current-line');
+            this.editor.session.addGutterDecoration(line - 1, 'current-line');
+            this.prevCurLine = line - 1;
+            
+            this.editor.session.removeMarker(this.lastMarker);
         };
 
         /**
@@ -279,17 +261,15 @@
          * @param {Number} line - Index of the line to highlight.
          */
         Editor.prototype.setBpHighlight = function(line) {
+            this.editor.session.removeGutterDecoration(this.prevCurLine, 'current-line');
+            this.editor.session.addGutterDecoration(line - 1, 'current-line');
+            this.prevCurLine = line - 1;
+
+            this.editor.session.removeMarker(this.lastMarker);
             this.lastMarker = this.editor.session.addMarker(
                 new Range(line - 1, 0, line - 1, 200), 
                 'current-line-bp', 
-                'fullLine');
-        };
-    
-        /**
-         * Removes last breakpoint highlight.
-         */
-        Editor.prototype.clearBpHighlight = function() {
-            this.editor.session.removeMarker(this.lastMarker);
+                'background');
         };
 
         return Editor;
