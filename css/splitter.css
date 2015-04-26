@@ -1,0 +1,26 @@
+#hLayout {
+    height: 100%;
+    width: 100%;
+}
+
+#paneMain {
+    background: #22252b;
+    overflow: auto;
+    height: 70%;
+    min-height: 90px;
+}
+
+#paneLog {
+    background: #22252b;
+    overflow: auto;
+    min-height: 0px;
+}
+
+#hLayout .hsplitbar {
+    height: 6px;
+    background: #cca;
+}
+
+#hLayout .hsplitbar.active, #hLayout .hsplitbar:hover {
+    background: #cca;
+}

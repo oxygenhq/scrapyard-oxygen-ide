@@ -6,14 +6,11 @@
 
     <link href="css/toolbar.css" rel="stylesheet" type="text/css" />
     <link href="css/editor.css" rel="stylesheet" type="text/css" />
-    <link href="css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="css/splitter.css" rel="stylesheet" type="text/css" />
     <link href="css/logger.css" rel="stylesheet" type="text/css" />
 
-    <!-- TODO: reimplement layout.js and drop jquery/jquery.ui -->
     <script type="text/javascript">window.$ = window.jQuery = require('./jquery.min.js');</script>
-    <!-- jquery-ui provides 'resizable' needed by layout.js -->
-    <script src="jquery-ui.js" type="text/javascript" charset="utf-8"></script>
-    <script src="layout.js" type="text/javascript" charset="utf-8"></script>
+    <script src="splitter.js" type="text/javascript" charset="utf-8"></script>
 
     <style type="text/css" media="screen">
         html, body {
@@ -26,8 +23,8 @@
 </head>
 <body>
     <div id="hLayout">
-        <div id="paneMain" style="height: 80%;"></div>
-        <div id="paneLog" style=""></div>
+        <div id="paneMain"></div>
+        <div id="paneLog"></div>
     </div>
 
     <script>
@@ -43,15 +40,7 @@
         document.body.insertBefore(toolbar, document.body.firstChild);
 
         // layout
-        $('#hLayout').layout({
-            type: 'horizontal',
-            resizable: true,
-            helper: 'ui-layout-resize-h',
-            panes: [
-                ['#paneMain', {minHeight: 100}],
-                ['#paneLog']
-            ]
-        });
+        $("#hLayout").splitter({ type: "h", anchorToWindow: true });
 
         // editor
         var editor = new Editor(); 
@@ -69,16 +58,16 @@
         apiDoc.setAttribute('id', 'apidoc');
         apiDoc.setAttribute('style', 'display:none;');
         
-        var innerPaneMain = document.getElementById('paneMain').firstChild;
-        innerPaneMain.appendChild(editor);
-        innerPaneMain.appendChild(apiDoc);
+        var paneMain = document.getElementById('paneMain');
+        paneMain.appendChild(editor);
+        paneMain.appendChild(apiDoc);
 
         // docs
         var docs = doc.init();
 
         // logger
         var logger = new Logger();
-        document.getElementById('paneLog').firstChild.appendChild(logger);
+        document.getElementById('paneLog').appendChild(logger);
     </script>
 </body>
 </html>
