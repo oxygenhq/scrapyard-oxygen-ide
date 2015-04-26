@@ -34,6 +34,12 @@
         var doc = require('./doc');
         var ipc = require('ipc');
         var fs = require('fs');
+        
+        document.onkeydown = function(evt) {
+            if (evt.keyCode == 8) {     // cancel backspace to prevent 'Back' action
+                event.preventDefault();
+            }
+        };
 
         // toolbar
         var toolbar = new Toolbar();
