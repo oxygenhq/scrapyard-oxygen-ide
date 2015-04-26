@@ -14471,7 +14471,7 @@ var EventEmitter = require("./lib/event_emitter").EventEmitter;
 var editorCss = ".ace_editor {\
 position: relative;\
 overflow: hidden;\
-font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;\
+font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;\
 direction: ltr;\
 }\
 .ace_scroller {\

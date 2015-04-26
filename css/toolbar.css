@@ -26,8 +26,9 @@ cb-toolbar {
 .tb span {
     padding-left: 22px;
     padding-right: 4px;
-    vertical-align: center;
-    font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    position: relative;
+    top: 1px;
+    font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
 .tb-disabled span {
