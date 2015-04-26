@@ -52,7 +52,10 @@
             editor.setContent(data);
           });
         });
-
+        $('#paneMain').bind('splitresize', function(){
+            editor.editor.resize(); 
+        }); 
+        
         // apidoc div
         var apiDoc = this.el = document.createElement('div');
         apiDoc.setAttribute('id', 'apidoc');
