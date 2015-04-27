@@ -157,7 +157,7 @@
             var scriptChild = this.parentElement.scriptChild = fork(
                 tmpFile.name, 
                 [ __dirname,   // setting cwd doesn't work (?) so we pass it as an argument
-                    this.browser ],
+                    this.parentElement.browser ],
                 { execArgv: ['--debug-brk=' + dbgPort] }
             ); 
             
