@@ -108,25 +108,16 @@ $.fn.splitter = function(args){
                 parseInt($.css(this[0],opts.split)) : opts['size'+this._pane];
         });
         
-        // Determine initial position, get from cookie if specified
+        // Determine initial position
         var initPos = A._init;
-        if ( !isNaN(B._init) )    // recalc initial B size as an offset from the top or left side
+        if ( !isNaN(B._init) ) {   // recalc initial B size as an offset from the top or left side
             initPos = splitter[0][opts.pxSplit] - splitter._PBA - B._init - bar._DA;
-        if ( opts.cookie ) {
-            if ( !$.cookie )
-                alert('jQuery.splitter(): jQuery cookie plugin required');
-            var ckpos = parseInt($.cookie(opts.cookie));
-            if ( !isNaN(ckpos) )
-                initPos = ckpos;
-            $(window).bind('unload', function(){
-                var state = String(bar.css(opts.origin));    // current location of splitbar
-                $.cookie(opts.cookie, state, {expires: opts.cookieExpires || 365, 
-                    path: opts.cookiePath || document.location.pathname});
-            });
         }
-        if ( isNaN(initPos) )    // King Solomon's algorithm
-            initPos = Math.round((splitter[0][opts.pxSplit] - splitter._PBA - bar._DA)/2);
-
+        if ( isNaN(initPos) ) {   // King Solomon's algorithm {
+            initPost = splitter[0].clientHeight;   
+            //initPos = Math.round((splitter[0][opts.pxSplit] - splitter._PBA - bar._DA)/2);
+        }
+            
         // Resize event propagation and splitter sizing
         if ( opts.anchorToWindow ) {
             // Account for margin or border on the splitter container and enforce min height
