@@ -24,7 +24,8 @@
     var tmp = require('tmp');
     var fork = require('child_process').fork;
     var path = require('path');
-
+    var remote = require('remote');
+                
     Toolbar = (function(_super) {
         __extends(Toolbar, _super);
 
@@ -51,15 +52,35 @@
         };
 
         Toolbar.prototype.initializeContent = function() {
-            var btnSave = this.btnSave = new ToolbarButton('tb-save', false, false);
+            // save button
+            var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
+            btnSave.onClick = this.save;
             this.add(btnSave);
+            // run button
             var btnStart = new ToolbarButton('tb-start', false, false, 'Run');
             this.btnStart = btnStart;
             btnStart.onClick = this.start;
             this.add(btnStart);
+            // stop button
             var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false);
             btnStop.onClick = this.stop;
             this.add(btnStop);       
+            // browser dropdown
+            var browserSel = document.createElement("select");
+            for (var browser of [['Chrome', 'chrome'], 
+                                ['Internet Explorer', 'ie'], 
+                                ['Firefox', 'firefox']]) {
+                var opt = document.createElement("option"); 
+                opt.text = browser[0];
+                opt.value = browser[1];
+                browserSel.options.add(opt);
+            }
+            this.browser = browserSel.value;
+            browserSel.onchange = function(e) {
+                this.browser = e.currentTarget.value;
+            }
+            this.appendChild(browserSel);
+            // record button
             var btnRecord= this.btnRecord = new ToolbarButton('tb-camera', false, true);
             btnRecord.onClick = this.record;
             this.add(btnRecord);
@@ -79,6 +100,28 @@
         }
     
         /**
+         * Saves the script.
+         */
+        Toolbar.prototype.save = function() {
+            if (editor.currentFilename) {
+                fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
+                    if(!err) {
+                        this.btnSave.disable();
+                    }
+                }); 
+            } else {
+                editor.currentFilename = remote.require('dialog').showSaveDialog();
+                if (editor.currentFilename) {
+                   fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
+                        if(!err) {
+                            this.btnSave.disable();
+                        }
+                    }); 
+                }
+            }
+        };
+
+        /**
          * Executes user script.
          */
         Toolbar.prototype.start = function() {
@@ -89,7 +132,7 @@
             editor.disable();
 
             // inject boilerplate with the user script
-            var script = editor.editor.getValue();
+            var script = editor.getContent();
             var boilerplate = fs.readFileSync(path.resolve(__dirname, 'script-boilerplate.js'))+'';
             // TODO: should probably optimize this...
             var boilerplateLines = boilerplate.split('\n');

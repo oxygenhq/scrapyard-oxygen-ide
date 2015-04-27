@@ -62,6 +62,11 @@
             var editor = this.editor = ace.edit(this);
             editor.setTheme('ace/theme/cloudbeat_dark');
             editor.getSession().setMode('ace/mode/javascript');
+            editor.getSession().on('change', function() {
+                if (!editor.getSession().getUndoManager().isClean()) {
+                    toolbar.btnSave.enable();
+                }
+            });
             editor.setPrintMarginColumn(100);
             editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -211,6 +216,18 @@
             this.clearBreakpoints();
         };
         
+        /**
+         * Gets editor's content.
+         * @return {string} Editor's content. 
+         */
+        Editor.prototype.getContent = function() {
+            return this.editor.getValue();
+        };
+        
+        /**
+         * Appends text.
+         * @param {string} data - Content to append.
+         */
         Editor.prototype.appendText = function(data) {
             this.editor.navigateFileEnd();
             this.editor.insert(data);

@@ -51,12 +51,14 @@
         // editor
         var editor = new Editor(); 
         ipc.on('file-open', function (filename) {
-          fs.readFile(filename, 'utf8', function (err,data) {
-            if (err) {
-              return console.log(err);
-            }
-            editor.setContent(data);
-          });
+            editor.currentFilename = filename;
+            fs.readFile(filename, 'utf8', function (err,data) {
+                if (err) {
+                    return console.log(err);
+                }
+                editor.setContent(data);
+                toolbar.btnSave.disable();
+            });
         });
         $('#paneMain').bind('splitresize', function(){
             editor.editor.resize(); 
