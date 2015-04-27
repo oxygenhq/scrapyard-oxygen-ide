@@ -14,7 +14,7 @@ var multiplexer = edge.func({
     methodName: 'Invoke'
 });
 
-multiplexer({module: 'utils', cmd: 'initialize', args: ['chrome', 'http://127.0.0.1:4444/wd/hub'] }, true); 
+multiplexer({module: 'utils', cmd: 'initialize', args: [process.argv[3], 'http://127.0.0.1:4444/wd/hub'] }, true); 
 
 web = require(path.resolve(cwd, 'module-web'))(execMethod);
 soap = require(path.resolve(cwd, 'module-soap'))(execMethod);
