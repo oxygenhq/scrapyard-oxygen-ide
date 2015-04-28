@@ -1,0 +1,127 @@
+/*
+ * Executes user script and controls its execution.
+ */
+ 
+var fork = require('child_process').fork;
+
+(function() {
+    module.exports = ScriptChild;
+    function ScriptChild(scriptFilename, userScriptOffset) {
+        var dbgPort = 10001;
+        this.scriptFilename = scriptFilename;
+        this.userScriptOffset = userScriptOffset;
+        
+        // fork new process
+        var child = this.child = fork(
+            scriptFilename, 
+            [ __dirname,   // setting cwd doesn't work (?) so we pass it as an argument
+                toolbar.browser ],
+            { execArgv: ['--debug-brk=' + dbgPort] }
+        ); 
+        
+        // apply the breakpoints and request continue
+        var Ev = require('events').EventEmitter;
+        var Debugger = require('./debugger');
+        var dbg = this.dbg = new Debugger(new Ev());
+
+        var self = this;
+        
+        dbg.connect(dbgPort).then(function(connection) {
+            var bps = editor.getBreakpoints();
+            for (var bp of editor.getBreakpoints()) {
+                dbg.request(
+                    'setbreakpoint', 
+                    { type: 'script', target: scriptFilename, line: userScriptOffset + bp }, 
+                    function(err, response) {
+                         self.breakPoints[response.line - userScriptOffset] = response.breakpoint;
+                    }
+                );
+            }
+            
+            dbg.request('continue', null, function(err, response) {
+                //console.log('dbg continue:' + JSON.stringify(response));
+            });
+        });
+
+        dbg.on('change', function() {
+            //console.log('dbg change');
+        });
+
+        dbg.on('break', function(breakpoint) {
+            //console.log('dbg break:' + JSON.stringify(breakpoint));
+            editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
+
+            toolbar.btnStart.onClick = function() {
+                dbg.request('continue', null, function(err, response) {
+                });
+            };
+            
+            // enable Continue button but only if the break is not due to --debug-brk
+            if (breakpoint.body.sourceLine >= userScriptOffset) {
+                toolbar.btnStart.enable();
+            }
+        });
+
+        dbg.on('exception', function(exc) {
+            //console.log('dbg exception:' + JSON.stringify(exc));
+        });
+
+        dbg.on('error', function(err) {
+            //console.log('dbg error' + err);
+        });
+      
+        child.on('exit', function () {
+            toolbar.btnStop.disable();
+            toolbar.btnStart.enable();
+            toolbar.btnStart.setText('Run');
+            toolbar.btnStart.onClick = toolbar.start;
+            stoolbar.btnStop.disable();
+            editor.clearBpHighlight();
+            editor.enable();
+        });
+
+        child.on('message', function(m) {
+            if (m.event === 'line-update') {
+                editor.setCmdHighlight(m.line - userScriptOffset - 1);
+            } else if (m.event === 'log-add') {
+                logger.add(m.level, m.msg);
+            }
+        });
+    }
+    
+    ScriptChild.prototype.breakPoints = {};
+    
+    /**
+     * Terminates script execution.
+     */
+    ScriptChild.prototype.kill = function() {
+        this.child.kill();
+    };
+    
+    /**
+     * Adds new breakpoint.
+     * @param {Number} Line number where to set the breakpoint.
+     */
+    ScriptChild.prototype.setBreakpoint = function(line) {
+        var self = this;
+        this.dbg.request(
+            'setbreakpoint', 
+            { type: 'script', target: this.scriptFilename, line: this.userScriptOffset + line }, 
+            function(err, response) {
+                self.breakPoints[line.toString()] = response.breakpoint;
+            }
+        );
+    };
+    
+    /**
+     * Removes existing breakpoint.
+     * @param {Number} Line number for which to remove the breakpoint.
+     */
+    ScriptChild.prototype.clearBreakpoint = function(line) {
+        this.dbg.request(
+            'clearbreakpoint', 
+            { type: 'script', breakpoint: this.breakPoints[line.toString()] }, 
+            function(err, response) {}
+        );
+    };
+}).call(this);

@@ -37,8 +37,6 @@
         function Editor() {
         }
         
-        Editor.prototype.breakPoints = [];
-        
         Editor.prototype.attached = false;
 
         Editor.prototype.createdCallback = function() {
@@ -179,11 +177,14 @@
 
                 if (bps.length < row || bps.length == 0 || bps[row] != 'ace_breakpoint') {
                     e.editor.session.setBreakpoint(row);
-                    self.breakPoints.push(row+1);
+                    if (toolbar.scriptChild) {
+                        toolbar.scriptChild.setBreakpoint(row+1);
+                    }  
                 } else {
                     e.editor.session.clearBreakpoint(row);
-                    var index = self.breakPoints.indexOf(row+1);
-                    self.breakPoints.splice(index, 1);
+                    if (toolbar.scriptChild) {
+                        toolbar.scriptChild.clearBreakpoint(row+1);
+                    }
                 }
 
                 e.stop();
@@ -266,6 +267,22 @@
             this.editor.session.removeMarker(this.lastMarker);
             this.editor.session.removeGutterDecoration(this.prevCurLine, 'current-line');
         };
+        
+        /**
+         * Returns an array of numbers, indicating which rows have breakpoints.
+         */
+        Editor.prototype.getBreakpoints = function() {
+            var bps = [];
+            this.editor.session.getBreakpoints().forEach(
+                function (value, i) {
+            
+                    if (value === 'ace_breakpoint') {
+                        bps.push(i+1);
+                    }
+                    
+            });
+            return bps;
+        }
     
         /**
          * Highlights the specified line.

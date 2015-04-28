@@ -22,9 +22,9 @@
     var Recorder = require('./recorder');
     var fs = require('fs');
     var tmp = require('tmp');
-    var fork = require('child_process').fork;
     var path = require('path');
     var remote = require('remote');
+    var ScriptChild = require('./script_child');
                 
     Toolbar = (function(_super) {
         __extends(Toolbar, _super);
@@ -151,89 +151,14 @@
                 if (err) throw err;
             });
 
-            var dbgPort = 10001;
-
-            // fork new process
-            var scriptChild = this.parentElement.scriptChild = fork(
-                tmpFile.name, 
-                [ __dirname,   // setting cwd doesn't work (?) so we pass it as an argument
-                    this.parentElement.browser ],
-                { execArgv: ['--debug-brk=' + dbgPort] }
-            ); 
-            
-            // apply the breakpoints and request continue
-            var Ev = require('events').EventEmitter;
-            var Debugger = require('./debugger');
-            var dbg = new Debugger(new Ev());
-
-            dbg.connect(dbgPort).then(function(connection) {
-                for (var bp of editor.breakPoints) {
-                    dbg.request(
-                        'setbreakpoint', 
-                        { type: 'script', target: tmpFile.name, line: userScriptOffset + bp }, 
-                        function(err, response) {
-                            //console.log('dbg setbreakpoint:' + JSON.stringify(response));
-                        }
-                    );
-                }
-                
-                dbg.request('continue', null, function(err, response) {
-                    //console.log('dbg continue:' + JSON.stringify(response));
-                });
-            });
-
-            dbg.on('change', function() {
-                //console.log('dbg change');
-            });
-
-            var self = this;
-            dbg.on('break', function(breakpoint) {
-                //console.log('dbg break:' + JSON.stringify(breakpoint));
-                editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
-
-                self.parentElement.btnStart.onClick = function() {
-                    dbg.request('continue', null, function(err, response) {
-                    });
-                };
-                
-                // enable Continue button but only if the break is not due to --debug-brk
-                if (breakpoint.body.sourceLine >= userScriptOffset) {
-                    self.parentElement.btnStart.enable();
-                }
-            });
-
-            dbg.on('exception', function(exc) {
-                //console.log('dbg exception:' + JSON.stringify(exc));
-            });
-
-            dbg.on('error', function(err) {
-                //console.log('dbg error' + err);
-            });
-          
-            scriptChild.on('exit', function () {
-                self.parentElement.btnStop.disable();
-                self.parentElement.btnStart.enable();
-                self.parentElement.btnStart.setText('Run');
-                self.parentElement.btnStart.onClick = self.start;
-                self.parentElement.btnStop.disable();
-                editor.clearBpHighlight();
-                editor.enable();
-            });
-
-            scriptChild.on('message', function(m) {
-                if (m.event === 'line-update') {
-                    editor.setCmdHighlight(m.line - userScriptOffset - 1);
-                } else if (m.event === 'log-add') {
-                    logger.add(m.level, m.msg);
-                }
-            });
+            toolbar.scriptChild = new ScriptChild(tmpFile.name, userScriptOffset);
         };
     
         /**
          * Terminates currently executing script.
          */
         Toolbar.prototype.stop = function() {
-            this.parentElement.scriptChild.kill(); 
+            toolbar.scriptChild.kill(); 
         };
         
         /**
