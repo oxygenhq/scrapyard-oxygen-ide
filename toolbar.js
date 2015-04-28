@@ -195,7 +195,11 @@
                     dbg.request('continue', null, function(err, response) {
                     });
                 };
-                self.parentElement.btnStart.enable();
+                
+                // enable Continue button but only if the break is not due to --debug-brk
+                if (breakpoint.body.sourceLine >= userScriptOffset) {
+                    self.parentElement.btnStart.enable();
+                }
             });
 
             dbg.on('exception', function(exc) {
