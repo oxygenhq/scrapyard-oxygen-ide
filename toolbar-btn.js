@@ -39,7 +39,9 @@
 
     ToolbarButton.prototype.disable = function() {
         this.disabled = true;
-        this.el.className = this.el.className + ' tb-disabled';
+        if (this.el.className.indexOf('tb-disabled') < 0) {
+            this.el.className += ' tb-disabled';
+        }
     };
 
     ToolbarButton.prototype.enable = function() {
