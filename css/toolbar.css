@@ -5,6 +5,7 @@ cb-toolbar {
     height: 30px;
     width: 100%;
     display: block;
+    -webkit-user-select: none;
 }
 
 cb-toolbar select {
