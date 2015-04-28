@@ -24,7 +24,7 @@
     var tmp = require('tmp');
     var path = require('path');
     var remote = require('remote');
-    var ScriptChild = require('./script_child');
+    var ScriptChild = require('./script-child');
                 
     Toolbar = (function(_super) {
         __extends(Toolbar, _super);
