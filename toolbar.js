@@ -106,7 +106,7 @@
             if (editor.currentFilename) {
                 fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                     if(!err) {
-                        this.btnSave.disable();
+                        toolbar.btnSave.disable();
                     }
                 }); 
             } else {
@@ -114,7 +114,7 @@
                 if (editor.currentFilename) {
                    fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                         if(!err) {
-                            this.btnSave.disable();
+                            toolbar.btnSave.disable();
                         }
                     }); 
                 }
