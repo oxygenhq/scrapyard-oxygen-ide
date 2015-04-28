@@ -116,5 +116,7 @@ var path = require('path');
         }
         
         editor.appendText('web.' + op.cmd + '(' + args + ');\n');
+        // onchange is not triggered for some reason when appending, so we enable it manually
+        toolbar.btnSave.enable();
     }
 }).call(this)
