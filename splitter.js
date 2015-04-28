@@ -132,7 +132,7 @@ $.fn.splitter = function(args){
         }
         else if ( opts.resizeToWidth ) {
             $(window).bind('resize', function(){
-                splitter.trigger('resize'); 
+                splitter.trigger('splitresize'); 
             });
         }
 
