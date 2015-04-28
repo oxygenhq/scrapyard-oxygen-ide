@@ -294,7 +294,14 @@
                 'current-line-bp', 
                 'background');
         };
-
+        
+        /**
+         * Removes current breakpoint highlight.
+         */
+        Editor.prototype.clearBpHighlight = function() {
+            this.editor.session.removeMarker(this.lastMarker);
+        };
+        
         return Editor;
     })(HTMLElement);
 

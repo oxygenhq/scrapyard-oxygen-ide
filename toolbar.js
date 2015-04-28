@@ -211,10 +211,12 @@
             });
           
             scriptChild.on('exit', function () {
+                self.parentElement.btnStop.disable();
                 self.parentElement.btnStart.enable();
                 self.parentElement.btnStart.setText('Run');
                 self.parentElement.btnStart.onClick = self.start;
                 self.parentElement.btnStop.disable();
+                editor.clearBpHighlight();
                 editor.enable();
             });
 
@@ -231,8 +233,6 @@
          * Terminates currently executing script.
          */
         Toolbar.prototype.stop = function() {
-            this.parentElement.btnStart.enable();
-            this.parentElement.btnStop.disable();
             this.parentElement.scriptChild.kill(); 
         };
         
