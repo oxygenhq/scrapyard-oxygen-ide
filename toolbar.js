@@ -168,7 +168,6 @@
             if (this.recordingActive) {
                 this.recorder.stop();
                 this.parentElement.btnStart.enable();
-                this.parentElement.btnStop.enable();
                 this.recordingActive = false;
                 this.parentElement.btnRecord.deactivate('tb-camera-active');  
             } else {
