@@ -76,8 +76,9 @@
                 browserSel.options.add(opt);
             }
             this.browser = browserSel.value;
+            var self = this;
             browserSel.onchange = function(e) {
-                this.browser = e.currentTarget.value;
+                self.browser = e.currentTarget.value;
             }
             this.appendChild(browserSel);
             // record button
