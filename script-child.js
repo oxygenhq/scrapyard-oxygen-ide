@@ -75,7 +75,7 @@ var fork = require('child_process').fork;
             toolbar.btnStart.enable();
             toolbar.btnStart.setText('Run');
             toolbar.btnStart.onClick = toolbar.start;
-            stoolbar.btnStop.disable();
+            toolbar.btnStop.disable();
             editor.clearBpHighlight();
             editor.enable();
         });
