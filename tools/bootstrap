@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var cp = require('child_process');
+
+const TARGET = '0.25.0';
+
+process.chdir(path.dirname(__dirname));
+var child = cp.exec('npm install ' +
+                        '--target=' + TARGET + 
+                        ' --arch=' + process.arch + 
+                        ' --dist-url=https://atom.io/download/electron', 
+                    function(error, stdout, stderr) {
+                        if (error) {
+                            process.exit(error.code || 1);
+                        }
+                    });
+child.stderr.pipe(process.stderr);
+child.stdout.pipe(process.stdout);

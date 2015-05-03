@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var cp = require('child_process');
+
+process.chdir(path.dirname(__dirname));
+var gruntPath = path.join('node_modules', '.bin', 'grunt') + (process.platform === 'win32' ? '.cmd' : '');
+var args = process.argv.slice(2);
+var child = cp.exec(gruntPath + ' --gruntfile="' + path.resolve('Gruntfile.js') + '" ' + args, 
+                    function(error, stdout, stderr) {
+                        if (error) {
+                            process.exit(error.code || 1);
+                        }
+                    });
+child.stderr.pipe(process.stderr);
+child.stdout.pipe(process.stdout);
