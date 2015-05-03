@@ -26,7 +26,7 @@ var path = require('path');
     function Recorder() {
         // bundle files
         this.bundle = '';
-        for (script of scripts){
+        for (var script of scripts){
             this.bundle += fs.readFileSync(path.resolve(__dirname, RECORDER_DIR + script)); 
         }
 
@@ -99,13 +99,13 @@ var path = require('path');
     Recorder.prototype.stop = function() {
         this.httpSrv.close();
         this.httpsSrv.close();
-    }
+    };
     
     Recorder.prototype.print = function(op) {
         if (op.targetLocators) {
             var pad = '                ';
             for (var loc of op.targetLocators) {
-                var locType = (pad + loc[1]).slice(-pad.length)
+                var locType = (pad + loc[1]).slice(-pad.length);
                 editor.appendText('// ' + locType + ': ' + loc[0] + '\n');
             }
         }
@@ -118,5 +118,5 @@ var path = require('path');
         editor.appendText('web.' + op.cmd + '(' + args + ');\n');
         // onchange is not triggered for some reason when appending, so we enable it manually
         toolbar.btnSave.enable();
-    }
-}).call(this)
+    };
+}).call(this);

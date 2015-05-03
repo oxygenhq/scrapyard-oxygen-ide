@@ -2,7 +2,7 @@ Object.defineProperty(global, '__stack', {
     get: function() {
         var orig = Error.prepareStackTrace;
         Error.prepareStackTrace = function(_, stack){ return stack; };
-        var err = new Error;
+        var err = new Error();
         Error.captureStackTrace(err, arguments.callee.caller);
         var stack = err.stack;
         Error.prepareStackTrace = orig;

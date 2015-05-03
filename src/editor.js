@@ -10,7 +10,9 @@
     var __hasProp = {}.hasOwnProperty;
     var __extends = function(child,  parent) {  
         for(var key in parent) { 
-            if (__hasProp.call(parent,  key)) child[key] = parent[key]; 
+            if (__hasProp.call(parent,  key)) {
+                child[key] = parent[key];
+            }
         } 
         function ctor() { 
             this.constructor = child; 
@@ -21,13 +23,12 @@
         return child;  
     };
     
-    var Editor;
     var Range, langTools; // need to be global in order to prevent GC
 
     require('./ace/ace');
     require('./ace/ext-language_tools');
 
-    Editor = (function(_super) {
+    var Editor = (function(_super) {
         __extends(Editor, _super);
 
         /*
@@ -40,16 +41,16 @@
         Editor.prototype.attached = false;
 
         Editor.prototype.createdCallback = function() {
-          this.attached = false;
-          this.initializeContent();
+            this.attached = false;
+            this.initializeContent();
         };
 
         Editor.prototype.attachedCallback = function() {
-          this.attached = true;
+            this.attached = true;
         };
 
         Editor.prototype.detachedCallback = function() {
-          return this.attached = false;
+            this.attached = false;
         };
 
         Editor.prototype.initializeContent = function() {
@@ -104,8 +105,9 @@
 
                     editor.completer.popup.on('changeHoverMarker', function (a) {
                         var row = editor.completer.popup.getHoveredRow();
+                        var d;
                         if (row === -1) {
-                            var d = document.getElementById('apidoc');
+                            d = document.getElementById('apidoc');
                             d.style.display = 'none';
                             return;
                         }
@@ -121,7 +123,7 @@
                         var tokens = fullMethodName.split('.');
                         var methodDoc;
                         var mod = docs[tokens[0]];
-                        for (method of mod.methods) {
+                        for (var method of mod.methods) {
                             if (method.getMethod() === tokens[1]) {
                                 methodDoc = method;
                                 break;
@@ -155,7 +157,7 @@
                         var top = parseFloat(editor.completer.popup.container.style.top);
                         var width = editor.completer.popup.container.clientWidth;
 
-                        var d = document.getElementById('apidoc');
+                        d = document.getElementById('apidoc');
                         d.innerHTML = apiDoc;
                         d.style.position = 'absolute';
                         d.style.left = (left + width + 10) + 'px';
@@ -163,7 +165,7 @@
                         d.style.display = 'block';
                     });
                 }
-            }
+            };
             langTools.addCompleter(completer);
 
             editor.on('guttermousedown', function (e) {
@@ -175,7 +177,7 @@
                 var row = e.getDocumentPosition().row;
                 var bps = editor.session.getBreakpoints();
 
-                if (bps.length < row || bps.length == 0 || bps[row] != 'ace_breakpoint') {
+                if (bps.length < row || bps.length === 0 || bps[row] != 'ace_breakpoint') {
                     e.editor.session.setBreakpoint(row);
                     if (toolbar.scriptChild) {
                         toolbar.scriptChild.setBreakpoint(row+1);
@@ -232,7 +234,7 @@
         Editor.prototype.appendText = function(data) {
             this.editor.navigateFileEnd();
             this.editor.insert(data);
-        }
+        };
     
         /**
          * Disables user interaction.
@@ -282,7 +284,7 @@
                     
             });
             return bps;
-        }
+        };
     
         /**
          * Highlights the specified line.
@@ -322,7 +324,7 @@
         return Editor;
     })(HTMLElement);
 
-    module.exports = Editor = document.registerElement('cb-editor', {
+    module.exports = document.registerElement('cb-editor', {
         prototype: Editor.prototype,
         extends: 'div'
     });

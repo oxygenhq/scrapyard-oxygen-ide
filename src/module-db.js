@@ -13,7 +13,7 @@ module.exports = function(execMethod) {
     *                              "Server=localhost;Database=myDatabase;" +<br/>
     *                              "User=myUsername;Password=myPassword;Option=3;"
     */
-    module.init = function() { return execMethod('db', 'init', Array.prototype.slice.call(arguments)) };
+    module.init = function() { return execMethod('db', 'init', Array.prototype.slice.call(arguments)); };
     /**
      * Executes the query, and returns the first column of the first row in the result set returned 
      * by the query. Additional columns or rows are ignored.
@@ -22,12 +22,12 @@ module.exports = function(execMethod) {
      * @return {Object} The first column of the first row in the result set,  or a null reference 
      *                  if the result set is empty.
      */
-    module.getScalar = function() { return execMethod('db', 'getScalar', Array.prototype.slice.call(arguments)) };
+    module.getScalar = function() { return execMethod('db', 'getScalar', Array.prototype.slice.call(arguments)); };
     /**
      * Executes an SQL statement.
      * @function executeNonQuery
      * @param {String} query - Query to execute.
      */
-    module.executeNonQuery = function() { return execMethod('db', 'executeNonQuery', Array.prototype.slice.call(arguments)) };
+    module.executeNonQuery = function() { return execMethod('db', 'executeNonQuery', Array.prototype.slice.call(arguments)); };
     return module;
 };

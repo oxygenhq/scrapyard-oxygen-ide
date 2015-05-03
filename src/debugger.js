@@ -8,7 +8,7 @@ var net = require('net');
 var q = require('q');
 var Protocol = require('_debugger').Protocol;
 
-inherits(Debugger, EventEmitter)
+inherits(Debugger, EventEmitter);
 function Debugger(runner) {
     EventEmitter.call(this);
 
@@ -71,7 +71,9 @@ function _doResponse(res) {
         cb(err, res.body && res.body.body || res.body, res);
     }
 
-    if (!handled) this.emit('unhandledResponse', res.body);
+    if (!handled) {
+        this.emit('unhandledResponse', res.body);
+    }
 }
 
 var connection = Debugger.prototype;
@@ -94,10 +96,10 @@ var connection = Debugger.prototype;
  * @return {Promise} promise object, call `then` callback when success
  */
 connection.connect = function(port) {
-    var socket
-        , self = this
-        , deferred
-        , protocol = new Protocol();
+    var socket;
+    var self = this;
+    var deferred;
+    var protocol = new Protocol();
 
     self._reqCallbacks = [];
     self._connectTimes = self._connectTimes || 0;
@@ -106,7 +108,7 @@ connection.connect = function(port) {
         return q(this.socket);
     }
 
-    socket = net.connect({ port: port })
+    socket = net.connect({ port: port });
     this.port = port;
     self.socket = socket;
     deferred = q.defer();
@@ -141,7 +143,7 @@ connection.connect = function(port) {
     protocol.onResponse = _doResponse.bind(this);
 
     return deferred.promise;
-}
+};
 
 
 /**
@@ -222,8 +224,8 @@ connection.lookup = function(refs) {
  *
  */
 connection.disconnect = function() {
-    var deferred = q.defer()
-        , self = this;
+    var deferred = q.defer();
+    var self = this;
 
     this.request('disconnect', {}, deferred.makeNodeResolver());
 
@@ -233,7 +235,7 @@ connection.disconnect = function() {
         self.emit('change');
     });
 
-    return deferred.promise
-}
+    return deferred.promise;
+};
 
 module.exports = Debugger;

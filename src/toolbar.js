@@ -6,7 +6,9 @@
     var __hasProp = {}.hasOwnProperty;
     var __extends = function(child,  parent) {  
         for(var key in parent) { 
-            if (__hasProp.call(parent,  key)) child[key] = parent[key]; 
+            if (__hasProp.call(parent,  key)) {
+                child[key] = parent[key]; 
+            }
         } 
         function ctor() { 
             this.constructor = child; 
@@ -17,7 +19,6 @@
         return child;  
     };
 
-    var Toolbar;
     var ToolbarButton = require('./toolbar-btn');
     var Recorder = require('./recorder');
     var fs = require('fs');
@@ -26,7 +27,7 @@
     var remote = require('remote');
     var ScriptChild = require('./script-child');
                 
-    Toolbar = (function(_super) {
+    var Toolbar = (function(_super) {
         __extends(Toolbar, _super);
 
         /*
@@ -44,11 +45,11 @@
         };
 
         Toolbar.prototype.attachedCallback = function() {
-          this.attached = true;
+            this.attached = true;
         };
 
         Toolbar.prototype.detachedCallback = function() {
-          return this.attached = false;
+            this.attached = false;
         };
 
         Toolbar.prototype.initializeContent = function() {
@@ -79,7 +80,7 @@
             var self = this;
             browserSel.onchange = function(e) {
                 self.browser = e.currentTarget.value;
-            }
+            };
             this.appendChild(browserSel);
             // record button
             var btnRecord= this.btnRecord = new ToolbarButton('tb-camera', false, true);
@@ -98,7 +99,7 @@
          */
         Toolbar.prototype.add = function(component) {
             this.appendChild(component.createComponent());
-        }
+        };
     
         /**
          * Saves the script.
@@ -139,12 +140,12 @@
             var boilerplateLines = boilerplate.split('\n');
             var userScriptOffset;
             for (var i = 0; i < boilerplateLines.length; i++) {
-                if (boilerplateLines[i].indexOf('%%USER_SCRIPT%%') > -1) {
+                if (boilerplateLines[i].indexOf('//%%USER_SCRIPT%%') > -1) {
                     userScriptOffset = i - 1;
                     break;
                 }
             }
-            boilerplate = boilerplate.replace('%%USER_SCRIPT%%', script);
+            boilerplate = boilerplate.replace('//%%USER_SCRIPT%%', script);
 
             // and create a tmp file
             var tmpFile = tmp.fileSync();
@@ -183,7 +184,7 @@
         return Toolbar;
     })(HTMLElement);
 
-    module.exports = Toolbar = document.registerElement('cb-toolbar', {
+    module.exports = document.registerElement('cb-toolbar', {
         prototype: Toolbar.prototype
     });
 }).call(this);

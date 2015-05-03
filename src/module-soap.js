@@ -12,7 +12,7 @@ module.exports = function(execMethod) {
      * @param {Array=} args - Array of arguments.
      * @return {JSON} Response object.
      */
-    module.get = function() { return execMethod('soap', 'get', Array.prototype.slice.call(arguments)) };
+    module.get = function() { return execMethod('soap', 'get', Array.prototype.slice.call(arguments)); };
     /**
      * Initiates a SOAP 1.2 request and returns the response.
      * @function get12
@@ -22,6 +22,6 @@ module.exports = function(execMethod) {
      * @param {Array=} args - Array of arguments.
      * @return {JSON} Response object.
      */
-    module.get12 = function() { return execMethod('soap', 'get12', Array.prototype.slice.call(arguments)) };
+    module.get12 = function() { return execMethod('soap', 'get12', Array.prototype.slice.call(arguments)); };
     return module;
 };

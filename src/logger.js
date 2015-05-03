@@ -6,7 +6,9 @@
     var __hasProp = {}.hasOwnProperty;
     var __extends = function(child,  parent) {  
         for(var key in parent) { 
-            if (__hasProp.call(parent,  key)) child[key] = parent[key]; 
+            if (__hasProp.call(parent,  key)) {
+                child[key] = parent[key]; 
+            }
         } 
         function ctor() { 
             this.constructor = child; 
@@ -17,9 +19,7 @@
         return child;  
     };
     
-    var Logger;
-
-    Logger = (function(_super) {
+    var Logger = (function(_super) {
         __extends(Logger, _super);
 
         /*
@@ -32,15 +32,15 @@
         Logger.prototype.attached = false;
 
         Logger.prototype.createdCallback = function() {
-          this.attached = false;
+            this.attached = false;
         };
 
         Logger.prototype.attachedCallback = function() {
-          this.attached = true;
+            this.attached = true;
         };
 
         Logger.prototype.detachedCallback = function() {
-          return this.attached = false;
+            this.attached = false;
         };
     
         /*
@@ -51,7 +51,7 @@
          * Clears the log.
          */
         Logger.prototype.clear = function() {
-          this.innerHTML = '';
+            this.innerHTML = '';
         };
     
         /**
@@ -61,23 +61,23 @@
          * @param {string|undefined} date - Optional log date. If not specified current time will be used.
          */
         Logger.prototype.add = function(level, msg, date) {
-          date = date || __timeNow;
-          var row = document.createElement('tr');
-          var dateCol = document.createElement('td');
-          dateCol.className = 'date';
-          var levelCol = document.createElement('td');
-          levelCol.className = 'level';
-          if (level === 'ERROR') {
-            levelCol.className += ' level-error';
-          }
-          var msgCol = document.createElement('td');  
-          dateCol.appendChild(document.createTextNode(date));
-          levelCol.appendChild(document.createTextNode(level));
-          msgCol.appendChild(document.createTextNode(msg));     
-          row.appendChild(dateCol);
-          row.appendChild(levelCol);
-          row.appendChild(msgCol);
-          this.appendChild(row);
+            date = date || __timeNow;
+            var row = document.createElement('tr');
+            var dateCol = document.createElement('td');
+            dateCol.className = 'date';
+            var levelCol = document.createElement('td');
+            levelCol.className = 'level';
+            if (level === 'ERROR') {
+                levelCol.className += ' level-error';
+            }
+            var msgCol = document.createElement('td');  
+            dateCol.appendChild(document.createTextNode(date));
+            levelCol.appendChild(document.createTextNode(level));
+            msgCol.appendChild(document.createTextNode(msg));     
+            row.appendChild(dateCol);
+            row.appendChild(levelCol);
+            row.appendChild(msgCol);
+            this.appendChild(row);
         };
     
         /*
@@ -93,7 +93,7 @@
         return Logger;
     })(HTMLElement);
   
-    module.exports = Logger = document.registerElement('cb-logger', {
+    module.exports = document.registerElement('cb-logger', {
         prototype: Logger.prototype,
         extends: 'table'
     });

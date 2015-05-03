@@ -33,7 +33,7 @@
             while ((commentRaw = regex.exec(data)) !== null) {
                 commentParsed = doctrine.parse(commentRaw[0], { unwrap: true });
                 
-                commentParsed['getMethod'] = function() {
+                commentParsed.getMethod = function() {
                     for (var tag of this.tags)
                     {
                         if (tag.title === 'function') {
@@ -41,7 +41,7 @@
                         }
                     }
                 };
-                commentParsed['getReturn'] = function() {
+                commentParsed.getReturn = function() {
                     for (var tag of this.tags)
                     {
                         if (tag.title === 'return') {
@@ -52,7 +52,7 @@
                         }
                     }
                 };
-                commentParsed['getParams'] = function() {
+                commentParsed.getParams = function() {
                     var params = [];
                     for (var tag of this.tags)
                     {
