@@ -27,14 +27,17 @@ Recorder.cmdSend = function (command, target, value, timestamp) {
     var data = JSON.stringify(
         { "cmd": command, "target": trg, "targetLocators": trgLocs, "value": value, "timestamp": timestamp },
         function (k, v) { return (v == null) ? undefined : v;});
-    JQueryWrapper.jQuery.ajax({
-        url: Recorder.GetIdeUrl(),
-        data: data,
-        contentType: 'text/plain',
-        type: 'POST'
-    }).error(function (a,b,c){
-        console.log("Error sending command: " + b + ", " + c);
-    });
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", Recorder.GetIdeUrl());
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if(xmlhttp.status != 400) {
+                console.log("Error sending command: " + xmlhttp.statusText);
+            }
+        }
+    }
+    xmlhttp.send(data);
 }
 
 Recorder.prototype.reattachWindowMethods = function() {
@@ -119,12 +122,16 @@ Recorder.prototype.attach = function() {
 	}
 
 	var lw = JSON.stringify(new LastWindow(window));
-	JQueryWrapper.jQuery.ajax({
-	    url: Recorder.GetIdeUrl() + "/lastwin_store",
-	    data: lw,
-	    contentType: 'text/plain',
-	    type: 'POST'
-	});
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_store");
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if(xmlhttp.status != 400) {
+                console.log("Error sending command: " + xmlhttp.statusText);
+            }
+        }
+    }
+    xmlhttp.send(lw);
 
 	Recorder.cmdSend('open', document.URL, null, (new Date()).getTime());
 }
@@ -135,70 +142,69 @@ Recorder.record = function (recorder, command, target, value) {
 
 Recorder.prototype.record = function (command, target, value, insertBeforeLastCommand) {
     var curDateForWin = (new Date).getTime();
-    JQueryWrapper.jQuery.ajax({
-        contentType: 'text/plain',
-        type: 'POST',
-        dataType: 'json',
-        url: Recorder.GetIdeUrl() + "/lastwin_update",
-        data: JSON.stringify(new LastWindow(window)),
-        async: true
-    }).success(function (lw) {
-        if (lw != 'False') {
-		    if (!Recorder.isSameWindow(lw, window)) {
-		        var send_frame = false;
-		        var send_win = false;
-				// it can be different window OR a different frame in same window OR different frame in different window
-		        console.log("is frame: " + (window != window.top));
-				if (window != window.top) { // check if frame
-					try {                   // IE9-11: results in Access Denied when accessing parent since script is injected into all "plain/html" sources
-						if (lw.parenthash != window.parent.__hash) {
-						    send_win = true;
-						}
-					} catch (e) { }
-					send_frame = true;
-				} else {
-				    try {
-				        if (lw.isTopLevel && window.top == window.top.parent) {
-				            send_win = lw.topName != window.top.name;
-				        } else {
-				            send_win = false;
-				        }
-				    } catch (e) { }
-				}
+    
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_store", false);
+    xmlhttp.send(JSON.stringify(new LastWindow(window)));
+    if (xmlhttp.status !== 400) {
+      console.log("AJAX lastwin_store error: " + xmlhttp.statusText);
+    }
+    var lw = xmlhttp.responseText;
+    if (lw != 'False') {
+        if (!Recorder.isSameWindow(lw, window)) {
+            var send_frame = false;
+            var send_win = false;
+            // it can be different window OR a different frame in same window OR different frame in different window
+            console.log("is frame: " + (window != window.top));
+            if (window != window.top) { // check if frame
+                try {                   // IE9-11: results in Access Denied when accessing parent since script is injected into all "plain/html" sources
+                    if (lw.parenthash != window.parent.__hash) {
+                        send_win = true;
+                    }
+                } catch (e) { }
+                send_frame = true;
+            } else {
+                try {
+                    if (lw.isTopLevel && window.top == window.top.parent) {
+                        send_win = lw.topName != window.top.name;
+                    } else {
+                        send_win = false;
+                    }
+                } catch (e) { }
+            }
 
-				if (send_win) {
-				    Recorder.cmdSend("selectWindow", (window.name == '') ? '' : "name=" + window.name, null, curDateForWin);
-				}
-				if (send_frame) {
-				    var destPath = createPath(window);
-				    var srcPath = createPath(lw);
-				    console.log("selectFrame: srcPath.length=" + srcPath.length + ", destPath.length=" + destPath.length);
-				    var branch = 0;
-				    var i;
-				    for (i = 0; ; i++) {
-				        if (i >= destPath.length || i >= srcPath.length) {
-				            break;
-				        }
-				        if (destPath[i] == srcPath[i]) {
-				            branch = i;
-				        }
-				    }
-				    console.log("branch=" + branch);
-				    if (branch == 0 && srcPath.size > 1) {
-				        // go to root
-				        Recorder.cmdSend("selectFrame", "relative=top", null, ++curDateForWin);
-				    } else {
-				        for (i = srcPath.length - 1; i > branch; i--) {
-				            Recorder.cmdSend("selectFrame", "relative=up", null, ++curDateForWin);
-				        }
-				    }
-				    for (i = branch + 1; i < destPath.length; i++) {
-				         Recorder.cmdSend("selectFrame", (destPath[i].name != '') ? destPath[i].name : "index=" + i, null, ++curDateForWin);
-				    }
-				}
-			}
-		}
-    });
+            if (send_win) {
+                Recorder.cmdSend("selectWindow", (window.name == '') ? '' : "name=" + window.name, null, curDateForWin);
+            }
+            if (send_frame) {
+                var destPath = createPath(window);
+                var srcPath = createPath(lw);
+                console.log("selectFrame: srcPath.length=" + srcPath.length + ", destPath.length=" + destPath.length);
+                var branch = 0;
+                var i;
+                for (i = 0; ; i++) {
+                    if (i >= destPath.length || i >= srcPath.length) {
+                        break;
+                    }
+                    if (destPath[i] == srcPath[i]) {
+                        branch = i;
+                    }
+                }
+                console.log("branch=" + branch);
+                if (branch == 0 && srcPath.size > 1) {
+                    // go to root
+                    Recorder.cmdSend("selectFrame", "relative=top", null, ++curDateForWin);
+                } else {
+                    for (i = srcPath.length - 1; i > branch; i--) {
+                        Recorder.cmdSend("selectFrame", "relative=up", null, ++curDateForWin);
+                    }
+                }
+                for (i = branch + 1; i < destPath.length; i++) {
+                     Recorder.cmdSend("selectFrame", (destPath[i].name != '') ? destPath[i].name : "index=" + i, null, ++curDateForWin);
+                }
+            }
+        }
+    }
 
     Recorder.cmdSend(command, target, value, (new Date).getTime())
 }
