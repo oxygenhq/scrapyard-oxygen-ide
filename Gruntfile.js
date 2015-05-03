@@ -6,7 +6,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
-
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    
     grunt.registerTask('default', ['download-electron', 'clean', 'sync']);
     grunt.registerTask('release', ['default', 'compress']);
 
@@ -55,6 +56,12 @@ module.exports = function(grunt) {
                     { expand: true, cwd: OUTDIR, src: ['**'], dest: 'cloudbeat-v' + pkg.version }
                 ]
             }
+        },
+        watch: {
+            scripts: {
+                files: ['src/**'],
+                tasks: ['sync']
+            },
         }
     });
 };

@@ -11,7 +11,8 @@
     "grunt-download-electron": "~2.1.0",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-compress": "~0.13.0",
-    "grunt-sync": "~0.2.3"
+    "grunt-sync": "~0.2.3",
+    "grunt-contrib-watch": "~0.6.1"
   },
   "dependencies": {
     "tmp": "0.0.25",
