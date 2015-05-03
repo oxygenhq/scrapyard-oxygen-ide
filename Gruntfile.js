@@ -3,10 +3,11 @@ var pkg = require('./package.json');
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-download-electron');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
 
-    grunt.registerTask('default', ['download-electron', 'clean', 'copy']);
+    grunt.registerTask('default', ['download-electron', 'clean', 'sync']);
     grunt.registerTask('release', ['default', 'compress']);
 
     const OUTDIR = 'build';
@@ -23,7 +24,7 @@ module.exports = function(grunt) {
         },
         clean: 
             [OUTDIR + "/resources/default_app"],
-        copy: {
+        sync: {
             main: {
                 files: [
                     { 
@@ -41,7 +42,8 @@ module.exports = function(grunt) {
                         src: ['package.json', 'LICENSE', 'selenium/**'], 
                         dest: OUTDIR + '/resources/app' 
                     },
-                ],
+                ], 
+                verbose: true
             }
         },
         compress: {
