@@ -7,7 +7,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
     grunt.registerTask('default', ['download-electron', 'clean', 'sync']);
     grunt.registerTask('release', ['default', 'compress']);
 
@@ -60,8 +61,17 @@ module.exports = function(grunt) {
         watch: {
             scripts: {
                 files: ['src/**'],
-                tasks: ['sync']
+                tasks: ['jshint', 'sync']
             },
+        },
+        jshint: {
+            files: ['Gruntfile.js', 'src/*.js', '!src/jquery.min.js'],
+                options: {
+                    esnext: true,
+                    curly: false,
+                    loopfunc: true,
+                    shadow: true
+                }
         }
     });
 };
