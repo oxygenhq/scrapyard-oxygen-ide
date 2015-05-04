@@ -56,6 +56,7 @@ var path = require('path');
                     response.statusCode = 404;
                     response.statusMessage = 'Not found';
                 } 
+                response.end();
             } else if (request.method === 'POST') {
                 var body = '';
                 request.on('data', function (data) {
@@ -86,13 +87,13 @@ var path = require('path');
                             self.print(op);
                         }  
                     }
+                    response.end();
                 });      
             } else {
                 response.statusCode = 404;
                 response.statusMessage = 'Not found';
+                response.end();
             }
-
-            response.end();
         }
     }
     
