@@ -33,7 +33,6 @@ Recorder.cmdSend = function (command, target, value, timestamp) {
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
             if(xmlhttp.status != 400) {
-                console.log("Error sending command: " + xmlhttp.statusText);
             }
         }
     }
@@ -127,7 +126,6 @@ Recorder.prototype.attach = function() {
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
             if(xmlhttp.status != 400) {
-                console.log("Error sending command: " + xmlhttp.statusText);
             }
         }
     }
@@ -144,12 +142,12 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
     var curDateForWin = (new Date).getTime();
     
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_store", false);
+    xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_update", false);
     xmlhttp.send(JSON.stringify(new LastWindow(window)));
-    if (xmlhttp.status !== 400) {
-      console.log("AJAX lastwin_store error: " + xmlhttp.statusText);
+    if (xmlhttp.status !== 200) {
+      console.log("AJAX lastwin_update error: " + xmlhttp.statusText);
     }
-    var lw = xmlhttp.responseText;
+    var lw = JSON.parse(xmlhttp.responseText);    
     if (lw != 'False') {
         if (!Recorder.isSameWindow(lw, window)) {
             var send_frame = false;
