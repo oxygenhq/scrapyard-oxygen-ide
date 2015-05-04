@@ -11,7 +11,7 @@ if (typeof(console) === "undefined") {
 if (typeof(String.prototype.startsWith) === "undefined")
 {
     String.prototype.startsWith = function (str) {
-        return this.indexOf(str) == 0;
+        return this.indexOf(str) === 0;
     };
 }
 
@@ -31,7 +31,7 @@ Array.prototype["delete"] = function(value) {
         }
     }
     return false;
-}
+};
 
 // Samit: Ref: Split the fn to allow both objects of a class as well as the class itself to be notifiable as required
 function observable(clazz) {
