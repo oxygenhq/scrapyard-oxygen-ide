@@ -36,9 +36,9 @@ var BrowserBot = function(topLevelApplicationWindow) {
     this.metaKeyDown = false;
 
     this.modalDialogTest = null;
-    this.recordedAlerts = new Array();
-    this.recordedConfirmations = new Array();
-    this.recordedPrompts = new Array();
+    this.recordedAlerts = [];
+    this.recordedConfirmations = [];
+    this.recordedPrompts = [];
     this.openedWindows = {};
     this.nextConfirmResult = true;
     this.nextPromptResult = '';
@@ -57,9 +57,9 @@ var BrowserBot = function(topLevelApplicationWindow) {
     this.shouldHighlightLocatedElement = false;
 
     this.uniqueId = "seleniumMarker" + new Date().getTime();
-    this.pollingForLoad = new Object();
-    this.permDeniedCount = new Object();
-    this.windowPollers = new Array();
+    this.pollingForLoad = {};
+    this.permDeniedCount = {};
+    this.windowPollers = [];
     // DGF for backwards compatibility
     this.browserbot = this;
 
@@ -730,7 +730,6 @@ BrowserBot.prototype.pollForLoad = function(loadFunction, windowObject, original
             }
             return;
         }
-        console.log("pollForLoad continue (" + marker + "): " + currentHref);
         this.reschedulePoller(loadFunction, windowObject, originalDocument, originalLocation, originalHref, marker);
     } catch (e) {
         console.log("Exception during pollForLoad; this should get noticed soon (" + e.message + ")!");
@@ -822,36 +821,6 @@ BrowserBot.prototype.getReadyState = function(windowObject, currentDocument) {
     return rs;
 };
 
-/** This function isn't used normally, but was the way we used to schedule pollers:
- asynchronously executed autonomous units.  This is deprecated, but remains here
- for future reference.
- */
-BrowserBot.prototype.XXXreschedulePoller = function(loadFunction, windowObject, originalDocument, originalLocation, originalHref, marker) {
-    var self = this;
-    window.setTimeout(function() {
-        self.pollForLoad(loadFunction, windowObject, originalDocument, originalLocation, originalHref, marker);
-    }, 500);
-};
-
-/** This function isn't used normally, but is useful for debugging asynchronous pollers
- * To enable it, rename it to "reschedulePoller", so it will override the
- * existing reschedulePoller function
- */
-BrowserBot.prototype.XXXreschedulePoller = function(loadFunction, windowObject, originalDocument, originalLocation, originalHref, marker) {
-    var doc = this.buttonWindow.document;
-    var button = doc.createElement("button");
-    var buttonName = doc.createTextNode(marker + " - " + windowObject.name);
-    button.appendChild(buttonName);
-    var tools = doc.getElementById("tools");
-    var self = this;
-    button.onclick = function() {
-        tools.removeChild(button);
-        self.pollForLoad(loadFunction, windowObject, originalDocument, originalLocation, originalHref, marker);
-    };
-    tools.appendChild(button);
-    window.setTimeout(button.onclick, 500);
-};
-
 BrowserBot.prototype.reschedulePoller = function(loadFunction, windowObject, originalDocument, originalLocation, originalHref, marker) {
     var self = this;
     var pollerFunction = function() {
@@ -863,7 +832,7 @@ BrowserBot.prototype.reschedulePoller = function(loadFunction, windowObject, ori
 BrowserBot.prototype.runScheduledPollers = function() {
     console.log("runScheduledPollers");
     var oldPollers = this.windowPollers;
-    this.windowPollers = new Array();
+    this.windowPollers = [];
     for (var i = 0; i < oldPollers.length; i++) {
         oldPollers[i].call();
     }
@@ -992,7 +961,7 @@ BrowserBot.prototype._registerAllLocatorFunctions = function() {
     /**
      * The implicit locator, that is used when no prefix is supplied.
      */
-    this.locationStrategies['implicit'] = function(locator, inDocument, inWindow) {
+    this.locationStrategies.implicit = function(locator, inDocument, inWindow) {
         if (locator.startsWith('//')) {
             return this.locateElementByXPath(locator, inDocument, inWindow);
         }
@@ -1069,9 +1038,9 @@ BrowserBot.prototype.findElement = function(locator, win) {
 BrowserBot.prototype.locateElementByIdentifier = function(identifier, inDocument, inWindow) {
     // HBC - use "this" instead of "BrowserBot.prototype"; otherwise we lose
     // the non-prototype fields of the object!
-    return this.locateElementById(identifier, inDocument, inWindow)
-            || BrowserBot.prototype.locateElementByName(identifier, inDocument, inWindow)
-            || null;
+    return this.locateElementById(identifier, inDocument, inWindow) ||
+            BrowserBot.prototype.locateElementByName(identifier, inDocument, inWindow) ||
+            null;
 };
 
 /**
@@ -1090,7 +1059,7 @@ BrowserBot.prototype.locateElementById = function(identifier, inDocument, inWind
             element = elements[i];
             
             if (element.tagName.toLowerCase() == 'form') {
-                if (element.attributes['id'].nodeValue == identifier) {
+                if (element.attributes.id.nodeValue == identifier) {
                     return element;
                 }
             }
@@ -1227,105 +1196,6 @@ BrowserBot.prototype.selectOption = function(element, optionToSelect) {
 
     if (changed) {
         bot.events.fire(element, bot.events.EventType.CHANGE);
-    }
-};
-
-/*
-* Select the specified option and trigger the relevant events of the element.
-*/
-BrowserBot.prototype.addSelection = function(element, option) {
-    this.checkMultiselect(element);
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-    if (!option.selected) {
-        option.selected = true;
-        bot.events.fire(element, bot.events.EventType.CHANGE);
-    }
-};
-
-/*
-* Select the specified option and trigger the relevant events of the element.
-*/
-BrowserBot.prototype.removeSelection = function(element, option) {
-    this.checkMultiselect(element);
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-    if (option.selected) {
-        option.selected = false;
-        bot.events.fire(element, bot.events.EventType.CHANGE);
-    }
-};
-
-BrowserBot.prototype.checkMultiselect = function(element) {
-    if (!element.multiple)
-    {
-        throw new SeleniumError("Not a multi-select");
-    }
-
-};
-
-BrowserBot.prototype.replaceText = function(element, stringValue) {
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-    bot.events.fire(element, bot.events.EventType.SELECT);
-    var maxLengthAttr = element.getAttribute("maxLength");
-    var actualValue = stringValue;
-    if (maxLengthAttr != null) {
-        var maxLength = parseInt(maxLengthAttr);
-        if (stringValue.length > maxLength) {
-            actualValue = stringValue.substr(0, maxLength);
-        }
-    }
-
-    if (getTagName(element) == "body") {
-        if (element.ownerDocument && element.ownerDocument.designMode) {
-            var designMode = new String(element.ownerDocument.designMode).toLowerCase();
-            if (designMode == "on") {
-                // this must be a rich text control!
-                element.innerHTML = actualValue;
-            }
-        }
-    } else {
-        element.value = actualValue;
-    }
-    // DGF this used to be skipped in chrome URLs, but no longer.  Is xpcnativewrappers to blame?
-    try {
-        bot.events.fire(element, bot.events.EventType.CHANGE);
-    } catch (e) {}
-};
-
-BrowserBot.prototype.submit = function(formElement) {
-    var actuallySubmit = true;
-    this._modifyElementTarget(formElement);
-    
-    if (formElement.onsubmit) {
-        if (browserVersion.isHTA) {
-            // run the code in the correct window so alerts are handled correctly even in HTA mode
-            var win = this.browserbot.getCurrentWindow();
-            var now = new Date().getTime();
-            var marker = 'marker' + now;
-            win[marker] = formElement;
-            win.setTimeout("var actuallySubmit = "+marker+".onsubmit();" +
-                "if (actuallySubmit) { " +
-                    marker+".submit(); " +
-                    "if ("+marker+".target && !/^_/.test("+marker+".target)) {"+
-                        "window.open('', "+marker+".target);"+
-                    "}"+
-                "};"+
-                marker+"=null", 0);
-            // pause for up to 2s while this command runs
-            var terminationCondition = function () {
-                return !win[marker];
-            };
-            return Selenium.decorateFunctionWithTimeout(terminationCondition, 2000);
-        } else {
-            actuallySubmit = formElement.onsubmit();
-            if (actuallySubmit) {
-                formElement.submit();
-                if (formElement.target && !/^_/.test(formElement.target)) {
-                    this.browserbot.openWindow('', formElement.target);
-                }
-            }
-        }
-    } else {
-        formElement.submit();
     }
 };
 

@@ -35,9 +35,9 @@ Recorder.cmdSend = function (command, target, value, timestamp) {
             if(xmlhttp.status != 400) {
             }
         }
-    }
+    };
     xmlhttp.send(data);
-}
+};
 
 Recorder.prototype.reattachWindowMethods = function() {
 	if (!this.windowMethods) {
@@ -49,30 +49,30 @@ Recorder.prototype.reattachWindowMethods = function() {
 		}, this);
 	var self = this;
 	window.alert = function(alert) {
-	    self.windowMethods['alert'].call(self.window, alert);
+	    self.windowMethods.alert.call(self.window, alert);
         self.record('assertAlert', alert);
-	}
+	};
 	window.confirm = function(message) {
-		var result = self.windowMethods['confirm'].call(self.window, message);
+		var result = self.windowMethods.confirm.call(self.window, message);
 		if (!result) {
 			self.record('chooseCancelOnNextConfirmation', null, null, true);
 		}
         self.record('assertConfirmation', message);
 		return result;
-	}
+	};
 	window.prompt = function(message) {
-		var result = self.windowMethods['prompt'].call(self.window, message);
+		var result = self.windowMethods.prompt.call(self.window, message);
 		self.record('answerOnNextPrompt', result, null, true);
         self.record('assertPrompt', message);
 		return result;
-	}
+	};
 	window.open = function (url, windowName, windowFeatures, replaceFlag) {
 		if (self.openCalled) {
 			// stop the recursion called by modifyWindowToRecordPopUpDialogs
 			return self.originalOpen.call(window, url, windowName, windowFeatures, replaceFlag);
 		} else {
 			self.openCalled = true;
-			var result = self.windowMethods['open'].call(window, url, windowName, windowFeatures, replaceFlag);
+			var result = self.windowMethods.open.call(window, url, windowName, windowFeatures, replaceFlag);
 			self.openCalled = false;
             if (result.wrappedJSObject) {
                 result = result.wrappedJSObject;
@@ -80,8 +80,8 @@ Recorder.prototype.reattachWindowMethods = function() {
 			setTimeout(Recorder.record, 0, self, 'waitForPopUp', windowName, "30000");
 			return result;
 		}
-	}
-}
+	};
+};
 
 Recorder.prototype.parseEventKey = function(eventKey) {
 	if (eventKey.match(/^C_/)) {
@@ -89,7 +89,7 @@ Recorder.prototype.parseEventKey = function(eventKey) {
 	} else {
 		return { eventName: eventKey, capture: false };
 	}
-}
+};
 
 Recorder.prototype.attach = function() {
     console.log("attaching");
@@ -97,19 +97,19 @@ Recorder.prototype.attach = function() {
 	this.eventListeners = {};
 	this.reattachWindowMethods();
 	var self = this;
-	for (eventKey in Recorder.eventHandlers) {
+	for (var eventKey in Recorder.eventHandlers) {
 		var eventInfo = this.parseEventKey(eventKey);
 		var eventName = eventInfo.eventName;
 		var capture = eventInfo.capture;
 		// create new function so that the variables have new scope.
-		function register() {
+		function register() { // jshint ignore:line
 			var handlers = Recorder.eventHandlers[eventKey];
 			//console.log('eventName=' + eventName + ' / handlers.length=' + handlers.length);
 			var listener = function(event) {
 				for (var i = 0; i < handlers.length; i++) {
                     handlers[i].call(self, event);
 				}
-			}
+			};
 			if (browserVersion.isIE && browserVersion.ieMode < 11) {
 			    window.document.attachEvent("on" + eventName, listener);
 			} else {
@@ -128,18 +128,18 @@ Recorder.prototype.attach = function() {
             if(xmlhttp.status != 400) {
             }
         }
-    }
+    };
     xmlhttp.send(lw);
 
 	Recorder.cmdSend('open', document.URL, null, (new Date()).getTime());
-}
+};
 
 Recorder.record = function (recorder, command, target, value) {
     recorder.record(command, target, value);
-}
+};
 
 Recorder.prototype.record = function (command, target, value, insertBeforeLastCommand) {
-    var curDateForWin = (new Date).getTime();
+    var curDateForWin = (new Date()).getTime();
     
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_update", false);
@@ -204,8 +204,8 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
         }
     }
 
-    Recorder.cmdSend(command, target, value, (new Date).getTime())
-}
+    Recorder.cmdSend(command, target, value, (new Date()).getTime());
+};
 
 function createPath(window) {
     var path = [];
@@ -218,30 +218,30 @@ function createPath(window) {
         }
     } catch (e) { }
     return path;
-};
+}
 
 Recorder.prototype.findLocator = function (element) {
 	return this.locatorBuilders.build(element);
-}
+};
 
 Recorder.prototype.findLocators = function (element) {
     var locators = this.locatorBuilders.buildAll(element);
     //console.log('Locators: ' + locators);
     return locators;
-}
+};
 
 Recorder.addEventHandler = function(handlerName, eventName, handler, options) {
 	handler.handlerName = handlerName;
 	if (!options) options = {};
-	var key = options['capture'] ? ('C_' + eventName) : eventName;
+	var key = options.capture ? ('C_' + eventName) : eventName;
 	if (!this.eventHandlers[key]) {
 		this.eventHandlers[key] = [];
 	}
 	this.eventHandlers[key].push(handler);
-}
+};
 
 Recorder.removeEventHandler = function(handlerName) {
-	for (eventKey in this.eventHandlers) {
+	for (var eventKey in this.eventHandlers) {
 		var handlers = this.eventHandlers[eventKey];
 		for (var i = 0; i < handlers.length; i++) {
 			if (handlers[i].handlerName == handlerName) {
@@ -250,13 +250,13 @@ Recorder.removeEventHandler = function(handlerName) {
 			}
 		}
 	}
-}
+};
 
 Recorder.eventHandlers = {};
 
 Recorder.GetIdeUrl = function() {
     return location.protocol === 'https:' ? "https://localhost:8889" : "http://localhost:7778";
-}
+};
 
 function LastWindow(window) {
     var hash;
@@ -266,14 +266,14 @@ function LastWindow(window) {
         hash = window.__hash;
     } else {
         hash = Recorder.guid();
-        window['__hash'] = hash;
+        window.__hash = hash;
     }
     try {
         if ('__hash' in window.parent) {
             phash = window.parent.__hash;
         } else {
             phash = Recorder.guid();
-            window.parent['__hash'] = phash;
+            window.parent.__hash = phash;
         }
         this.isTopLevel = window == window.parent;
         this.topName = window.top.name;
@@ -292,7 +292,7 @@ Recorder.guid = function() {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     }
     return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
-}
+};
 
 Recorder.isSameWindow = function (lastwin, window) {
     console.log('isSameWindow lw:' + lastwin.hash + " win: " + window.__hash);
@@ -300,7 +300,7 @@ Recorder.isSameWindow = function (lastwin, window) {
         return false;
     } 
     return lastwin.hash == window.__hash;
-}
+};
 
 Recorder.inputTypes = ["text", "password", "file", "datetime", "datetime-local", "date", "month", "time", "week", "number", "range", "email", "url", "search", "tel", "color"];
 Recorder.addEventHandler('type', 'change', function (ev, check_prev) {
@@ -349,7 +349,7 @@ if (browserVersion.isIE && browserVersion.ieMode < 11) {
         var target = ev.srcElement;
 
         if (target.nodeName.toLowerCase() === "select") {
-            var changeHandlers = Recorder.eventHandlers["change"];
+            var changeHandlers = Recorder.eventHandlers.change;
             for (var i = 0; i < changeHandlers.length; i++) {
                 if (changeHandlers[i].handlerName == "select") {
                     changeHandlers[i].call(this, ev, true);
@@ -357,7 +357,7 @@ if (browserVersion.isIE && browserVersion.ieMode < 11) {
                 }
             }
         } else if (target.nodeName.toLowerCase() === "input") {
-            var changeHandlers = Recorder.eventHandlers["change"];
+            var changeHandlers = Recorder.eventHandlers.change;
             for (var i = 0; i < changeHandlers.length; i++) {
                 if (changeHandlers[i].handlerName == "type") {
                     changeHandlers[i].call(this, ev, true);
