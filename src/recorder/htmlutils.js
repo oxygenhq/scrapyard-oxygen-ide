@@ -1044,80 +1044,9 @@ function NativeEngine() {
 
 NativeEngine.prototype = new XPathEngine();
 
-/**
- * Implements XPathEngine.
- */
-function AjaxsltEngine() {
-// private
-    var ignoreAttributesWithoutValue = false;
-    
-    function selectLogic(xpath, contextNode, namespaceResolver, firstMatch) {
-        // DGF set xpathdebug = true (using getEval, if you like) to turn on JS
-        // XPath debugging
-        //xpathdebug = true;
-        var context;
-        
-        if (contextNode == this.doc) {
-            context = new ExprContext(this.doc);
-        }
-        else {
-            // provide false values to get the default constructor values
-            context = new ExprContext(contextNode, false, false,
-                contextNode.parentNode);
-        }
-        
-        context.setCaseInsensitive(true);
-        context.setIgnoreAttributesWithoutValue(ignoreAttributesWithoutValue);
-        context.setReturnOnFirstMatch(firstMatch);
-        
-        try {
-            var xpathObj = xpathParse(xpath);
-        }
-        catch (e) {
-            var msg = extractExceptionMessage(e);
-            throw new SeleniumError("Invalid xpath [3]: " + msg);
-        }
-        
-        var nodes = []
-        var xpathResult = xpathObj.evaluate(context);
-        
-        if (xpathResult && xpathResult.value) {
-            for (var i = 0; i < xpathResult.value.length; ++i) {
-                nodes.push(xpathResult.value[i]);
-            }
-        }
-        
-        return nodes;
-    }
-    
-// public
-    // Override
-    this.isAvailable = function() { return true; };
-    
-    // Override
-    this.selectNodes = function(xpath, contextNode, namespaceResolver) {
-        return selectLogic(xpath, contextNode, namespaceResolver, false);
-    };
-    
-    // Override
-    this.selectSingleNode = function(xpath, contextNode, namespaceResolver) {
-        var nodes = selectLogic(xpath, contextNode, namespaceResolver, true);
-        return (nodes.length > 0 ? nodes[0] : null);
-    };
-    
-    // Override
-    this.setIgnoreAttributesWithoutValue = function(ignore) {
-        ignoreAttributesWithoutValue = ignore;
-        return this;
-    };
-}
+///////////////////////////////////////////////////////////////////////////////
 
-AjaxsltEngine.prototype = new XPathEngine();
-
-/**
- * Implements XPathEngine.
- */
-function JavascriptXPathEngine() {
+function WickedGoodXPathEngine() {
 // private
     var engineDoc = document;
     
@@ -1165,7 +1094,7 @@ function JavascriptXPathEngine() {
     };
 }
 
-JavascriptXPathEngine.prototype = new XPathEngine();
+WickedGoodXPathEngine.prototype = new XPathEngine();
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -1179,10 +1108,9 @@ JavascriptXPathEngine.prototype = new XPathEngine();
 function XPathEvaluator(newDefaultEngineName) {
 // private
     var nativeEngine = new NativeEngine();
-    var defaultEngineName = newDefaultEngineName || 'ajaxslt';
+    var defaultEngineName = newDefaultEngineName || 'wgxpath';
     var engines = {
-        'ajaxslt'               : new AjaxsltEngine(),
-        'javascript-xpath'      : new JavascriptXPathEngine(),
+        'wgxpath'      : new WickedGoodXPathEngine(),
         'native'                : nativeEngine
     };
     
@@ -1251,10 +1179,7 @@ function XPathEvaluator(newDefaultEngineName) {
      */
     this.registerEngine = function(name, engine) {
         // can't overwrite one of these
-        if (name == 'ajaxslt' ||
-            name == 'javascript-xpath' ||
-            name == 'native' ||
-            name == 'default') {
+        if (name == 'wgxpath' || name == 'default') {
             return false;
         }
         
@@ -1773,54 +1698,6 @@ function is_ancestor(node, target)
     }
     return false;
 }
-
-//******************************************************************************
-// parseUri 1.2.1
-// MIT License
-
-/*
-Copyright (c) 2007 Steven Levithan <stevenlevithan.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-*/
-
-function parseUri (str) {
-    var o   = parseUri.options,
-        m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
-        uri = {},
-        i   = 14;
-
-    while (i--) uri[o.key[i]] = m[i] || "";
-
-    uri[o.q.name] = {};
-    uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
-        if ($1) uri[o.q.name][$1] = $2;
-    });
-
-    return uri;
-};
-
-parseUri.options = {
-    strictMode: false,
-    key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
-    q:   {
-        name:   "queryKey",
-        parser: /(?:^|&)([^&=]*)=?([^&]*)/g
-    },
-    parser: {
-        strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-        loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
-    }
-};
-
 
 /**
  * Construct the UI map object, and return it. Once the object is instantiated,

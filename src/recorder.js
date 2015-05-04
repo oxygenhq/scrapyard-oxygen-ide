@@ -14,8 +14,8 @@ var path = require('path');
     const PORT_HTTPS = 8889;
     const RECORDER_DIR = 'recorder/';
     
-    var scripts = ['tools.js', 'xmltoken.js', 'dom.js', 'util.js', 'xpath.js', 'htmlutils.js', 
-                'selenium-browserbot.js', 'locatorBuilders.js', 'recorder.js'];
+    var scripts = ['tools.js', 'util.js', 'htmlutils.js', 'selenium-browserbot.js',
+                    'locatorBuilders.js', 'recorder.js', 'wgxpath.install.js'];
  
     /*
      * Section: Construction and Destruction

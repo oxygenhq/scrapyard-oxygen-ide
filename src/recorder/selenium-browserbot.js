@@ -25,7 +25,7 @@ var BrowserBot = function(topLevelApplicationWindow) {
     this.currentWindow = this.topWindow;
     this.currentWindowName = null;
     this.allowNativeXpath = true;
-    this.xpathEvaluator = new XPathEvaluator('ajaxslt');  // change to "javascript-xpath" for the newer, faster engine
+    this.xpathEvaluator = new XPathEvaluator('wgxpath');
     
     // We need to know this in advance, in case the frame closes unexpectedly
     this.isSubFrameSelected = false;
