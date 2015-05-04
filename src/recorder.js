@@ -14,7 +14,7 @@ var path = require('path');
     const PORT_HTTPS = 8889;
     const RECORDER_DIR = 'recorder/';
     
-    var scripts = ['tools.js', 'util.js', 'htmlutils.js', 'selenium-browserbot.js',
+    var scripts = ['tools.js', 'htmlutils.js', 'selenium-browserbot.js',
                     'locatorBuilders.js', 'recorder.js', 'wgxpath.install.js'];
  
     /*

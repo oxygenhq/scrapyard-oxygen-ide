@@ -119,11 +119,7 @@ var BrowserBot = function(topLevelApplicationWindow) {
           return self.newPageLoaded && (self.isXhrSent ? (self.abortXhr || self.isXhrDone) : true); 
         }
     };
-    
-    this.setAllowNativeXPath = function(allow) {
-        this.xpathEvaluator.setAllowNativeXPath(allow);
-    };
-    
+
     this.setIgnoreAttributesWithoutValue = function(ignore) {
         this.xpathEvaluator.setIgnoreAttributesWithoutValue(ignore);
     };
@@ -139,33 +135,6 @@ var BrowserBot = function(topLevelApplicationWindow) {
 
 // DGF PageBot exists for backwards compatibility with old user-extensions
 var PageBot = function(){};
-
-BrowserBot.createForWindow = function(window, proxyInjectionMode) {
-    var browserbot;
-    console.log('createForWindow');
-    console.log("browserName: " + browserVersion.name);
-    console.log("userAgent: " + navigator.userAgent);
-    if (browserVersion.isIE) {
-        browserbot = new IEBrowserBot(window);
-    }
-    else if (browserVersion.isKonqueror) {
-        browserbot = new KonquerorBrowserBot(window);
-    }
-    else if (browserVersion.isOpera) {
-        browserbot = new OperaBrowserBot(window);
-    }
-    else if (browserVersion.isSafari) {
-        browserbot = new SafariBrowserBot(window);
-    }
-    else {
-        // Use mozilla by default
-        browserbot = new MozillaBrowserBot(window);
-    }
-    // getCurrentWindow has the side effect of modifying it to handle page loads etc
-    browserbot.proxyInjectionMode = proxyInjectionMode;
-    browserbot.getCurrentWindow();    // for modifyWindow side effect.  This is not a transparent style
-    return browserbot;
-};
 
 BrowserBot.prototype.relayBotToRC = function(s) {
     // DGF need to do this funny trick to see if we're in PI mode, because
@@ -309,84 +278,6 @@ BrowserBot.prototype._modifyWindow = function(win) {
     return win;
 };
 
-BrowserBot.prototype.selectWindow = function(target) {
-    if (!target || target == "null") {
-        this._selectTopWindow();
-        return;
-    }
-    var result = target.match(/^([a-zA-Z]+)=(.*)/);
-    if (!result) {
-        this._selectWindowByWindowId(target);
-        return;
-    }
-    locatorType = result[1];
-    locatorValue = result[2];
-    if (locatorType == "title") {
-        this._selectWindowByTitle(locatorValue);
-    }
-    // TODO separate name and var into separate functions
-    else if (locatorType == "name") {
-        this._selectWindowByName(locatorValue);
-    } else if (locatorType == "var") {
-        var win = this.getCurrentWindow().eval(locatorValue);
-        if (win) {
-            this._selectWindowByName(win.name);
-        } else {
-            throw new SeleniumError("Window not found by var: " + locatorValue);
-        }
-    } else {
-        throw new SeleniumError("Window locator not recognized: " + locatorType);
-    }
-};
-
-BrowserBot.prototype.selectPopUp = function(windowId) {
-    if (! windowId || windowId == 'null') {
-        this._selectFirstNonTopWindow();
-    }
-    else {
-        this._selectWindowByWindowId(windowId);
-    }
-};
-
-BrowserBot.prototype._selectTopWindow = function() {
-    this.currentWindowName = null;
-    this.currentWindow = this.topWindow;
-    this.topFrame = this.topWindow;
-    this.isSubFrameSelected = false;
-};
-
-BrowserBot.prototype._selectWindowByWindowId = function(windowId) {
-    try {
-        this._selectWindowByName(windowId);
-    }
-    catch (e) {
-        this._selectWindowByTitle(windowId);
-    }
-};
-
-BrowserBot.prototype._selectWindowByName = function(target) {
-    this.currentWindow = this.getWindowByName(target, false);
-    this.topFrame = this.currentWindow;
-    this.currentWindowName = target;
-    this.isSubFrameSelected = false;
-};
-
-BrowserBot.prototype._selectWindowByTitle = function(target) {
-    var windowName = this.getWindowNameByTitle(target);
-    if (!windowName) {
-        this._selectTopWindow();
-    } else {
-        this._selectWindowByName(windowName);
-    }
-};
-
-BrowserBot.prototype._selectFirstNonTopWindow = function() {
-    var names = this.getNonTopWindowNames();
-    if (names.length) {
-        this._selectWindowByName(names[0]);
-    }
-};
-
 BrowserBot.prototype.selectFrame = function(target) {
     var frame;
     
@@ -453,65 +344,6 @@ BrowserBot.prototype.selectFrame = function(target) {
     }
     // modifies the window
     this.getCurrentWindow();
-};
-
-BrowserBot.prototype.doesThisFrameMatchFrameExpression = function(currentFrameString, target) {
-    var isDom = false;
-    if (target.indexOf("dom=") == 0) {
-        target = target.substr(4);
-        isDom = true;
-    } else if (target.indexOf("index=") == 0) {
-        target = "frames[" + target.substr(6) + "]";
-        isDom = true;
-    }
-    var t;
-    try {
-        eval("t=" + currentFrameString + "." + target);
-    } catch (e) {
-    }
-    var autWindow = this.browserbot.getCurrentWindow();
-    if (t != null) {
-        try {
-            if (t.window == autWindow) {
-                return true;
-            }
-            if (t.window.uniqueId == autWindow.uniqueId) {
-                return true;
-               }
-            return false;
-        } catch (permDenied) {
-            // DGF if the windows are incomparable, they're probably not the same...
-        }
-    }
-    if (isDom) {
-        return false;
-    }
-    var currentFrame;
-    eval("currentFrame=" + currentFrameString);
-    if (target == "relative=up") {
-        if (currentFrame.window.parent == autWindow) {
-            return true;
-        }
-        return false;
-    }
-    if (target == "relative=top") {
-        if (currentFrame.window.top == autWindow) {
-            return true;
-        }
-        return false;
-    }
-    if (currentFrame.window == autWindow.parent) {
-        if (autWindow.name == target) {
-            return true;
-        }
-        try {
-            var element = this.findElement(target, currentFrame.window);
-            if (element.contentWindow == autWindow) {
-                return true;
-            }
-        } catch (e) {}
-    }
-    return false;
 };
 
 BrowserBot.prototype.abortXhrRequest = function() {
@@ -1058,91 +890,6 @@ BrowserBot.prototype.isPollingForLoad = function(win) {
     return marker;
 };
 
-BrowserBot.prototype.getWindowByName = function(windowName, doNotModify) {
-    console.log("getWindowByName(" + windowName + ")");
-    // First look in the map of opened windows
-    var targetWindow = this.openedWindows[windowName];
-    if (!targetWindow) {
-        targetWindow = this.topWindow[windowName];
-    }
-    if (!targetWindow && windowName == "_blank") {
-        for (var winName in this.openedWindows) {
-            // _blank can match selenium_blank*, if it looks like it's OK (valid href, not closed)
-            if (/^selenium_blank/.test(winName)) {
-                targetWindow = this.openedWindows[winName];
-                var ok;
-                try {
-                    if (!this._windowClosed(targetWindow)) {
-                        ok = targetWindow.location.href;
-                    }
-                } catch (e) {}
-                if (ok) break;
-            }
-        }
-    }
-    if (!targetWindow) {
-        throw new SeleniumError("Window does not exist. If this looks like a Selenium bug, make sure to read http://seleniumhq.org/docs/02_selenium_ide.html#alerts-popups-and-multiple-windows for potential workarounds.");
-    }
-    if (browserVersion.isHTA) {
-        try {
-            targetWindow.location.href;
-        } catch (e) {
-            targetWindow = window.open("", targetWindow.name);
-            this.openedWindows[targetWindow.name] = targetWindow;
-        }
-    }
-    if (!doNotModify) {
-        this._modifyWindow(targetWindow);
-    }
-    return targetWindow;
-};
-
-/**
- * Find a window name from the window title.
- */
-BrowserBot.prototype.getWindowNameByTitle = function(windowTitle) {
-    console.log("getWindowNameByTitle(" + windowTitle + ")");
-
-    // First look in the map of opened windows and iterate them
-    for (var windowName in this.openedWindows) {
-        var targetWindow = this.openedWindows[windowName];
-
-        // If the target window's title is our title
-        try {
-            // TODO implement Pattern Matching here
-            if (!this._windowClosed(targetWindow) &&
-                targetWindow.document.title == windowTitle) {
-                return windowName;
-            }
-        } catch (e) {
-            // You'll often get Permission Denied errors here in IE
-            // eh, if we can't read this window's title,
-            // it's probably not available to us right now anyway
-        }
-    }
-    
-    try {
-        if (this.topWindow.document.title == windowTitle) {
-            return "";
-        }
-    } catch (e) {} // IE Perm denied
-
-    throw new SeleniumError("Could not find window with title " + windowTitle);
-};
-
-BrowserBot.prototype.getNonTopWindowNames = function() {
-    var nonTopWindowNames = [];
-    
-    for (var windowName in this.openedWindows) {
-        var win = this.openedWindows[windowName];
-        if (! this._windowClosed(win) && win != this.topWindow) {
-            nonTopWindowNames.push(windowName);
-        }
-    }
-    
-    return nonTopWindowNames;
-};
-
 BrowserBot.prototype.getCurrentWindow = function(doNotModify) {
     if (this.proxyInjectionMode) {
         return window;
@@ -1315,32 +1062,6 @@ BrowserBot.prototype.findElement = function(locator, win) {
     return element;
 };
 
-
-/**
- * Finds a list of elements using the same mechanism as webdriver.
- *
- * @param {string} how The finding mechanism to use.
- * @param {string} using The selector to use.
- * @param {Document|Element} root The root of the search path.
- */
-BrowserBot.prototype.findElementsLikeWebDriver = function(how, using, root) {
-  var by = {};
-  by[how] = using;
-
-  var all = bot.locators.findElements(by, root);
-  var toReturn = '';
-
-  for (var i = 0; i < all.length - 1; i++) {
-      toReturn += bot.inject.cache.addElement(all[i]) + ',';
-  }
-  if (all[all.length - 1]) {
-      var last = all[all.length - 1];
-    toReturn += bot.inject.cache.addElement(all[all.length - 1]);
-  }
-
-  return toReturn;
-};
-
 /**
  * In non-IE browsers, getElementById() does not search by name.  Instead, we
  * we search separately by id and name.
@@ -1458,22 +1179,6 @@ BrowserBot.prototype.locateElementByXPath = function(xpath, inDocument, inWindow
           : this._namespaceResolver);
 };
 
-
-/**
- * Find many elements using xpath.
- *
- * @param {string} xpath XPath expression to search for.
- * @param {=Document} inDocument The document to search in.
- * @param {=Window} inWindow The window the document is in.
- */
-BrowserBot.prototype.locateElementsByXPath = function(xpath, inDocument, inWindow) {
-    return this.xpathEvaluator.selectNodes(inDocument, xpath, null,
-        inDocument.createNSResolver
-          ? inDocument.createNSResolver(inDocument.documentElement)
-          : this._namespaceResolver);
-};
-
-
 BrowserBot.prototype._namespaceResolver = function(prefix) {
     if (prefix == 'html' || prefix == 'xhtml' || prefix == 'x') {
         return 'http://www.w3.org/1999/xhtml';
@@ -1485,54 +1190,6 @@ BrowserBot.prototype._namespaceResolver = function(prefix) {
         throw new Error("Unknown namespace: " + prefix + ".");
     }
 };
-
-/**
- * Returns the number of xpath results.
- */
-BrowserBot.prototype.evaluateXPathCount = function(selector, inDocument) {
-    var locator = parse_locator(selector);
-    var opts = {};
-    opts['namespaceResolver'] =
-        inDocument.createNSResolver
-          ? inDocument.createNSResolver(inDocument.documentElement)
-          : this._namespaceResolver;
-    if (locator.type == 'xpath' || locator.type == 'implicit') {
-    	return eval_xpath(locator.string, inDocument, opts).length;
-    } else {
-        console.log("Locator does not use XPath strategy: " + selector);
-        return 0;
-    }
-};
-
-/**
- * Returns the number of css results.
- */
-BrowserBot.prototype.evaluateCssCount = function(selector, inDocument) {
-    var locator = parse_locator(selector);
-    if (locator.type == 'css' || locator.type == 'implicit') {
-        return eval_css(locator.string, inDocument).length;
-    } else {
-        console.log("Locator does not use CSS strategy: " + selector);
-        return 0;
-    }
-};
-
-/**
- * Finds a link element with text matching the expression supplied. Expressions must
- * begin with "link:".
- */
-BrowserBot.prototype.locateElementByLinkText = function(linkText, inDocument, inWindow) {
-    var links = inDocument.getElementsByTagName('a');
-    for (var i = 0; i < links.length; i++) {
-        var element = links[i];
-        if (PatternMatcher.matches(linkText, getText(element))) {
-            return element;
-        }
-    }
-    return null;
-};
-
-BrowserBot.prototype.locateElementByLinkText.prefix = "link";
 
 /**
  * Returns an attribute based on an attribute locator. This is made up of an element locator
@@ -1672,19 +1329,6 @@ BrowserBot.prototype.submit = function(formElement) {
     }
 };
 
-BrowserBot.prototype.clickElement = function(element, clientX, clientY) {
-       this._fireEventOnElement("click", element, clientX, clientY);
-};
-
-BrowserBot.prototype.doubleClickElement = function(element, clientX, clientY) {
-       this._fireEventOnElement("dblclick", element, clientX, clientY);
-};
-
-// The contextmenu event is fired when the user right-clicks to open the context menu
-BrowserBot.prototype.contextMenuOnElement = function(element, clientX, clientY) {
-       this._fireEventOnElement("contextmenu", element, clientX, clientY);
-};
-
 BrowserBot.prototype._modifyElementTarget = function(element) {
     if (element.target) {
         if (element.target == "_blank" || /^selenium_blank/.test(element.target) ) {
@@ -1710,37 +1354,6 @@ BrowserBot.prototype._handleClickingImagesInsideLinks = function(targetWindow, e
         itrElement = itrElement.parentNode;
     }
 };
-
-BrowserBot.prototype._getTargetWindow = function(element) {
-    var targetWindow = element.ownerDocument.defaultView;
-    if (element.target) {
-        targetWindow = this._getFrameFromGlobal(element.target);
-    }
-    return targetWindow;
-};
-
-BrowserBot.prototype._getFrameFromGlobal = function(target) {
-
-    if (target == "_self") {
-        return this.getCurrentWindow();
-    }
-    if (target == "_top") {
-        return this.topFrame;
-    } else if (target == "_parent") {
-        return this.getCurrentWindow().parent;
-    } else if (target == "_blank") {
-        // TODO should this set cleverer window defaults?
-        return this.getCurrentWindow().open('', '_blank');
-    }
-    var frameElement = this.findElementBy("implicit", target, this.topFrame.document, this.topFrame);
-    if (frameElement) {
-        return frameElement.contentWindow;
-    }
-    var win = this.getWindowByName(target);
-    if (win) return win;
-    return this.getCurrentWindow().open('', target);
-};
-
 
 BrowserBot.prototype.bodyText = function() {
     if (!this.getDocument().body) {
@@ -1901,80 +1514,6 @@ BrowserBot.prototype.locateElementByAlt = function(locator, document) {
                 return element.alt == locator;
             }
             );
-};
-
-/**
- * Find an element by css selector
- */
-BrowserBot.prototype.locateElementByCss = function (locator, document) {
-    var elements = eval_css(locator, document);
-    if (elements.length != 0)
-        return elements[0];
-    return null;
-};
-
-/**
- * This function is responsible for mapping a UI specifier string to an element
- * on the page, and returning it. If no element is found, null is returned.
- * Returning null on failure to locate the element is part of the undocumented
- * API for locator strategies.
- */
-BrowserBot.prototype.locateElementByUIElement = function(locator, inDocument) {
-    // offset locators are delimited by "->", which is much simpler than the
-    // previous scheme involving detecting the close-paren.
-    var locators = locator.split(/->/, 2);
-    
-    var locatedElement = null;
-    var pageElements = UIMap.getInstance()
-        .getPageElements(locators[0], inDocument);
-    
-    if (locators.length > 1) {
-        for (var i = 0; i < pageElements.length; ++i) {
-            var locatedElements = eval_locator(locators[1], inDocument,
-                pageElements[i]);
-            if (locatedElements.length) {
-                locatedElement = locatedElements[0];
-                break;
-            }
-        }
-    }
-    else if (pageElements.length) {
-        locatedElement = pageElements[0];
-    }
-    
-    return locatedElement;
-};
-
-BrowserBot.prototype.locateElementByUIElement.prefix = 'ui';
-
-// define a function used to compare the result of a close UI element
-// match with the actual interacted element. If they are close enough
-// according to the heuristic, consider them a match.
-/**
- * A heuristic function for comparing a node with a target node. Typically the
- * node is specified in a UI element definition, while the target node is
- * returned by the recorder as the leaf element which had some event enacted
- * upon it. This particular heuristic covers the case where the anchor element
- * contains other inline tags, such as "em" or "img".
- *
- * @param node    the node being compared to the target node
- * @param target  the target node
- * @return        true if node equals target, or if node is a link
- *                element and target is its descendant, or if node has
- *                an onclick attribute and target is its descendant.
- *                False otherwise.
- */
-BrowserBot.prototype.locateElementByUIElement.is_fuzzy_match = function(node, target) {
-    try {
-        var isMatch = (
-            (node == target) ||
-            ((node.nodeName == 'A' || node.onclick) && is_ancestor(node, target))
-        );
-        return isMatch;
-    }
-    catch (e) {
-        return false;
-    }
 };
 
 /*****************************************************************/
@@ -2275,99 +1814,6 @@ SafariBrowserBot.prototype.modifyWindowToRecordPopUpDialogs = function(windowToM
     };
 };
 
-MozillaBrowserBot.prototype._fireEventOnElement = function(eventType, element, clientX, clientY) {
-    var win = this.getCurrentWindow();
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-
-    // Add an event listener that detects if the default action has been prevented.
-    // (This is caused by a javascript onclick handler returning false)
-    // we capture the whole event, rather than the getPreventDefault() state at the time,
-    // because we need to let the entire event bubbling and capturing to go through
-    // before making a decision on whether we should force the href
-    var savedEvent = null;
-
-    element.addEventListener(eventType, function(evt) {
-        savedEvent = evt;
-    }, false);
-
-    this._modifyElementTarget(element);
-
-    // Trigger the event.
-    this.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY);
-
-    if (this._windowClosed(win)) {
-        return;
-    }
-
-    // Perform the link action if preventDefault was set.
-    // In chrome URL, the link action is already executed by triggerMouseEvent.
-    if (!browserVersion.isChrome && savedEvent != null && savedEvent.getPreventDefault && !savedEvent.getPreventDefault()) {
-        var targetWindow = this.browserbot._getTargetWindow(element);
-        if (element.href) {
-            targetWindow.location.href = element.href;
-        } else {
-            this.browserbot._handleClickingImagesInsideLinks(targetWindow, element);
-        }
-    }
-
-};
-
-
-OperaBrowserBot.prototype._fireEventOnElement = function(eventType, element, clientX, clientY) {
-    var win = this.getCurrentWindow();
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-
-    this._modifyElementTarget(element);
-
-    // Trigger the click event.
-    this.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY);
-
-    if (this._windowClosed(win)) {
-        return;
-    }
-
-};
-
-
-KonquerorBrowserBot.prototype._fireEventOnElement = function(eventType, element, clientX, clientY) {
-    var win = this.getCurrentWindow();
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-
-    this._modifyElementTarget(element);
-
-    if (element[eventType]) {
-        element[eventType]();
-    }
-    else {
-        this.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY);
-    }
-
-    if (this._windowClosed(win)) {
-        return;
-    }
-
-};
-
-SafariBrowserBot.prototype._fireEventOnElement = function(eventType, element, clientX, clientY) {
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-    var wasChecked = element.checked;
-
-    this._modifyElementTarget(element);
-
-    // For form element it is simple.
-    if (element[eventType]) {
-        element[eventType]();
-    }
-    // For links and other elements, event emulation is required.
-    else {
-        var targetWindow = this.browserbot._getTargetWindow(element);
-        // todo: deal with anchors?
-        this.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY);
-
-    }
-
-};
-
 SafariBrowserBot.prototype.refresh = function() {
     var win = this.getCurrentWindow();
     if (win.location.hash) {
@@ -2379,63 +1825,5 @@ SafariBrowserBot.prototype.refresh = function() {
         window.setTimeout(actuallyReload, 1);
     } else {
         win.location.reload(true);
-    }
-};
-
-IEBrowserBot.prototype._fireEventOnElement = function(eventType, element, clientX, clientY) {
-    var win = this.getCurrentWindow();
-    bot.events.fire(element, bot.events.EventType.FOCUS);
-
-    var wasChecked = element.checked;
-
-    // Set a flag that records if the page will unload - this isn't always accurate, because
-    // <a href="javascript:alert('foo'):"> triggers the onbeforeunload event, even thought the page won't unload
-    var pageUnloading = false;
-    var pageUnloadDetector = function() {
-        pageUnloading = true;
-    };
-    if (win.addEventListener) {
-      win.addEventListener('beforeunload', pageUnloadDetector, true);
-    } else {
-      win.attachEvent('onbeforeunload', pageUnloadDetector);
-    }
-    this._modifyElementTarget(element);
-    if (element[eventType]) {
-        element[eventType]();
-    }
-    else {
-        this.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY);
-    }
-
-
-    // If the page is going to unload - still attempt to fire any subsequent events.
-    // However, we can't guarantee that the page won't unload half way through, so we need to handle exceptions.
-    try {
-        if (win.removeEventListener) {
-            win.removeEventListener('onbeforeunload', pageUnloadDetector, true);
-        } else {
-            win.detachEvent('onbeforeunload', pageUnloadDetector);
-        }
-
-        if (this._windowClosed(win)) {
-            return;
-        }
-
-        // Onchange event is not triggered automatically in IE.
-        if (isDefined(element.checked) && wasChecked != element.checked) {
-            bot.events.fire(element, bot.events.EventType.CHANGE);
-        }
-
-    }
-    catch (e) {
-        // If the page is unloading, we may get a "Permission denied" or "Unspecified error".
-        // Just ignore it, because the document may have unloaded.
-        if (pageUnloading) {
-            LOG.logHook = function() {
-            };
-            console.log("Caught exception when firing events on unloading page: " + e.message);
-            return;
-        }
-        throw e;
     }
 };

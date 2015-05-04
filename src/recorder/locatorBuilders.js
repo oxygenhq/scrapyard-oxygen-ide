@@ -19,7 +19,6 @@ LocatorBuilders.prototype.detach = function() {
 LocatorBuilders.prototype.pageBot = function() {
   var pageBot = this.window._locator_pageBot;
   if (pageBot == null) {
-    //pageBot = BrowserBot.createForWindow(this.window);
     pageBot = new MozillaBrowserBot(this.window);
     var self = this;
     pageBot.getCurrentWindow = function() {
@@ -266,11 +265,6 @@ LocatorBuilders.prototype.preciseXPath = function(xpath, e){
 }
 
 /* ===== builders ===== */
-
-LocatorBuilders.add('ui', function(pageElement) {
-  return UIMap.getInstance().getUISpecifierString(pageElement,
-      this.window.document);
-});
 
 LocatorBuilders.add('id', function(e) {
   if (e.id) {
