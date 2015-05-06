@@ -9,7 +9,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('default', ['download-electron', 'clean', 'sync']);
+    grunt.loadTasks('./tools/grunt-tasks');
+
+    grunt.registerTask('default', ['download-electron', 'rebrand', 'sync']);
     grunt.registerTask('release', ['default', 'compress']);
 
     const OUTDIR = 'build';
@@ -24,8 +26,13 @@ module.exports = function(grunt) {
             version: '0.25.1',
             outputDir: OUTDIR
         },
+        rebrand: {
+            name: pkg.name,
+            version: pkg.version,
+            dist: OUTDIR,
+        },
         clean: 
-            [OUTDIR + "/resources/default_app"],
+            [OUTDIR],
         sync: {
             main: {
                 files: [
