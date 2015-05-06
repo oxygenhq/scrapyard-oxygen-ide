@@ -24,7 +24,8 @@ module.exports = function(grunt) {
     grunt.initConfig({
         'download-electron': {
             version: '0.25.1',
-            outputDir: OUTDIR
+            outputDir: OUTDIR,
+            rebuild: false
         },
         rebrand: {
             name: pkg.name,
