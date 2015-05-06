@@ -94,7 +94,7 @@ BrowserBot.prototype._registerAllLocatorFunctions = function() {
     this.locationStrategies = {};
     for (var functionName in this) {
         var result = /^locateElementBy([A-Z].+)$/.exec(functionName);
-        if (result != null) {
+        if (result !== null) {
             var locatorFunction = this[functionName];
             if (typeof(locatorFunction) != 'function') {
                 continue;
@@ -137,7 +137,7 @@ BrowserBot.prototype._registerAllLocatorFunctions = function() {
 BrowserBot.prototype.findElementRecursive = function(locatorType, locatorString, inDocument, inWindow) {
 
     var element = this.findElementBy(locatorType, locatorString, inDocument, inWindow);
-    if (element != null) {
+    if (element !== null) {
         return element;
     }
 
@@ -146,8 +146,7 @@ BrowserBot.prototype.findElementRecursive = function(locatorType, locatorString,
         // frames.  Make sure the document is valid before continuing.
         if (inWindow.frames[i].document) {
             element = this.findElementRecursive(locatorType, locatorString, inWindow.frames[i].document, inWindow.frames[i]);
-
-            if (element != null) {
+            if (element !== null) {
                 return element;
             }
         }
@@ -160,7 +159,7 @@ BrowserBot.prototype.findElementRecursive = function(locatorType, locatorString,
 BrowserBot.prototype.findElementOrNull = function(locator, win) {
     locator = parse_locator(locator);
 
-    if (win == null) {
+    if (win === null || win === undefined) {
         win = this.getCurrentWindow();
     }
     var element = this.findElementRecursive(locator.type, locator.string, win.document, win);
@@ -169,7 +168,9 @@ BrowserBot.prototype.findElementOrNull = function(locator, win) {
 
 BrowserBot.prototype.findElement = function(locator, win) {
     var element = this.findElementOrNull(locator, win);
-    if (element == null) throw new SeleniumError("Element " + locator + " not found");
+    if (element === null) { 
+        throw new SeleniumError("Element " + locator + " not found");
+    }
     return element;
 };
 
@@ -245,7 +246,7 @@ BrowserBot.prototype.locateElementByDomTraversal = function(domTraversal, docume
     var browserbot = this.browserbot;
     var element = null;
     try {
-        element = eval(domTraversal);
+        element = eval(domTraversal);   // jshint ignore:line
     } catch (e) {
         return null;
     }
@@ -265,9 +266,8 @@ BrowserBot.prototype.locateElementByDomTraversal.prefix = "dom";
  */
 BrowserBot.prototype.locateElementByXPath = function(xpath, inDocument, inWindow) {
     return this.xpathEvaluator.selectSingleNode(inDocument, xpath, null,
-        inDocument.createNSResolver
-          ? inDocument.createNSResolver(inDocument.documentElement)
-          : this._namespaceResolver);
+        inDocument.createNSResolver ?
+          inDocument.createNSResolver(inDocument.documentElement) : this._namespaceResolver);
 };
 
 BrowserBot.prototype._namespaceResolver = function(prefix) {
@@ -355,10 +355,10 @@ objectExtend(SafariBrowserBot.prototype, BrowserBot.prototype);
 
 function OperaBrowserBot(frame) {
     BrowserBot.call(this, frame);
-};
+}
 objectExtend(OperaBrowserBot.prototype, BrowserBot.prototype);
 
 function IEBrowserBot(frame) {
     BrowserBot.call(this, frame);
-};
+}
 objectExtend(IEBrowserBot.prototype, BrowserBot.prototype);

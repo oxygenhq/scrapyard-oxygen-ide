@@ -132,10 +132,9 @@ function NativeEngine() {
         }
     
         var nodes = [];
-        
+        var xpathResult;
         try {
-            var xpathResult = this.doc.evaluate(xpath, contextNode,
-                namespaceResolver, 0, null);
+            xpathResult = this.doc.evaluate(xpath, contextNode, namespaceResolver, 0, null);
         }
         catch (e) {
             var msg = extractExceptionMessage(e);
@@ -179,14 +178,9 @@ function WickedGoodXPathEngine() {
             xpath = '.' + xpath;
         }
         var nodes = [];
-        
+        var xpathResult;
         try {
-            // When using the new and faster javascript-xpath library, we'll
-            // use the TestRunner's document object, not the App-Under-Test's
-            // document. The new library only modifies the TestRunner document
-            // with the new functionality.
-            var xpathResult = engineDoc.evaluate(xpath, contextNode,
-                namespaceResolver, 0, null);
+            xpathResult = engineDoc.evaluate(xpath, contextNode, namespaceResolver, 0, null);
         }
         catch (e) {
             var msg = extractExceptionMessage(e);
@@ -242,7 +236,7 @@ function XPathEvaluator(newDefaultEngineName) {
         }
         // HUGE hack - remove namespace from xpath for IE
         if (browserVersion && browserVersion.isIE) {
-            xpath = xpath.replace(/x:/g, '')
+            xpath = xpath.replace(/x:/g, '');
         }
         
         return xpath;

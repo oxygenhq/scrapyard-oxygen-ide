@@ -412,7 +412,7 @@ Recorder.addEventHandler('selectMousedown', 'mousedown', function (ev) {
 Recorder.prototype.getOptionLocator = function (option) {
     var label = option.text.replace(/^ *(.*?) *$/, "$1");
     if (label.match(/\xA0/)) { // if the text contains &nbsp;
-        return "label=regexp:" + label.replace(/[\(\)\[\]\\\^\$\*\+\?\.\|\{\}]/g, function (str) { return '\\' + str })
+        return "label=regexp:" + label.replace(/[\(\)\[\]\\\^\$\*\+\?\.\|\{\}]/g, function (str) { return '\\' + str }) // jshint ignore:line
                                       .replace(/\s+/g, function (str) {
                                           if (str.match(/\xA0/)) {
                                             return (str.length > 1 ? "\\s+" : "\\s");
