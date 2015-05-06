@@ -23,16 +23,6 @@ if(typeof(String.prototype.trim) === "undefined")
     };
 }
 
-Array.prototype["delete"] = function(value) {
-    for (var i = 0; i < this.length; i++) {
-        if (this[i] == value) {
-            this.splice(i, 1);
-            return true;
-        }
-    }
-    return false;
-};
-
 // Samit: Ref: Split the fn to allow both objects of a class as well as the class itself to be notifiable as required
 function observable(clazz) {
   classObservable(clazz.prototype);
