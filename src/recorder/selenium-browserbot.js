@@ -3,111 +3,15 @@
 *  Licensed under the Apache License, Version 2.0 (the "License");
 */
 
-/*
-* This script provides the Javascript API to drive the test application contained within
-* a Browser Window.
-*/
-
-// The window to which the commands will be sent.  For example, to click on a
-// popup window, first select that window, and then do a normal click command.
-var BrowserBot = function(topLevelApplicationWindow) {
-    this.topWindow = topLevelApplicationWindow;
-    this.topFrame = this.topWindow;
-    this.baseUrl=window.location.href;
-    this.currentWindow = this.topWindow;
-    this.currentWindowName = null;
+var BrowserBot = function() {
     this.allowNativeXpath = true;
     this.xpathEvaluator = new XPathEvaluator('wgxpath');
-    
-    // We need to know this in advance, in case the frame closes unexpectedly
-    this.isSubFrameSelected = false;
-
-    this.modalDialogTest = null;
-    this.recordedAlerts = [];
-    this.recordedConfirmations = [];
-    this.recordedPrompts = [];
-    this.openedWindows = {};
-    this.nextConfirmResult = true;
-    this.nextPromptResult = '';
-    this.newPageLoaded = false;
-    this.pageLoadError = null;
-
-    // DGF for backwards compatibility
-    this.browserbot = this;
-
+    this.browserbot = this; // DGF for backwards compatibility
     var self = this;
-
-    objectExtend(this, PageBot.prototype);
     this._registerAllLocatorFunctions();
 };
 
-// DGF PageBot exists for backwards compatibility with old user-extensions
-var PageBot = function(){};
-
-BrowserBot.prototype._getFrameElement = function(win) {
-    var frameElement = null;
-    var caught;
-    try {
-        frameElement = win.frameElement;
-    } catch (e) {
-        caught = true;
-    }
-    if (caught) {
-        // on IE, checking frameElement in a pop-up results in a "No such interface supported" exception
-        // but it might have a frame element anyway!
-        var parentContainsIdenticallyNamedFrame = false;
-        try {
-            parentContainsIdenticallyNamedFrame = win.parent.frames[win.name];
-        } catch (e) {} // this may fail if access is denied to the parent; in that case, assume it's not a pop-up
-
-        if (parentContainsIdenticallyNamedFrame) {
-            // it can't be a coincidence that the parent has a frame with the same name as myself!
-            var result;
-            try {
-                result = parentContainsIdenticallyNamedFrame.frameElement;
-                if (result) {
-                    return result;
-                }
-            } catch (e) {} // it was worth a try! _getFrameElementsByName is often slow
-            result = this._getFrameElementByName(win.name, win.parent.document, win);
-            return result;
-        }
-    }
-    console.log("_getFrameElement: frameElement="+frameElement); 
-    if (frameElement) {
-        console.log("frameElement.name="+frameElement.name);
-    }
-    return frameElement;
-};
-
-BrowserBot.prototype._getFrameElementByName = function(name, doc, win) {
-    var frames;
-    var frame;
-    var i;
-    frames = doc.getElementsByTagName("iframe");
-    for (i = 0; i < frames.length; i++) {
-        frame = frames[i];        
-        if (frame.name === name) {
-            return frame;
-        }
-    }
-    frames = doc.getElementsByTagName("frame");
-    for (i = 0; i < frames.length; i++) {
-        frame = frames[i];        
-        if (frame.name === name) {
-            return frame;
-        }
-    }
-    // DGF weird; we only call this function when we know the doc contains the frame
-    console.log("_getFrameElementByName couldn't find a frame or iframe; checking every element for the name " + name);
-    return BrowserBot.prototype.locateElementByName(win.name, win.parent.document);
-};
-
 BrowserBot.prototype.getCurrentWindow = function() {};
-
-/*****************************************************************/
-/* BROWSER-SPECIFIC FUNCTIONS ONLY AFTER THIS LINE */
-
 
 BrowserBot.prototype._registerAllLocatorFunctions = function() {
     // TODO - don't do this in the constructor - only needed once ever
@@ -302,25 +206,6 @@ BrowserBot.prototype._namespaceResolver = function(prefix) {
     }
 };
 
-BrowserBot.prototype.close = function() {
-    if (browserVersion.isIE) {
-        // fix "do you want to close this window" warning in IE
-        // You can only close windows that you have opened.
-        // So, let's "open" it.
-        try {
-            this.topFrame.name=new Date().getTime();
-            window.open("", this.topFrame.name, "");
-            this.topFrame.close();
-            return;
-        } catch (e) {}
-    }
-    if (browserVersion.isChrome || browserVersion.isSafari || browserVersion.isOpera) {
-        this.topFrame.close();
-    } else {
-        this.getCurrentWindow().eval("window.top.close();");
-    }
-};
-
 /**
  * Refine a list of elements using a filter.
  */
@@ -380,40 +265,12 @@ BrowserBot.prototype.selectElements = function(filterExpr, elements, defaultFilt
     return this.selectElementsBy(filterType, filterExpr, elements);
 };
 
-/**
- * Find an element by class
- */
-BrowserBot.prototype.locateElementByClass = function(locator, document) {
-    return elementFindFirstMatchingChild(document,
-            function(element) {
-                return element.className == locator;
-            }
-            );
-};
-
-/**
- * Find an element by alt
- */
-BrowserBot.prototype.locateElementByAlt = function(locator, document) {
-    return elementFindFirstMatchingChild(document,
-            function(element) {
-                return element.alt == locator;
-            }
-            );
-};
-
-/*****************************************************************/
-/* BROWSER-SPECIFIC FUNCTIONS ONLY AFTER THIS LINE */
+/****************** BROWSER-SPECIFIC FUNCTIONS ONLY AFTER THIS LINE *******************/
 
 function MozillaBrowserBot(frame) {
     BrowserBot.call(this, frame);
 }
 objectExtend(MozillaBrowserBot.prototype, BrowserBot.prototype);
-
-function KonquerorBrowserBot(frame) {
-    BrowserBot.call(this, frame);
-}
-objectExtend(KonquerorBrowserBot.prototype, BrowserBot.prototype);
 
 function SafariBrowserBot(frame) {
     BrowserBot.call(this, frame);
@@ -429,10 +286,3 @@ function IEBrowserBot(frame) {
     BrowserBot.call(this, frame);
 };
 objectExtend(IEBrowserBot.prototype, BrowserBot.prototype);
-
-/**
- * In IE, getElementById() also searches by name - this is an optimisation for IE.
- */
-IEBrowserBot.prototype.locateElementByIdentifer = function(identifier, inDocument, inWindow) {
-    return inDocument.getElementById(identifier);
-};
