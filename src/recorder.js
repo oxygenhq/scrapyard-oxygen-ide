@@ -107,15 +107,15 @@ var path = require('path');
             var pad = '                ';
             for (var loc of op.targetLocators) {
                 var locType = (pad + loc[1]).slice(-pad.length);
-                editor.appendText('// ' + locType + ': ' + loc[0] + '\n');
+                editor.appendText('// ' + locType + ': ' + loc[0].replace(/'/g, "\\'") + '\n');
             }
         }
-        
-        var args = "'" + op.target + "'";
+
+        var args = "'" + op.target.replace(/'/g, "\\'") + "'";
         if (op.value) {
             args += ", '" + op.value + "'";
         }
-        
+
         editor.appendText('web.' + op.cmd + '(' + args + ');\n');
         // onchange is not triggered for some reason when appending, so we enable it manually
         toolbar.btnSave.enable();
