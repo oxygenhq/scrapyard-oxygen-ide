@@ -13,6 +13,82 @@ var BrowserBot = function() {
 
 BrowserBot.prototype.getCurrentWindow = function() {};
 
+
+/**
+ * Find an element by css selector
+ */
+BrowserBot.prototype.locateElementByCss = function (locator, document) {
+    var elements = eval_css(locator, document);
+    if (elements.length != 0)
+        return elements[0];
+    return null;
+};
+
+/**
+ * This function is responsible for mapping a UI specifier string to an element
+ * on the page, and returning it. If no element is found, null is returned.
+ * Returning null on failure to locate the element is part of the undocumented
+ * API for locator strategies.
+ */
+BrowserBot.prototype.locateElementByUIElement = function(locator, inDocument) {
+    // offset locators are delimited by "->", which is much simpler than the
+    // previous scheme involving detecting the close-paren.
+    var locators = locator.split(/->/, 2);
+    
+    var locatedElement = null;
+    var pageElements = UIMap.getInstance()
+        .getPageElements(locators[0], inDocument);
+    
+    if (locators.length > 1) {
+        for (var i = 0; i < pageElements.length; ++i) {
+            var locatedElements = eval_locator(locators[1], inDocument,
+                pageElements[i]);
+            if (locatedElements.length) {
+                locatedElement = locatedElements[0];
+                break;
+            }
+        }
+    }
+    else if (pageElements.length) {
+        locatedElement = pageElements[0];
+    }
+    
+    return locatedElement;
+};
+
+BrowserBot.prototype.locateElementByUIElement.prefix = 'ui';
+
+// define a function used to compare the result of a close UI element
+// match with the actual interacted element. If they are close enough
+// according to the heuristic, consider them a match.
+/**
+ * A heuristic function for comparing a node with a target node. Typically the
+ * node is specified in a UI element definition, while the target node is
+ * returned by the recorder as the leaf element which had some event enacted
+ * upon it. This particular heuristic covers the case where the anchor element
+ * contains other inline tags, such as "em" or "img".
+ *
+ * @param node    the node being compared to the target node
+ * @param target  the target node
+ * @return        true if node equals target, or if node is a link
+ *                element and target is its descendant, or if node has
+ *                an onclick attribute and target is its descendant.
+ *                False otherwise.
+ */
+BrowserBot.prototype.locateElementByUIElement.is_fuzzy_match = function(node, target) {
+    try {
+        var isMatch = (
+            (node == target) ||
+            ((node.nodeName == 'A' || node.onclick) && is_ancestor(node, target))
+        );
+        return isMatch;
+    }
+    catch (e) {
+        return false;
+    }
+};
+
+
 BrowserBot.prototype._registerAllLocatorFunctions = function() {
     // TODO - don't do this in the constructor - only needed once ever
     this.locationStrategies = {};

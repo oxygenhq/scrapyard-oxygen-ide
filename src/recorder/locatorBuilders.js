@@ -266,6 +266,11 @@ LocatorBuilders.prototype.preciseXPath = function(xpath, e){
 
 /* ===== builders ===== */
 
+LocatorBuilders.add('ui', function(pageElement) {
+  return UIMap.getInstance().getUISpecifierString(pageElement,
+      this.window.document);
+});
+
 LocatorBuilders.add('id', function(e) {
   if (e.id) {
     return 'id=' + e.id;
