@@ -9,7 +9,7 @@ function Recorder() {
 
 Recorder.cmdSend = function (command, target, value, timestamp) {
     console.log("Command: " + command + ", target: " + target + ", value: " + value + ", timestamp: " + timestamp);
-    if (value == "" && command != "type") { // ommit empty values from serialization
+    if (value === "" && command != "type") { // ommit empty values from serialization
         value = null;
     }
 
@@ -26,7 +26,7 @@ Recorder.cmdSend = function (command, target, value, timestamp) {
 
     var data = JSON.stringify(
         { "cmd": command, "target": trg, "targetLocators": trgLocs, "value": value, "timestamp": timestamp },
-        function (k, v) { return (v == null) ? undefined : v;});
+        function (k, v) { return (v === null || v === undefined) ? undefined : v;});
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", Recorder.GetIdeUrl());
@@ -172,7 +172,7 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
             }
 
             if (send_win) {
-                Recorder.cmdSend("selectWindow", (window.name == '') ? '' : "name=" + window.name, null, curDateForWin);
+                Recorder.cmdSend("selectWindow", (window.name === '') ? '' : "name=" + window.name, null, curDateForWin);
             }
             if (send_frame) {
                 var destPath = createPath(window);
@@ -189,7 +189,7 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
                     }
                 }
                 console.log("branch=" + branch);
-                if (branch == 0 && srcPath.size > 1) {
+                if (branch === 0 && srcPath.size > 1) {
                     // go to root
                     Recorder.cmdSend("selectFrame", "relative=top", null, ++curDateForWin);
                 } else {
@@ -198,7 +198,7 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
                     }
                 }
                 for (i = branch + 1; i < destPath.length; i++) {
-                     Recorder.cmdSend("selectFrame", (destPath[i].name != '') ? destPath[i].name : "index=" + i, null, ++curDateForWin);
+                     Recorder.cmdSend("selectFrame", (destPath[i].name !== '') ? destPath[i].name : "index=" + i, null, ++curDateForWin);
                 }
             }
         }
@@ -380,7 +380,7 @@ if (!browserVersion.isIE || browserVersion.ieMode >= 11) {
                 console.log('remembering selections');
                 var options = target.options;
                 for (var i = 0; i < options.length; i++) {
-                    if (options[i]._wasSelected == null) {
+                    if (options[i]._wasSelected === null || options[i]._wasSelected === undefined) {
                         // is the focus was gained by mousedown event, _wasSelected would be already set
                         options[i]._wasSelected = options[i].selected;
                     }
@@ -444,7 +444,7 @@ Recorder.addEventHandler('select', 'change', function(ev, check_prev) {
                 var options = target.options;
                 for (var i = 0; i < options.length; i++) {
                     console.log('option=' + i + ', ' + options[i].selected);
-                    if (options[i]._wasSelected == null) {
+                    if (options[i]._wasSelected === null || options[i]._wasSelected === undefined) {
                         console.log('_wasSelected was not recorded');
                     }
                     if (options[i]._wasSelected != options[i].selected) {
@@ -466,7 +466,7 @@ Recorder.addEventHandler('clickLocator', 'click', function (ev) {
     console.log('event handler: clickLocator, click');
     var ev = ev || window.event;
     var target = ev.target || ev.srcElement;
-    if (ev.button == 0) {
+    if (ev.button === 0) {
         var clickable = this.findClickableElement(target);
         if (clickable) {
             this.record("click", this.findLocators(target), '');
@@ -483,12 +483,12 @@ Recorder.prototype.findClickableElement = function (e) {
     if (!e.tagName) return null;
     var tagName = e.tagName.toLowerCase();
     var type = e.type;
-    if (e.getAttribute("onclick") != null || e.getAttribute("href") != null || tagName == "button" ||
+    if (e.getAttribute("onclick") !== null || e.getAttribute("href") !== null || tagName == "button" ||
 		(tagName == "input" &&
 		 (type == "submit" || type == "button" || type == "image" || type == "radio" || type == "checkbox" || type == "reset"))) {
         return e;
     } else {
-        if (e.parentNode != null) {
+        if (e.parentNode !== null && e.parentNode !== undefined) {
             return this.findClickableElement(e.parentNode);
         } else {
             return null;

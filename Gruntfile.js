@@ -73,7 +73,8 @@ module.exports = function(grunt) {
             },
         },
         jshint: {
-            files: ['Gruntfile.js', 'src/*.js', '!src/jquery.min.js'],
+            files: ['Gruntfile.js', 'src/*.js', 'src/recorder/*.js', 
+                    '!src/recorder/wgxpath.install.js', '!src/jquery.min.js'],
                 options: {
                     esnext: true,
                     curly: false,

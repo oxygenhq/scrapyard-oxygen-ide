@@ -18,7 +18,7 @@ LocatorBuilders.prototype.detach = function() {
 
 LocatorBuilders.prototype.pageBot = function() {
   var pageBot = this.window._locator_pageBot;
-  if (pageBot == null) {
+  if (!pageBot) {
     pageBot = new MozillaBrowserBot(this.window);
     var self = this;
     pageBot.getCurrentWindow = function() {
@@ -262,7 +262,7 @@ LocatorBuilders.prototype.preciseXPath = function(xpath, e){
     }
   }
   return xpath;
-}
+};
 
 /* ===== builders ===== */
 
@@ -304,7 +304,7 @@ LocatorBuilders.add('css', function(e) {
  * This function is called from DOM locatorBuilders
  */
 LocatorBuilders.prototype.findDomFormLocator = function(form) {
-  if (form.getAttribute('name') != null) {
+  if (form.getAttribute('name') !== null) {
     var name = form.getAttribute('name');
     var locator = "document." + name;
     if (this.findElement(locator) == form) {
@@ -363,11 +363,11 @@ LocatorBuilders.add('xpath:link', function(e) {
 
 LocatorBuilders.add('xpath:img', function(e) {
   if (e.nodeName == 'IMG') {
-    if (e.alt != '') {
+    if (e.alt !== '') {
       return this.preciseXPath("//" + this.xpathHtmlElement("img") + "[@alt=" + this.attributeValue(e.alt) + "]", e);
-    } else if (e.title != '') {
+    } else if (e.title !== '') {
       return this.preciseXPath("//" + this.xpathHtmlElement("img") + "[@title=" + this.attributeValue(e.title) + "]", e);
-    } else if (e.src != '') {
+    } else if (e.src !== '') {
       return this.preciseXPath("//" + this.xpathHtmlElement("img") + "[contains(@src," + this.attributeValue(e.src) + ")]", e);
     }
   }
@@ -402,7 +402,7 @@ LocatorBuilders.add('xpath:attributes', function(e) {
     // try preferred attributes
     for (i = 0; i < PREFERRED_ATTRIBUTES.length; i++) {
       var name = PREFERRED_ATTRIBUTES[i];
-      if (attsMap[name] != null) {
+      if (attsMap[name] !== null && attsMap[name] !== undefined) {
         names.push(name);
         var locator = attributesXPath.call(this, e.nodeName.toLowerCase(), names, attsMap);
         if (e == this.findElement(locator)) {
@@ -417,8 +417,8 @@ LocatorBuilders.add('xpath:attributes', function(e) {
 LocatorBuilders.add('xpath:idRelative', function(e) {
   var path = '';
   var current = e;
-  while (current != null) {
-    if (current.parentNode != null) {
+  while (current !== null && current !== undefined) {
+    if (current.parentNode !== null && current.parentNode !== undefined) {
       path = this.relativeXPathFromParent(current) + path;
       if (1 == current.parentNode.nodeType && // ELEMENT_NODE
           current.parentNode.getAttribute("id")) {
@@ -435,7 +435,7 @@ LocatorBuilders.add('xpath:idRelative', function(e) {
 });
 
 LocatorBuilders.add('xpath:href', function(e) {
-  if (e.attributes && e.getAttribute("href") != null) {
+  if (e.attributes && e.getAttribute("href") !== null) {
     href = e.getAttribute("href");
     if (href.search(/^http?:\/\//) >= 0) {
       return this.preciseXPath("//" + this.xpathHtmlElement("a") + "[@href=" + this.attributeValue(href) + "]", e);
@@ -466,9 +466,9 @@ LocatorBuilders.add('xpath:position', function(e, opt_contextNode) {
  // console.log("positionXPath: e=" + e);
   var path = '';
   var current = e;
-  while (current != null && current != opt_contextNode) {
+  while (current !== null && current !== undefined && current != opt_contextNode) {
     var currentPath;
-    if (current.parentNode != null) {
+    if (current.parentNode !== null && current.parentNode !== undefined) {
       currentPath = this.relativeXPathFromParent(current);
     } else {
       currentPath = '/' + this.xpathHtmlElement(current.nodeName.toLowerCase());

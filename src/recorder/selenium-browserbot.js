@@ -147,7 +147,7 @@ BrowserBot.prototype.locateElementById = function(identifier, inDocument, inWind
  */
 BrowserBot.prototype.locateElementByCss = function (locator, document) {
     var elements = eval_css(locator, document);
-    if (elements.length != 0)
+    if (elements.length !== 0)
         return elements[0];
     return null;
 };
