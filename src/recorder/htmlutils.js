@@ -320,11 +320,7 @@ function XPathEvaluator(newDefaultEngineName) {
     this.getCurrentEngine = function() {
         return currentEngineName || defaultEngineName;
     };
-    
-    this.isAllowNativeXPath = function() {
-        return allowNativeXPath;
-    };
-    
+
     this.setIgnoreAttributesWithoutValue = function(ignore) {
         ignoreAttributesWithoutValue = ignore;
     };

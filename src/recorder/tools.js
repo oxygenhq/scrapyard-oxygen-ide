@@ -23,11 +23,6 @@ if(typeof(String.prototype.trim) === "undefined")
     };
 }
 
-// Samit: Ref: Split the fn to allow both objects of a class as well as the class itself to be notifiable as required
-function observable(clazz) {
-  classObservable(clazz.prototype);
-}
-
 function classObservable(clazz) {
     clazz.addObserver = function(observer) {
         if (!this.observers) this.observers = [];
@@ -71,17 +66,5 @@ var BrowserVersion = function () {
     this.isChrome = !!window.chrome && !this.isOpera;              // Chrome 1+
     this.isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
     this.isIE9Quirks = this.isIE && document.compatMode === 'BackCompat';
-
-    if (this.isIE) {
-        this.ieMode = document.documentMode;
-        var self = this;
-        try {
-            if (window.top.document.location.pathname.match(/.hta$/i)) {
-                this.isHTA = true;
-            }
-        } catch (e) {
-            self.isHTA = false;
-        }
-    }
 };
 var browserVersion = new BrowserVersion();

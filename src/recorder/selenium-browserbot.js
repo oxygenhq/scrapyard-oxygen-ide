@@ -4,7 +4,6 @@
 */
 
 var BrowserBot = function() {
-    this.allowNativeXpath = true;
     this.xpathEvaluator = new XPathEvaluator('wgxpath');
     this.browserbot = this; // DGF for backwards compatibility
     var self = this;
