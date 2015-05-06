@@ -427,29 +427,6 @@ function SeleniumError(message) {
     return error;
 };
 
-function highlight(element) {
-    var highLightColor = "yellow";
-    var outline = "#8f8 solid 1px"  //Samit: Enh: Added an outline to simulate the native find button behaviour
-
-    if (element.originalColor == undefined) { // avoid picking up highlight
-        element.originalColor = elementGetStyle(element, "background-color");
-    }
-    if (element.originalOutline == undefined) { // avoid picking up highlight
-        element.originalOutline = elementGetStyle(element, "outline");
-    }
-    elementSetStyle(element, {"backgroundColor" : highLightColor});
-    elementSetStyle(element, {"outline" : outline});
-    window.setTimeout(function() {
-        try {
-            //if element is orphan, probably page of it has already gone, so ignore
-            if (!element.parentNode) {
-                return;
-            }
-            elementSetStyle(element, {"backgroundColor" : element.originalColor});
-            elementSetStyle(element, {"outline" : element.originalOutline});
-        } catch (e) {} // DGF unhighlighting is very dangerous and low priority
-    }, 200);
-};
 // for use from vs.2003 debugger
 function o2s(obj) {
     var s = "";
