@@ -164,7 +164,7 @@ PatternMatcher.regexpFromGlob = function(glob) {
 function getText(element) {
     var text = "";
 
-    if (browserVersion.isFirefox || browserVersion.isKonqueror || browserVersion.isSafari || browserVersion.isOpera) {
+    if (browserVersion.isFirefox || browserVersion.isSafari || browserVersion.isOpera) {
         text = getTextContent(element);
     } else if (element.textContent) {
         text = element.textContent;

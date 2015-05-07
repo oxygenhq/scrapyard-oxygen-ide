@@ -66,7 +66,8 @@ LocatorBuilders.prototype.buildAll = function(el) {
         //TODO: Useful if a builder wants to capture a different element like a parent. Use the this.elementEquals
         var fe = this.findElement(locator);
         if ((el == fe) || (coreLocatorStrategies[finderName] && coreLocatorStrategies[finderName].is_fuzzy_match && coreLocatorStrategies[finderName].is_fuzzy_match(fe, el))) {
-          locators.push([ locator, finderName ]);
+            locator = locator.replace(/\r\n|\r|\n/g, "\\n");
+            locators.push([ locator, finderName ]);
         }
       }
     } catch (e) {
