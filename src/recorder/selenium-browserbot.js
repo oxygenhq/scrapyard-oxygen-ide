@@ -151,6 +151,26 @@ BrowserBot.prototype.locateElementByCss = function (locator, document) {
     return null;
 };
 
+
+/**
+ * Finds a link element with text matching the expression supplied. Expressions must
+ * begin with "link:".
+ */
+BrowserBot.prototype.locateElementByLinkText = function(linkText, inDocument, inWindow) {
+
+    var links = inDocument.getElementsByTagName('a');
+    for (var i = 0; i < links.length; i++) {
+
+        var element = links[i];
+        if (PatternMatcher.matches(linkText, getText(element))) {
+            return element;
+        }
+    }
+    return null;
+};
+
+BrowserBot.prototype.locateElementByLinkText.prefix = "link";
+
 /**
  * Find an element by name, refined by (optional) element-filter expressions.
  */
