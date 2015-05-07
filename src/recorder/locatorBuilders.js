@@ -91,44 +91,10 @@ LocatorBuilders.prototype.findElement = function (locator) {
 LocatorBuilders.order = [];
 LocatorBuilders.builderMap = {};
 LocatorBuilders._preferredOrder = [];
-classObservable(LocatorBuilders);
 
 LocatorBuilders.add = function(name, finder) {
   this.order.push(name);
   this.builderMap[name] = finder;
-  this._orderChanged();
-};
-
-/**
- * Call when the order or preferred order changes
- */
-LocatorBuilders._orderChanged = function () {
-  var changed = this._ensureAllPresent(this.order, this._preferredOrder);
-  this._sortByRefOrder(this.order, this._preferredOrder);
-  if (changed) {
-    this.notify('preferredOrderChanged', this._preferredOrder);
-  }
-};
-
-/**
- * Set the preferred order of the locator builders
- *
- * @param preferredOrder can be an array or a comma separated string of names
- */
-LocatorBuilders.setPreferredOrder = function(preferredOrder) {
-  if (typeof preferredOrder === 'string') {
-    this._preferredOrder = preferredOrder.split(',');
-  } else {
-    this._preferredOrder = preferredOrder;
-  }
-  this._orderChanged();
-};
-
-/**
- * Returns the locator builders preferred order as an array
- */
-LocatorBuilders.getPreferredOrder = function() {
-  return this._preferredOrder;
 };
 
 /**

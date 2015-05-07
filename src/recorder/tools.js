@@ -1,9 +1,3 @@
-/*
- * Copyright 2005 Shinya Kasatani
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
-
-// IE fix. console doesn't exist unless dev toolbar is open
 if (typeof(console) === "undefined") {
     console = { log: function (logMsg) { } };
 }
@@ -20,39 +14,6 @@ if(typeof(String.prototype.trim) === "undefined")
     String.prototype.trim = function() 
     {
         return String(this).replace(/^\s+|\s+$/g, '');
-    };
-}
-
-function classObservable(clazz) {
-    clazz.addObserver = function(observer) {
-        if (!this.observers) this.observers = [];
-        this.observers.push(observer);
-    };
-
-    clazz.removeObserver = function(observer) {
-        if (!this.observers) return;
-        this.observers["delete"](observer);
-    };
-
-    clazz.notify = function(event) {
-        if (this.log) {
-            console.log("notify " + event);
-        }
-        if (!this.observers) return;
-        var args = [];
-        for (var i = 1; i < arguments.length; i++) {
-            args.push(arguments[i]);
-        }
-        for (var i = 0; i < this.observers.length; i++) {
-            var observer = this.observers[i];
-            if (observer[event]) {
-                try {
-                    observer[event].apply(observer, args);
-                } catch(e) {
-                    //continue with the rest even if one observer fails
-                }
-            }
-        }
     };
 }
 
