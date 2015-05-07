@@ -47,9 +47,6 @@ BrowserBot.prototype._registerAllLocatorFunctions = function() {
         if (locator.startsWith('//')) {
             return this.locateElementByXPath(locator, inDocument, inWindow);
         }
-        if (locator.startsWith('document.')) {
-            return this.locateElementByDomTraversal(locator, inDocument, inWindow);
-        }
         return this.locateElementByIdentifier(locator, inDocument, inWindow);
     };
 };
@@ -190,28 +187,6 @@ BrowserBot.prototype.locateElementByName = function(locator, document, inWindow)
     }
     return null;
 };
-
-/**
- * Finds an element using by evaluating the specfied string.
- */
-BrowserBot.prototype.locateElementByDomTraversal = function(domTraversal, document, window) {
-
-    var browserbot = this.browserbot;
-    var element = null;
-    try {
-        element = eval(domTraversal);   // jshint ignore:line
-    } catch (e) {
-        return null;
-    }
-
-    if (!element) {
-        return null;
-    }
-
-    return element;
-};
-
-BrowserBot.prototype.locateElementByDomTraversal.prefix = "dom";
 
 /**
  * Finds an element identified by the xpath expression. Expressions _must_
