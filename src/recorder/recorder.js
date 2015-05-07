@@ -29,14 +29,11 @@ Recorder.cmdSend = function (command, target, value, timestamp) {
         function (k, v) { return (v === null || v === undefined) ? undefined : v;});
 
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", Recorder.GetIdeUrl());
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
-            if(xmlhttp.status != 400) {
-            }
-        }
-    };
+    xmlhttp.open("POST", Recorder.GetIdeUrl(), false);
     xmlhttp.send(data);
+    if (xmlhttp.status !== 200) {
+        console.log("ERROR cmdSend: " + xmlhttp.statusText);
+    }
 };
 
 Recorder.prototype.reattachWindowMethods = function() {
@@ -145,7 +142,8 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
     xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_update", false);
     xmlhttp.send(JSON.stringify(new LastWindow(window)));
     if (xmlhttp.status !== 200) {
-      console.log("AJAX lastwin_update error: " + xmlhttp.statusText);
+        console.log("AJAX lastwin_update error: " + xmlhttp.statusText);
+        return;
     }
     var lw = JSON.parse(xmlhttp.responseText);    
     if (lw != 'False') {
