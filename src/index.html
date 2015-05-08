@@ -63,15 +63,14 @@
         $('#paneMain').bind('splitresize', function(){
             editor.editor.resize(); 
         }); 
-        
+        var paneMain = document.getElementById('paneMain');
+        paneMain.appendChild(editor);
+ 
         // apidoc div
         var apiDoc = this.el = document.createElement('div');
         apiDoc.setAttribute('id', 'apidoc');
         apiDoc.setAttribute('style', 'display:none;');
-        
-        var paneMain = document.getElementById('paneMain');
-        paneMain.appendChild(editor);
-        paneMain.appendChild(apiDoc);
+        document.body.appendChild(apiDoc);
 
         // docs
         var docs = doc.init();

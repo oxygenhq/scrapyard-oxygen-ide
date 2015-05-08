@@ -139,17 +139,19 @@
                         var argsSegments = '';
                         for (var param of params)
                         {
-                          paramConcat.push(param.name);
-                          argsSegments += APIDOC_TMPL_ARG.format(param.name, param.type, param.description);
+                            paramConcat.push(param.name);
+                            argsSegments += APIDOC_TMPL_ARG.format(param.name, 
+                                                                    param.type, 
+                                                                    param.description);
                         }
                         var ret = methodDoc.getReturn();
 
                         var apiDoc = APIDOC_TMPL.format(
-                          methodDoc.getMethod(),
-                          paramConcat.join(', '),
-                          methodDoc.description,
-                          params.length > 0 ? APIDOC_TMPL_ARG_SECTION.format(argsSegments) : '',
-                          ret ? APIDOC_TMPL_RETURN.format(ret.type, ret.description) : ''
+                            methodDoc.getMethod(),
+                            paramConcat.join(', '),
+                            methodDoc.description,
+                            params.length > 0 ? APIDOC_TMPL_ARG_SECTION.format(argsSegments) : '',
+                            ret ? APIDOC_TMPL_RETURN.format(ret.type, ret.description) : ''
                         );
 
                         // show it
@@ -161,7 +163,7 @@
                         d.innerHTML = apiDoc;
                         d.style.position = 'absolute';
                         d.style.left = (left + width + 10) + 'px';
-                        d.style.top = (top - 32) + 'px';
+                        d.style.top = top + 'px';
                         d.style.display = 'block';
                     });
                 }
