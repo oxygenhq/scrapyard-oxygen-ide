@@ -2,12 +2,10 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 var Menu = require('menu');
 var MenuItem = require('menu-item');
-var dialog = require('dialog');
-var path = require('path');
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
-var menu = null;
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -28,7 +26,6 @@ app.on('ready', function() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
-        menu = null;
     });
   
     var template = [
@@ -42,13 +39,13 @@ app.on('ready', function() {
             },
             {
                 label: '&Close',
-                accelerator: 'Ctrl+W',
+                accelerator: 'Alt+F4',
                 click: function() { mainWindow.close(); }
             },
         ]
     },
     {
-        label: '&View',
+        label: '&[Dev]',
         submenu: [
             {
                 label: '&Reload',
@@ -57,13 +54,13 @@ app.on('ready', function() {
             },
             {
                 label: '&Toggle DevTools',
-                accelerator: 'Alt+Ctrl+I',
+                accelerator: 'Ctrl+D',
                 click: function() { mainWindow.toggleDevTools(); }
             },
         ]
     },
     ];
 
-    menu = Menu.buildFromTemplate(template);
-    mainWindow.setMenu(menu);
+    mainWindow.menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(mainWindow.menu);
 });
