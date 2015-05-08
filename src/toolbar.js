@@ -26,6 +26,7 @@
     var path = require('path');
     var remote = require('remote');
     var ScriptChild = require('./script-child');
+    var dialog = remote.require('dialog');
                 
     var Toolbar = (function(_super) {
         __extends(Toolbar, _super);
@@ -100,7 +101,7 @@
         Toolbar.prototype.add = function(component) {
             this.appendChild(component.createComponent());
         };
-    
+
         /**
          * Saves the script.
          */
@@ -112,7 +113,7 @@
                     }
                 }); 
             } else {
-                editor.currentFilename = remote.require('dialog').showSaveDialog();
+                editor.currentFilename = dialog.showSaveDialog(remote.getCurrentWindow());
                 if (editor.currentFilename) {
                    fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                         if(!err) {

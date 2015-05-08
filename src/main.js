@@ -38,7 +38,7 @@ app.on('ready', function() {
             {
                 label: '&Open',
                 accelerator: 'Ctrl+O',
-                click: function() { openFile(); }
+                click: function() { mainWindow.send('file-open'); }
             },
             {
                 label: '&Close',
@@ -67,10 +67,3 @@ app.on('ready', function() {
     menu = Menu.buildFromTemplate(template);
     mainWindow.setMenu(menu);
 });
-
-function openFile() {
-    var file = dialog.showOpenDialog({ properties: [ 'openFile', 'openFile' ]});
-    if (file) {
-        mainWindow.send('file-open', file[0]);
-    }
-}

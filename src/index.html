@@ -34,7 +34,9 @@
         var doc = require('./doc');
         var ipc = require('ipc');
         var fs = require('fs');
-        
+        var remote = require('remote');
+        var dialog = remote.require('dialog');
+
         document.onkeydown = function(evt) {
             if (evt.keyCode == 8) {     // cancel backspace to prevent 'Back' action
                 event.preventDefault();
@@ -50,15 +52,21 @@
 
         // editor
         var editor = new Editor(); 
-        ipc.on('file-open', function (filename) {
-            editor.currentFilename = filename;
-            fs.readFile(filename, 'utf8', function (err,data) {
-                if (err) {
-                    return console.log(err);
-                }
-                editor.setContent(data);
-                toolbar.btnSave.disable();
-            });
+        ipc.on('file-open', function () {
+            var file = dialog.showOpenDialog(
+                remote.getCurrentWindow(), 
+                { properties: [ 'openFile', 'openFile' ] }
+            );
+            if (file) {
+                editor.currentFilename = file[0];
+                fs.readFile(file[0], 'utf8', function (err,data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    editor.setContent(data);
+                    toolbar.btnSave.disable();
+                });
+            }
         });
         $('#paneMain').bind('splitresize', function(){
             editor.editor.resize(); 
