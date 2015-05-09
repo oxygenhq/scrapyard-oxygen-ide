@@ -38,10 +38,22 @@ app.on('ready', function() {
                 click: function() { mainWindow.send('file-open'); }
             },
             {
+                type: 'separator'
+            },
+            {
                 label: '&Save',
                 accelerator: 'Ctrl+S',
                 enabled: false,
                 click: function() { mainWindow.send('file-save'); }
+            },
+            {
+                label: 'Save As',
+                accelerator: 'Alt+Ctrl+S',
+                enabled: true,
+                click: function() { mainWindow.send('file-save-as'); }
+            },
+            {
+                type: 'separator'
             },
             {
                 label: '&Close',
@@ -51,7 +63,7 @@ app.on('ready', function() {
         ]
     },
     {
-        label: '&[Dev]',
+        label: '[&Dev]',
         submenu: [
             {
                 label: '&Reload',

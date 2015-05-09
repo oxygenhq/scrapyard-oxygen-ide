@@ -52,7 +52,7 @@
 
         // editor
         var editor = new Editor(); 
-        
+        toolbar.btnSave.setClickHandler(editor.save);
         ipc.on('file-open', function () {
             var file = dialog.showOpenDialog(
                 remote.getCurrentWindow(), 
@@ -77,7 +77,10 @@
             }
         });
         ipc.on('file-save', function () {
-            toolbar.save();
+            editor.save();
+        });
+        ipc.on('file-save-as', function () {
+            editor.saveAs();
         });
         
         $('#paneMain').bind('splitresize', function(){

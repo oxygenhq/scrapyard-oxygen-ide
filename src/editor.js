@@ -319,6 +319,45 @@
         };
         
         /**
+         * Save the script.
+         */
+        Editor.prototype.save = function() {
+            if (editor.currentFilename) {
+                fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
+                    if(!err) {
+                        toolbar.btnSave.disable();
+                        remote.getCurrentWindow().menu.saveEnable(false);
+                    }
+                }); 
+            } else {
+                editor.saveAs();
+            }
+        };
+        
+        /**
+         * Save the script as a new file.
+         */
+        Editor.prototype.saveAs = function() {
+            var fileName = dialog.showSaveDialog(
+                remote.getCurrentWindow(),
+                { filters: 
+                    [
+                        { name: 'JavaScript', extensions: ['js'] }
+                    ]
+                }
+            );
+            if (fileName) {
+                editor.currentFilename = fileName;
+                fs.writeFile(fileName, editor.getContent(), function(err) {
+                    if(!err) {
+                        toolbar.btnSave.disable();
+                        remote.getCurrentWindow().menu.saveEnable(false);
+                    }
+                }); 
+            }
+        };
+        
+        /**
          * Removes current breakpoint highlight.
          */
         Editor.prototype.clearBpHighlight = function() {

@@ -102,37 +102,6 @@
         };
 
         /**
-         * Saves the script.
-         */
-        Toolbar.prototype.save = function() {
-            if (editor.currentFilename) {
-                fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
-                    if(!err) {
-                        toolbar.btnSave.disable();
-                        remote.getCurrentWindow().menu.saveEnable(false);
-                    }
-                }); 
-            } else {
-                editor.currentFilename = dialog.showSaveDialog(
-                    remote.getCurrentWindow(),
-                    { filters: 
-                        [
-                            { name: 'JavaScript', extensions: ['js'] }
-                        ]
-                    }
-                );
-                if (editor.currentFilename) {
-                   fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
-                        if(!err) {
-                            toolbar.btnSave.disable();
-                            remote.getCurrentWindow().menu.saveEnable(false);
-                        }
-                    }); 
-                }
-            }
-        };
-
-        /**
          * Executes user script.
          */
         Toolbar.prototype.start = function() {
