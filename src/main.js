@@ -38,6 +38,12 @@ app.on('ready', function() {
                 click: function() { mainWindow.send('file-open'); }
             },
             {
+                label: '&Save',
+                accelerator: 'Ctrl+S',
+                enabled: false,
+                click: function() { mainWindow.send('file-save'); }
+            },
+            {
                 label: '&Close',
                 accelerator: 'Alt+F4',
                 click: function() { mainWindow.close(); }
@@ -63,4 +69,12 @@ app.on('ready', function() {
 
     mainWindow.menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(mainWindow.menu);
+
+    mainWindow.menu.saveEnable = function (enabled) {
+        for (var item of this.items[0].submenu.items) {
+            if (item.label === "&Save") {
+                item.enabled = enabled;
+            }
+        }
+    };
 });

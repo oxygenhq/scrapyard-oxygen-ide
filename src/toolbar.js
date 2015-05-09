@@ -110,6 +110,7 @@
                 fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                     if(!err) {
                         toolbar.btnSave.disable();
+                        remote.getCurrentWindow().menu.saveEnable(false);
                     }
                 }); 
             } else {
@@ -118,6 +119,7 @@
                    fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                         if(!err) {
                             toolbar.btnSave.disable();
+                            remote.getCurrentWindow().menu.saveEnable(false);
                         }
                     }); 
                 }

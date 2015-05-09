@@ -24,7 +24,8 @@
     };
     
     var Range, langTools; // need to be global in order to prevent GC
-
+    
+    var remote = require('remote');
     require('./ace/ace');
     require('./ace/ext-language_tools');
 
@@ -64,6 +65,7 @@
             editor.getSession().on('change', function() {
                 if (!editor.getSession().getUndoManager().isClean()) {
                     toolbar.btnSave.enable();
+                    remote.getCurrentWindow().menu.saveEnable(true);
                 }
             });
             editor.setPrintMarginColumn(100);
