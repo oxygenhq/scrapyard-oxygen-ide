@@ -56,17 +56,16 @@
         Toolbar.prototype.initializeContent = function() {
             // save button
             var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
-            btnSave.onClick = this.save;
             this.add(btnSave);
             // run button
             var btnStart = new ToolbarButton('tb-start', false, false, 'Run');
             this.btnStart = btnStart;
-            btnStart.onClick = this.start;
             this.add(btnStart);
+            btnStart.setClickHandler(this.start);
             // stop button
             var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false);
-            btnStop.onClick = this.stop;
-            this.add(btnStop);       
+            this.add(btnStop);
+            btnStop.setClickHandler(this.stop);            
             // browser dropdown
             var browserSel = document.createElement("select");
             for (var browser of [['Chrome', 'chrome'], 
@@ -85,8 +84,8 @@
             this.appendChild(browserSel);
             // record button
             var btnRecord= this.btnRecord = new ToolbarButton('tb-camera', false, true);
-            btnRecord.onClick = this.record;
             this.add(btnRecord);
+            btnRecord.setClickHandler(this.record);
         };
     
         /*

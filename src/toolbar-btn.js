@@ -63,6 +63,12 @@
         this.el.classList.remove(clazz);
     };
     
-    ToolbarButton.prototype.onClick = function() {
+    /**
+     * Sets click handler.  
+     * Should be used only after the button has been added to a toolbar!
+     * @param {function} handler - function to perform on click.
+     */
+    ToolbarButton.prototype.setClickHandler = function(handler) {
+        this.el.onclick = handler;
     };
 }).call(this);
