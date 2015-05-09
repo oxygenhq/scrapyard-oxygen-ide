@@ -114,7 +114,14 @@
                     }
                 }); 
             } else {
-                editor.currentFilename = dialog.showSaveDialog(remote.getCurrentWindow());
+                editor.currentFilename = dialog.showSaveDialog(
+                    remote.getCurrentWindow(),
+                    { filters: 
+                        [
+                            { name: 'JavaScript', extensions: ['js'] }
+                        ]
+                    }
+                );
                 if (editor.currentFilename) {
                    fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                         if(!err) {
