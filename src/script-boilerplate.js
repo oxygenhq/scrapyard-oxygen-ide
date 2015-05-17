@@ -14,6 +14,8 @@ var multiplexer = edge.func({
     methodName: 'Invoke'
 });
 
+process.send({ event: 'log-add', level: 'INFO', msg: 'Initializing...' });
+
 try { 
     multiplexer({ module: 'utils', cmd: 'initialize', 
                     args: [process.argv[3], 'http://127.0.0.1:4444/wd/hub'] }, true); 
@@ -62,6 +64,8 @@ function execMethod(module, cmd, args) {
     }
 }
 
+process.send({ event: 'log-add', level: 'INFO', msg: 'Executing script...' });
+
 try {
 //%%USER_SCRIPT%%
 } catch (exc) {
@@ -73,4 +77,5 @@ try {
 
 // all done. terminate browser instance and exit.
 multiplexer({module: 'utils', cmd: 'close', args: [] }, true);
+process.send({ event: 'log-add', level: 'INFO', msg: 'Done.' });
 process.exit();

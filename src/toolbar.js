@@ -138,6 +138,7 @@
          * Terminates currently executing script.
          */
         Toolbar.prototype.stop = function() {
+            logger.add('INFO', 'Stopping...');
             toolbar.scriptChild.kill(); 
         };
         

@@ -96,6 +96,7 @@ var fork = require('child_process').fork;
      */
     ScriptChild.prototype.kill = function() {
         this.child.kill();
+        logger.add('INFO', 'Script terminated.');
     };
     
     /**
