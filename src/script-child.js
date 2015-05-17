@@ -50,11 +50,9 @@ var fork = require('child_process').fork;
         dbg.on('break', function(breakpoint) {
             //console.log('dbg break:' + JSON.stringify(breakpoint));
             editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
-
-            toolbar.btnStart.onClick = function() {
-                dbg.request('continue', null, function(err, response) {
-                });
-            };
+            toolbar.btnStart.setClickHandler(function() {
+                dbg.request('continue', null, function(err, response) { });
+            });
             
             // enable Continue button but only if the break is not due to --debug-brk
             if (breakpoint.body.sourceLine >= userScriptOffset) {
@@ -74,7 +72,7 @@ var fork = require('child_process').fork;
             toolbar.btnStop.disable();
             toolbar.btnStart.enable();
             toolbar.btnStart.setText('Run');
-            toolbar.btnStart.onClick = toolbar.start;
+            toolbar.btnStart.setClickHandler(toolbar.start);
             toolbar.btnStop.disable();
             editor.clearBpHighlight();
             editor.enable();
