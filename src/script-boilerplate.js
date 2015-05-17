@@ -52,7 +52,12 @@ function execMethod(module, cmd, args) {
         return multiplexer({module: module, cmd: cmd, args: args}, true);
     } catch (exc) { 
    // process.send({ event: 'net-exception', exc: exc.toString() });
-    process.send({ event: 'log-add', level: 'ERROR', msg: cmd + (exc.InnerException||exc).toString() });
+    process.send(
+    { 
+        event: 'log-add', 
+        level: 'ERROR', 
+        msg: module + '.' + cmd + ': ' + (exc.InnerException||exc).toString() 
+    });
     process.exit();
     }
 }
