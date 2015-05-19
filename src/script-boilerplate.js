@@ -17,8 +17,23 @@ var multiplexer = edge.func({
 process.send({ event: 'log-add', level: 'INFO', msg: 'Initializing...' });
 
 try { 
-    multiplexer({ module: 'utils', cmd: 'initialize', 
-                    args: [process.argv[3], 'http://127.0.0.1:4444/wd/hub'] }, true); 
+    var paramFilePath = (process.argv[4] != 'undefined' ? process.argv[4] : null);
+    var configFilePath = (process.argv[5] != 'undefined' ? process.argv[5] : null);
+    var paramNextValue = (process.argv[7] != 'undefined' ? process.argv[7] : null);
+    multiplexer(
+        { 
+            module: 'utils', 
+            cmd: 'initialize', 
+            args: [
+                process.argv[3], 
+                'http://127.0.0.1:4444/wd/hub', 
+                paramFilePath, 
+                configFilePath,
+                paramNextValue
+            ]
+        }, 
+        true
+    ); 
 } catch (exc) { 
     process.send({ event: 'log-add', level: 'ERROR', msg: exc.toString() });
     process.exit();
@@ -65,9 +80,15 @@ function execMethod(module, cmd, args) {
 }
 
 process.send({ event: 'log-add', level: 'INFO', msg: 'Executing script...' });
-
 try {
-//%%USER_SCRIPT%%
+    var iterations = process.argv[6];
+    for (i = 0; i < iterations; i++) {
+        if (i > 0) {
+            process.send({ event: 'log-add', level: 'INFO', msg: 'Starting new iteration.' });
+        }
+        multiplexer({ module: 'utils', cmd: 'next_iteration', args: [] }, true);
+        //%%USER_SCRIPT%%   
+    }
 } catch (exc) {
     // process.send({ event: 'eval-exception', exc: exc.toString() });
     process.send({ event: 'log-add', level: 'ERROR', msg: JSON.stringify(exc) });

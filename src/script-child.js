@@ -14,8 +14,14 @@ var fork = require('child_process').fork;
         // fork new process
         var child = this.child = fork(
             scriptFilename, 
-            [ __dirname,   // setting cwd doesn't work (?) so we pass it as an argument
-                toolbar.browser ],
+            [
+                __dirname,   // setting cwd doesn't work (?) so we pass it as an argument
+                toolbar.browser,
+                runtimeSettings.paramsFilePath,
+                runtimeSettings.configFilePath,
+                runtimeSettings.iterations,
+                runtimeSettings.paramNextValue
+            ],
             { execArgv: ['--debug-brk=' + dbgPort] }
         ); 
         

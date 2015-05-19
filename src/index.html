@@ -8,7 +8,8 @@
     <link href="css/editor.css" rel="stylesheet" type="text/css" />
     <link href="css/splitter.css" rel="stylesheet" type="text/css" />
     <link href="css/logger.css" rel="stylesheet" type="text/css" />
-
+    <link href="css/modals.css" rel="stylesheet" type="text/css" />
+    
     <script type="text/javascript">window.$ = window.jQuery = require('./jquery.min.js');</script>
     <script src="splitter.js" type="text/javascript" charset="utf-8"></script>
 
@@ -101,6 +102,100 @@
         // logger
         var logger = new Logger();
         document.getElementById('paneLog').appendChild(logger);
+    </script>
+
+    <div class="modal" id="modal-settings" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-header">Runtime Settings</div>
+        <div class="modal-body">
+            <div class="hr first">General</div>
+            <div style="float:left;padding-right: 10px;">Iterations:</div><input type="text" id="iterations" style="width: 60px;" />
+            <div class="hr">Test Parameters</div>
+            <span>Choose parameter file:</span>
+            <input id="paramsFilePath" type="text" class="input-path" readonly />
+            <input type="button" value="Browse..." onclick="selectParamsFile();" />
+            <div style="margin-top:15px;">
+                <span>Read next value:</span>
+                <select id="paramNextValue">
+                    <option value="random">Randomly</option>
+                    <option value="sequential">Sequentialy</option>
+                </select>
+            </div>
+            <div class="hr">Page Objects</div>
+            <span>Choose configuration file:</span>
+            <input id="configFilePath" type="text" class="input-path" readonly />
+            <input type="button" value="Browse..."  onclick="selectConfigFile();" />
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="cancel" onclick="hideSettings();">Cancel</a> <a href="#" class="btn" onclick="runtimeSettingsSave();">Save</a>
+        </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+        runtimeSettings = {};
+        
+        function hideSettings() {
+             document.getElementById('modal-settings').className = 
+                document.getElementById('modal-settings').className.replace(/\bshow\b/,'');
+        }
+        
+        function selectParamsFile() {
+            var file = selectFile(
+                [
+                    { name: 'CSV', extensions: ['csv'] },
+                    { name: 'All Files', extensions: ['*'] }
+                ]
+            );                   
+            if (file) {
+                document.getElementById('paramsFilePath').value = file;
+            }
+        }
+        
+        function selectConfigFile() {
+            var file = selectFile(
+                [
+                    { name: 'Test Case Config', extensions: ['config'] },
+                    { name: 'All Files', extensions: ['*'] }
+                ]
+            );                   
+            if (file) {
+                document.getElementById('configFilePath').value = file;
+            }
+        }
+        
+        function selectFile(filters) {
+            return dialog.showOpenDialog(
+                remote.getCurrentWindow(), 
+                { 
+                    properties: [ 'openFile', 'openFile' ],
+                    filters: filters
+                }
+            );
+        }
+        
+        function runtimeSettingsSave() {
+            var paramsFilePath = document.getElementById('paramsFilePath').value;
+            if (paramsFilePath !== '') {
+                runtimeSettings.paramsFilePath = paramsFilePath;
+            }
+            
+            var configFilePath = document.getElementById('configFilePath').value;
+            if (configFilePath !== '') {
+                runtimeSettings.configFilePath = configFilePath;
+            }
+            
+            var iterations = document.getElementById('iterations').value;
+            if (iterations !== '') {
+                runtimeSettings.iterations = iterations;
+            }
+            
+            var nv = document.getElementById("paramNextValue");
+            runtimeSettings.paramNextValue = nv.options[nv.selectedIndex].value;
+            
+            hideSettings();
+        }
     </script>
 </body>
 </html>

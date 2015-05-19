@@ -59,6 +59,10 @@ cb-toolbar select {
     background-image: url("../img/tb-stop.png");
 }
 
+.tb.tb-settings {
+    background-image: url("../img/tb-settings.png");
+}
+
 .tb.tb-camera {
     background-image: url("../img/tb-camera.png");
 }

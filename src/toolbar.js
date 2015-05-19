@@ -68,6 +68,7 @@
             btnStop.setClickHandler(this.stop);            
             // browser dropdown
             var browserSel = document.createElement("select");
+            browserSel.setAttribute('style', 'float:left;');
             for (var browser of [['Chrome', 'chrome'], 
                                 ['Internet Explorer', 'ie'], 
                                 ['Firefox', 'firefox']]) {
@@ -82,6 +83,10 @@
                 self.browser = e.currentTarget.value;
             };
             this.appendChild(browserSel);
+            // settings
+            var btnSettings = this.btnSettings = new ToolbarButton('tb-settings', false, false);
+            this.add(btnSettings);
+            btnSettings.setClickHandler(this.settings);
             // record button
             var btnRecord= this.btnRecord = new ToolbarButton('tb-camera', false, true);
             this.add(btnRecord);
@@ -140,6 +145,18 @@
         Toolbar.prototype.stop = function() {
             logger.add('INFO', 'Stopping...');
             toolbar.scriptChild.kill(); 
+        };
+        
+        /**
+         * Shows runtime settings modal dialog
+         */
+        Toolbar.prototype.settings = function() {
+            document.getElementById('iterations').value = runtimeSettings.iterations || '1';
+            document.getElementById('paramsFilePath').value = runtimeSettings.paramsFilePath || '';
+            document.getElementById('paramNextValue').value = runtimeSettings.paramNextValue || 'random';
+            document.getElementById('configFilePath').value = runtimeSettings.configFilePath || '';
+            document.getElementById('modal-settings').className = 
+                document.getElementById('modal-settings').className + " show";
         };
         
         /**

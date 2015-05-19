@@ -1,0 +1,103 @@
+/**************************************************************************************************
+ * Common styles for modal dialogs
+ *************************************************************************************************/
+
+.modal:before {
+    content: '';
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+}
+
+.modal.show:before {
+    display: block;
+}
+
+.modal.show .modal-dialog {
+    transform: translate(0, 0);
+    top: 10%;
+}
+
+.modal-dialog {
+    background: #fefefe;
+    border: #333333 solid 1px;
+    border-radius: 5px;
+    width: 500px;
+    margin-left: -250px;
+    position: fixed;
+    left: 50%;
+    top: 1000%;
+    z-index: 10001;
+    font: 14px/normal Helvetica,Arial,sans-serif;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-header {
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.modal-footer {
+    margin-top: 10px;
+    padding: 10px 20px;
+}
+
+.modal-header {
+    border-bottom: #eeeeee solid 1px;
+}
+
+.modal-footer {
+    border-top: #eeeeee solid 1px;
+    text-align: right;
+}
+
+.modal-footer .cancel {
+    padding-right: 10px;
+}
+
+.modal-dialog div .hr {
+    padding-top: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+    margin-top:15px;
+    font-weight: bold;
+}
+
+.modal-dialog div .hr.first {
+    margin-top:0px;
+}
+
+.modal-dialog .btn {
+    background: #428bca;
+    border: #357ebd solid 1px;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 14px;
+    padding: 8px 15px;
+    text-decoration: none;
+    text-align: center;
+    min-width: 60px;
+    position: relative;
+    transition: color .1s ease;
+}
+
+.modal-dialog .btn:hover {
+    background: #357ebd;
+}
+
+/**************************************************************************************************
+ * Runtime Settings modal
+ *************************************************************************************************/
+ 
+#modal-settings .input-path {
+    width: 370px;
+}
