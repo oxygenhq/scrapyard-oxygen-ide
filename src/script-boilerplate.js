@@ -79,13 +79,13 @@ function execMethod(module, cmd, args) {
     }
 }
 
-process.send({ event: 'log-add', level: 'INFO', msg: 'Executing script...' });
 try {
     var iterations = process.argv[6];
+    if (iterations < 1) {
+        process.send({ event: 'log-add', level: 'ERROR', msg: 'Iterations should be > 0.' });
+    }
     for (i = 0; i < iterations; i++) {
-        if (i > 0) {
-            process.send({ event: 'log-add', level: 'INFO', msg: 'Starting new iteration.' });
-        }
+        process.send({ event: 'log-add', level: 'INFO', msg: 'Starting iteration #' + (i + 1) });
         multiplexer({ module: 'utils', cmd: 'next_iteration', args: [] }, true);
         //%%USER_SCRIPT%%   
     }
