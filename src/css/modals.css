@@ -34,6 +34,7 @@
     top: 1000%;
     z-index: 10001;
     font: 14px/normal Helvetica,Arial,sans-serif;
+    -webkit-user-select: none;
 }
 
 .modal-body {
