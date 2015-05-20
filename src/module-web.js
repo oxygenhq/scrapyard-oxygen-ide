@@ -25,19 +25,10 @@ module.exports = function(execMethod) {
     /**
      * Opens an URL in the test frame. This accepts both relative and absolute URLs.
      * The "open" command waits for the page to load before proceeding.
-     * This command is a synonym for openAndWait.
      * @function open
      * @param {String} url - The URL to open; may be relative or absolute.
      */
     module.open = function() { return execMethod('web', 'open', Array.prototype.slice.call(arguments)); };
-    /**
-     * Opens an URL in the test frame. This accepts both relative and absolute URLs.
-     * The "openAndWait" command waits for the page to load before proceeding.
-     * This command is a synonym for open.
-     * @function openAndWait
-     * @param {String} url - The URL to open; may be relative or absolute.
-     */
-    module.openAndWait = function() { return execMethod('web', 'openAndWait', Array.prototype.slice.call(arguments)); };
     /**
      * *Documentation not available*
      * @function point
@@ -45,7 +36,7 @@ module.exports = function(execMethod) {
     module.point = function() { return execMethod('web', 'point', Array.prototype.slice.call(arguments)); };
     /**
      * Clicks on a link, button, checkbox or radio button. If the click causes new page to load, the 
-     * command waits for page to load before proceeding. This command is a synonym for clickAndWait.
+     * command waits for page to load before proceeding.
      * @function click
      * @param {String} locator - An element locator.
      */
@@ -55,13 +46,6 @@ module.exports = function(execMethod) {
      * @function clickHidden
      */
     module.clickHidden = function() { return execMethod('web', 'clickHidden', Array.prototype.slice.call(arguments)); };
-    /**
-     * Clicks on a link, button, checkbox or radio button. If the click causes new page to load, the 
-     * command waits for page to load before proceeding. This command is a synonym for click.
-     * @function clickAndWait
-     * @param {String} locator - An element locator.
-     */
-    module.clickAndWait = function() { return execMethod('web', 'clickAndWait', Array.prototype.slice.call(arguments)); };
     /**
      * *Documentation not available*
      * @function assertTitle
