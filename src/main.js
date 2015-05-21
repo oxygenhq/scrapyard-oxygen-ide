@@ -33,6 +33,11 @@ app.on('ready', function() {
         label: '&File',
         submenu: [
             {
+                label: '&New',
+                accelerator: 'Ctrl+N',
+                click: function() { mainWindow.send('file-new'); }
+            },
+            {
                 label: '&Open',
                 accelerator: 'Ctrl+O',
                 click: function() { mainWindow.send('file-open'); }

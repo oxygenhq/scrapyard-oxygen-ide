@@ -83,6 +83,11 @@
         ipc.on('file-save-as', function () {
             editor.saveAs();
         });
+        ipc.on('file-new', function () {
+            editor.setContent('');
+            editor.currentFilename = null;
+        });
+        
         
         $('#paneMain').bind('splitresize', function(){
             editor.editor.resize(); 
