@@ -96,6 +96,7 @@ module.exports = function(execMethod) {
      * @function storeAttribute
      * @param {String} attributeLocator - An element locator followed by an &#064; sign and then the 
      *                                    name of the attribute, e.g. "foo&#064;bar"
+     * @param {String} variableName - The name of a variable in which the result is to be stored.
      */
     module.storeAttribute = function() { return execMethod('web', 'storeAttribute', Array.prototype.slice.call(arguments)); };
     /**
