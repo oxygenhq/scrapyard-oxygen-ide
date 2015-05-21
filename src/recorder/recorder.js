@@ -202,6 +202,11 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
         }
     }
 
+	if (this.waitForElementPresent)
+	{
+		Recorder.cmdSend("waitForElementPresent", target, null, (new Date()).getTime());
+		this.waitForElementPresent = false;
+	}
     Recorder.cmdSend(command, target, value, (new Date()).getTime());
 };
 
@@ -469,8 +474,12 @@ Recorder.addEventHandler('clickLocator', 'click', function (ev) {
         if (clickable) {
             this.record("click", this.findLocators(target), '');
         } else {
+			// if we get here it means that the event has generated a new dynamic content
             this.callIfMeaningfulEvent(function () {
                 this.record("click", this.findLocators(target), '');
+				// as most likely the next event will be based on the new dynamic content,
+				// we have to add waitForElementPresent before the next event
+				this.waitForElementPresent = true;
             });
         }
     }
@@ -527,7 +536,7 @@ Recorder.prototype.callIfMeaningfulEvent = function (handler) {
         console.log("clear event");
         self.delayedRecorder = null;
         self.domModifiedTimeout = null;
-    }, 50);
+    }, 500);	// timeout increased from 50ms to 500ms due as some DOM changes take longer to catch then 50ms (ex. DudaMobile)
 };
 
 new Recorder();
