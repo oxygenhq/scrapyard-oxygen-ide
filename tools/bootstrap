@@ -6,7 +6,7 @@ var cp = require('child_process');
 const TARGET = '0.26.0';
 
 process.chdir(path.dirname(__dirname));
-var child = cp.exec('npm install', 
+var child = cp.exec('npm install --msvs_version=2013', 
                     {
                         npm_config_disturl: 'https://atom.io/download/electron',
                         npm_config_target: TARGET,
