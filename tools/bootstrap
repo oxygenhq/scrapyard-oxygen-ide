@@ -5,10 +5,12 @@ var cp = require('child_process');
 
 const TARGET = '0.25.0';
 
+var arch = (process.arch === 'x64' ? 'ia64' : process.arch;
+
 process.chdir(path.dirname(__dirname));
 var child = cp.exec('npm install ' +
                         '--target=' + TARGET + 
-                        ' --arch=' + process.arch + 
+                        ' --arch=' + arch + 
                         ' --dist-url=https://atom.io/download/electron', 
                     function(error, stdout, stderr) {
                         if (error) {
