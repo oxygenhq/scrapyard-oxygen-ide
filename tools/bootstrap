@@ -3,15 +3,15 @@
 var path = require('path');
 var cp = require('child_process');
 
-const TARGET = '0.25.0';
-
-var arch = (process.arch === 'x64' ? 'ia64' : process.arch);
+const TARGET = '0.26.0';
 
 process.chdir(path.dirname(__dirname));
-var child = cp.exec('npm install ' +
-                        '--target=' + TARGET + 
-                        ' --arch=' + arch + 
-                        ' --dist-url=https://atom.io/download/electron', 
+var child = cp.exec('npm install', 
+                    {
+                        npm_config_disturl: 'https://atom.io/download/electron',
+                        npm_config_target: TARGET,
+                        npm_config_arch: process.arch
+                    },
                     function(error, stdout, stderr) {
                         if (error) {
                             process.exit(error.code || 1);
