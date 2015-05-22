@@ -90,8 +90,8 @@ try {
         //%%USER_SCRIPT%%   
     }
 } catch (exc) {
-    // process.send({ event: 'eval-exception', exc: exc.toString() });
-    process.send({ event: 'log-add', level: 'ERROR', msg: JSON.stringify(exc) });
+    // catch TypeError exceptions (for example due to undefined methods - web.undefinedmethod())
+    process.send({ event: 'log-add', level: 'ERROR', msg: exc.toString() });
     multiplexer({module: 'utils', cmd: 'close', args: [] }, true); // terminate browser instance
     process.exit();
 }
