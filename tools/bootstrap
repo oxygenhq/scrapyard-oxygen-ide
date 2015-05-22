@@ -3,14 +3,16 @@
 var path = require('path');
 var cp = require('child_process');
 
-const TARGET = '0.26.0';
+const TARGET = '0.26.1';
 
 process.chdir(path.dirname(__dirname));
-var child = cp.exec('npm install --msvs_version=2013', 
-                    {
-                        npm_config_disturl: 'https://atom.io/download/electron',
-                        npm_config_target: TARGET,
-                        npm_config_arch: process.arch
+var child = cp.exec('npm install --msvs_version=2013',
+                    { env: 
+                        {
+                            npm_config_disturl: 'https://atom.io/download/atom-shell',
+                            npm_config_target: TARGET,
+                            npm_config_arch: process.arch
+                        }
                     },
                     function(error, stdout, stderr) {
                         if (error) {
