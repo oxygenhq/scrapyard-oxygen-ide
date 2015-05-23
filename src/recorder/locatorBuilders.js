@@ -7,6 +7,17 @@ function LocatorBuilders(window) {
     this.window = window;
 }
 
+function LocatorFrameBuilders(window) {
+    this.window = window;
+}
+
+LocatorBuilders.order = [];
+LocatorBuilders.builderMap = {};
+LocatorBuilders._preferredOrder = [];
+
+LocatorFrameBuilders.order = [];
+LocatorFrameBuilders.builderMap = {};
+
 LocatorBuilders.prototype.detach = function() {
     if (this.window._locator_pageBot) {
         console.log(this.window);
@@ -16,7 +27,7 @@ LocatorBuilders.prototype.detach = function() {
     }
 };
 
-LocatorBuilders.prototype.pageBot = function() {
+LocatorBuilders.prototype.pageBot = LocatorFrameBuilders.prototype.pageBot = function() {
     var pageBot = this.window._locator_pageBot;
     if (!pageBot) {
         pageBot = new MozillaBrowserBot(this.window);
@@ -31,6 +42,10 @@ LocatorBuilders.prototype.pageBot = function() {
 
 LocatorBuilders.prototype.buildWith = function(name, e, opt_contextNode) {
     return LocatorBuilders.builderMap[name].call(this, e, opt_contextNode);
+};
+
+LocatorFrameBuilders.prototype.buildWith = function(name, e, opt_contextNode) {
+    return LocatorFrameBuilders.builderMap[name].call(this, e, opt_contextNode);
 };
 
 LocatorBuilders.prototype.elementEquals = function(name, e, locator) {
@@ -78,7 +93,29 @@ LocatorBuilders.prototype.buildAll = function(el) {
     return locators;
 };
 
-LocatorBuilders.prototype.findElement = function (locator) {
+LocatorFrameBuilders.prototype.buildAll = function(el) {
+    var locator;
+    var locators = [];
+
+    var coreLocatorStrategies = this.pageBot().locationStrategies;
+    for (var i = 0; i < LocatorFrameBuilders.order.length; i++) {
+        var finderName = LocatorFrameBuilders.order[i];
+     // console.log("trying " + finderName);
+        try {
+            locator = this.buildWith(finderName, el);
+            if (locator) {
+                locator = String(locator).replace(/\r\n|\r|\n/g, "\\n");
+                locators.push([ locator, finderName ]);
+            }
+        } catch (e) {
+            // TODO ignore the buggy locator builder for now
+            console.log("locator exception: " + e.message);
+        }
+    }
+    return locators;
+};
+
+LocatorBuilders.prototype.findElement = LocatorFrameBuilders.prototype.findElement = function (locator) {
         //console.log("finding element. locator: " + locator);
     try {
         return this.pageBot().findElement(locator);
@@ -88,11 +125,12 @@ LocatorBuilders.prototype.findElement = function (locator) {
     }
 };
 
-LocatorBuilders.order = [];
-LocatorBuilders.builderMap = {};
-LocatorBuilders._preferredOrder = [];
-
 LocatorBuilders.add = function(name, finder) {
+    this.order.push(name);
+    this.builderMap[name] = finder;
+};
+
+LocatorFrameBuilders.add = function(name, finder) {
     this.order.push(name);
     this.builderMap[name] = finder;
 };
@@ -130,7 +168,7 @@ LocatorBuilders._ensureAllPresent = function(sourceArray, destArray) {
 /*
  * Utility function: Encode XPath attribute value.
  */
-LocatorBuilders.prototype.attributeValue = function(value) {
+LocatorBuilders.prototype.attributeValue = LocatorFrameBuilders.prototype.attributeValue = function(value) {
     if (value.indexOf("'") < 0) {
         return "'" + value + "'";
     } else if (value.indexOf('"') < 0) {
@@ -163,7 +201,7 @@ LocatorBuilders.prototype.attributeValue = function(value) {
     }
 };
 
-LocatorBuilders.prototype.xpathHtmlElement = function(name) {
+LocatorBuilders.prototype.xpathHtmlElement = LocatorFrameBuilders.prototype.xpathHtmlElement =  function(name) {
     if (this.window.document.contentType == 'application/xhtml+xml') {
         // "x:" prefix is required when testing XHTML pages
         return "x:" + name;
@@ -172,7 +210,7 @@ LocatorBuilders.prototype.xpathHtmlElement = function(name) {
     }
 };
 
-LocatorBuilders.prototype.relativeXPathFromParent = function(current) {
+LocatorBuilders.prototype.relativeXPathFromParent = LocatorFrameBuilders.prototype.relativeXPathFromParent = function(current) {
     var index = this.getNodeNbr(current);
     var currentPath = '/' + this.xpathHtmlElement(current.nodeName.toLowerCase());
     if (index > 0) {
@@ -181,7 +219,7 @@ LocatorBuilders.prototype.relativeXPathFromParent = function(current) {
     return currentPath;
 };
 
-LocatorBuilders.prototype.getNodeNbr = function(current) {
+LocatorBuilders.prototype.getNodeNbr = LocatorFrameBuilders.prototype.getNodeNbr = function(current) {
     var childNodes = current.parentNode.childNodes;
     var total = 0;
     var index = -1;
@@ -216,7 +254,7 @@ LocatorBuilders.prototype.getCSSSubPath = function(e) {
         return e.nodeName.toLowerCase();
 };
 
-LocatorBuilders.prototype.preciseXPath = function(xpath, e){
+LocatorBuilders.prototype.preciseXPath = LocatorFrameBuilders.prototype.preciseXPath = function(xpath, e){
     //only create more precise xpath if needed
     if (this.findElement(xpath) != e) {
         var result = e.ownerDocument.evaluate(xpath, e.ownerDocument, null, 7, null);
@@ -319,6 +357,7 @@ LocatorBuilders.add('xpath:attributes', function(e) {
         for (i = 0; i < PREFERRED_ATTRIBUTES.length; i++) {
             var name = PREFERRED_ATTRIBUTES[i];
             if (attsMap[name] !== null && attsMap[name] !== undefined) {
+
                 names.push(name);
                 var locator = attributesXPath.call(this, e.nodeName.toLowerCase(), names, attsMap);
                 if (e == this.findElement(locator)) {
@@ -382,6 +421,64 @@ LocatorBuilders.add('xpath:position', function(e, opt_contextNode) {
         current = current.parentNode;
         
         console.log("positionXPath: current=" + current);
+    }
+    return null;
+});
+
+LocatorFrameBuilders.add('xpath:attributes', function(e) {
+    var PREFERRED_ATTRIBUTES = ['name', 'src'];
+    var i = 0;
+
+    function attributesXPath(name, attNames, attributes) {
+        var locator = "//" + this.xpathHtmlElement(name) + "[";
+        for (i = 0; i < attNames.length; i++) {
+            if (i > 0) {
+                locator += " and ";
+            }
+            var attName = attNames[i];
+            locator += 'contains(@' + attName + "," + this.attributeValue(attributes[attName]) + ")";
+        }
+        locator += "]";
+        return this.preciseXPath(locator, e);
+    }
+
+    if (e.attributes) {
+        var atts = e.attributes;
+        var attsMap = {};
+        for (i = 0; i < atts.length; i++) {
+            var att = atts[i];
+            attsMap[att.name] = att.value;
+        }
+        var names = [];
+        // try preferred attributes
+        for (i = 0; i < PREFERRED_ATTRIBUTES.length; i++) {
+            var name = PREFERRED_ATTRIBUTES[i];
+            if (attsMap[name] !== null && attsMap[name] !== undefined) {
+                names.push(name);
+                return attributesXPath.call(this, e.nodeName.toLowerCase(), names, attsMap);
+            }
+        }
+    }
+    return null;
+});
+
+LocatorFrameBuilders.add('xpath:position', function(e, opt_contextNode) {
+    var path = '';
+    var current = e;
+    while (current !== null && current !== undefined && current != opt_contextNode) {
+        var currentPath;
+        if (current.parentNode !== null && current.parentNode !== undefined) {
+            currentPath = this.relativeXPathFromParent(current);
+        } else {
+            currentPath = '/' + this.xpathHtmlElement(current.nodeName.toLowerCase());
+        }
+
+        if (currentPath === '/html') {
+            return '/' + path;
+        }
+        
+        path = currentPath + path; 
+        current = current.parentNode;
     }
     return null;
 });

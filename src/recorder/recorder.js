@@ -91,6 +91,7 @@ Recorder.prototype.parseEventKey = function(eventKey) {
 Recorder.prototype.attach = function() {
     console.log("attaching");
     this.locatorBuilders = new LocatorBuilders(window);
+    this.locatorFrameBuilders = new LocatorFrameBuilders(window);
     this.eventListeners = {};
     this.reattachWindowMethods();
     var self = this;
@@ -136,8 +137,6 @@ Recorder.record = function (recorder, command, target, value) {
 };
 
 Recorder.prototype.record = function (command, target, value, insertBeforeLastCommand) {
-    var curDateForWin = (new Date()).getTime();
-    
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", Recorder.GetIdeUrl() + "/lastwin_update", false);
     xmlhttp.send(JSON.stringify(new LastWindow(window)));
@@ -145,13 +144,13 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
         console.log("AJAX lastwin_update error: " + xmlhttp.statusText);
         return;
     }
-    var lw = JSON.parse(xmlhttp.responseText);    
-    if (lw != 'False') {
+
+    if (xmlhttp.responseText !== 'False') {
+        var lw = JSON.parse(xmlhttp.responseText);    
         if (!Recorder.isSameWindow(lw, window)) {
             var send_frame = false;
             var send_win = false;
             // it can be different window OR a different frame in same window OR different frame in different window
-            console.log("is frame: " + (window != window.top));
             if (window != window.top) { // check if frame
                 try {                   // IE9-11: results in Access Denied when accessing parent since script is injected into all "plain/html" sources
                     if (lw.parenthash != window.parent.__hash) {
@@ -170,33 +169,23 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
             }
 
             if (send_win) {
-                Recorder.cmdSend("selectWindow", (window.name === '') ? '' : "name=" + window.name, null, curDateForWin);
+                Recorder.cmdSend("selectWindow", (window.name === '') ? '' : "name=" + window.name, null, (new Date()).getTime());
             }
             if (send_frame) {
-                var destPath = createPath(window);
-                var srcPath = createPath(lw);
-                console.log("selectFrame: srcPath.length=" + srcPath.length + ", destPath.length=" + destPath.length);
-                var branch = 0;
-                var i;
-                for (i = 0; ; i++) {
-                    if (i >= destPath.length || i >= srcPath.length) {
-                        break;
-                    }
-                    if (destPath[i] == srcPath[i]) {
-                        branch = i;
-                    }
-                }
-                console.log("branch=" + branch);
-                if (branch === 0 && srcPath.size > 1) {
-                    // go to root
-                    Recorder.cmdSend("selectFrame", "relative=top", null, ++curDateForWin);
-                } else {
-                    for (i = srcPath.length - 1; i > branch; i--) {
-                        Recorder.cmdSend("selectFrame", "relative=up", null, ++curDateForWin);
-                    }
-                }
-                for (i = branch + 1; i < destPath.length; i++) {
-                     Recorder.cmdSend("selectFrame", (destPath[i].name !== '') ? destPath[i].name : "index=" + i, null, ++curDateForWin);
+                try {
+                    var frEl = window.frameElement;
+                    var locs = this.findFrameLocators(frEl);
+                    Recorder.cmdSend("selectFrame", locs, null, (new Date()).getTime());
+                } catch (exc) {
+                    // accessing window.frameElement from different origin frame will throw. 
+                    // in such case generate xpath using the src attribute.
+                    var src = window.location.href;
+                    // remove protocol since it's possible that it's not specified in the "src" 
+                    // attribute. e.g. <iframe src="//somesite.com">
+                    src = src.substring(src.indexOf(':') + 1);
+                    
+                    var xpath = '//iframe[contains(@src,\'' + src + '\')]';
+                    Recorder.cmdSend("selectFrame", xpath, null, (new Date()).getTime()); 
                 }
             }
         }
@@ -210,27 +199,16 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
     Recorder.cmdSend(command, target, value, (new Date()).getTime());
 };
 
-function createPath(window) {
-    var path = [];
-    var lastWindow = null;
-    try {
-        while (window != lastWindow) {
-            path.unshift(window);
-            lastWindow = window;
-            window = lastWindow.parent;
-        }
-    } catch (e) { }
-    return path;
-}
-
 Recorder.prototype.findLocator = function (element) {
     return this.locatorBuilders.build(element);
 };
 
 Recorder.prototype.findLocators = function (element) {
-    var locators = this.locatorBuilders.buildAll(element);
-    //console.log('Locators: ' + locators);
-    return locators;
+    return this.locatorBuilders.buildAll(element);
+};
+
+Recorder.prototype.findFrameLocators = function (element) {
+    return this.locatorFrameBuilders.buildAll(element);
 };
 
 Recorder.addEventHandler = function(handlerName, eventName, handler, options) {
@@ -284,10 +262,8 @@ function LastWindow(window) {
 
     this.hash = hash;
     this.parenthash = phash;
-    this.history = history.length;
-    this.isFrame = window != window.top;
 
-    console.log("LastWin " + this.hash + " - " + this.isFrame);
+    console.log("LastWin " + this.hash);
 }
 
 Recorder.guid = function() {
