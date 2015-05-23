@@ -155,9 +155,13 @@ module.exports = function(execMethod) {
     module.waitForPopUp = function() { return execMethod('web', 'waitForPopUp', Array.prototype.slice.call(arguments)); };
     /**
      * Selects a frame within the current window (You may invoke this command multiple times to 
-     * select nested frames). To select the parent frame, use "relative=parent" as a locator; 
-     * to select the top frame, use "relative=top". You can also select a frame by its 0-based 
-     * index number; e.g. "index=0" to select the first frame.
+     * select nested frames). 
+     * <br/><br/>
+     * Available locators:<br/>
+     * <code>relative=parent</code> Select parent frame.<br/>
+     * <code>relative=top</code> Select top window.<br/>
+     * <code>index=0</code> Select frame by its 0-based index.<br/>
+     * <code>//frame[contains(@src,'frame.html')]</code> Select frame using XPath.
      * @function selectFrame
      * @param {String} locator - An element locator identifying a frame or an iframe.
      */
