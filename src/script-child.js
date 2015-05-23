@@ -74,7 +74,10 @@ var fork = require('child_process').fork;
             //console.log('dbg error' + err);
         });
       
-        child.on('exit', function () {
+        child.on('exit', function (code) {
+            if (code === 1) {
+                logger.add('ERROR', 'Script terminated abruptly. Possibly due to a syntax error?');
+            }
             toolbar.btnStop.disable();
             toolbar.btnStart.enable();
             toolbar.btnStart.setText('Run');
