@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using mshtml;
 using System.Windows;
 using System.Net;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace CloudBeat.IEAddon
@@ -116,6 +117,11 @@ namespace CloudBeat.IEAddon
         #region Implementation of IObjectWithSite
         int IObjectWithSite.SetSite(object site)
         {
+#if DEBUG
+            // launch debugger when in Debug build
+            Debugger.Launch();
+#endif
+
             if (site != null)
             {
                 browser = (IWebBrowser2)site;
