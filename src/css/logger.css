@@ -9,11 +9,12 @@ table[is=cb-logger] td {
 }
 
 table[is=cb-logger] td.date {
-    min-width: 80px;
+    min-width: 85px;
 }
 
 table[is=cb-logger] td.level {
-    padding-right: 10px; 
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 table[is=cb-logger] td.level-error {
