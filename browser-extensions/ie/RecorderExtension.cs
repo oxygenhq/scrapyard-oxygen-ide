@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using mshtml;
 using System.Windows;
 using System.Net;
+using System.Collections.Generic;
 
 namespace CloudBeat.IEAddon
 {
@@ -15,6 +16,8 @@ namespace CloudBeat.IEAddon
     public class RecorderExtension : IObjectWithSite, IOleCommandTarget {
         IWebBrowser2 browser;
 
+        HashSet<string> seenPages = new HashSet<string>();
+
         #region
 		private string GetResourceContent()
 		{
@@ -24,6 +27,7 @@ namespace CloudBeat.IEAddon
 
 		private void InjectScriptToHead(HTMLDocument doc, string script)
 		{
+
 			IHTMLDOMNode head = (IHTMLDOMNode)doc.getElementsByTagName("head").item(0);
 			IHTMLScriptElement scriptEl = (IHTMLScriptElement)doc.createElement("script");
 			scriptEl.type = "text/javascript";
@@ -43,8 +47,46 @@ namespace CloudBeat.IEAddon
             return true;
         }
 
+        public void OnDownloadBegin()
+        {
+            if (!IsSupportedURL(browser.LocationURL))
+                return;
+
+            HTMLDocument doc = browser.Document as HTMLDocument;
+            if (doc.readyState == "loading")
+            {
+                // if the page has been seen already and tries to load again -
+                // the window was refreshed and we'll need to inject all the scripts again
+                seenPages.Remove(browser.LocationURL);
+            }
+        }
+
         public void OnDownloadComplete()
         {
+            if (!IsSupportedURL(browser.LocationURL))
+                return;
+
+            HTMLDocument doc = browser.Document as HTMLDocument;
+
+            if (doc.readyState == "loading")
+            {
+                seenPages.Remove(browser.LocationURL);
+            }
+            else if (doc.readyState == "interactive")
+            {
+                if (seenPages.Contains(browser.LocationURL))
+                    return;
+
+                try
+                {
+                    var script = GetResourceContent();
+                    InjectScriptToHead(doc, script);
+                    seenPages.Add(doc.url);
+                }
+                catch (Exception)
+                { // suppress exceptions
+                }
+            }
         }
 
         public void OnDocumentComplete(object pDisp, ref object URL) {
@@ -55,12 +97,15 @@ namespace CloudBeat.IEAddon
             if (!IsSupportedURL(browser.LocationURL))
                 return;
 
-        //    MessageBox.Show(browser.LocationURL);
+            if (seenPages.Contains(browser.LocationURL))
+                return;
+
             HTMLDocument doc = (HTMLDocument)browser.Document;
             try
             {
                 var script = GetResourceContent();
                 InjectScriptToHead(doc, script);
+                seenPages.Add(doc.url);
             }
             catch (Exception)
             { // suppress exceptions
@@ -75,6 +120,7 @@ namespace CloudBeat.IEAddon
             {
                 browser = (IWebBrowser2)site;
                 ((DWebBrowserEvents2_Event)browser).DocumentComplete += new DWebBrowserEvents2_DocumentCompleteEventHandler(this.OnDocumentComplete);
+                ((DWebBrowserEvents2_Event)browser).DownloadBegin += new DWebBrowserEvents2_DownloadBeginEventHandler(this.OnDownloadBegin);
                 ((DWebBrowserEvents2_Event)browser).DownloadComplete += new DWebBrowserEvents2_DownloadCompleteEventHandler(this.OnDownloadComplete);
             }
             else
