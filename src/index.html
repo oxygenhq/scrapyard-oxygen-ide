@@ -84,8 +84,7 @@
             editor.saveAs();
         });
         ipc.on('file-new', function () {
-            editor.setContent('');
-            editor.currentFilename = null;
+            editor.new();
         });
         
         

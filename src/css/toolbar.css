@@ -47,6 +47,10 @@ cb-toolbar select {
     pointer-events: none;
 }
 
+.tb.tb-new {
+    background-image: url("../img/tb-new.png");
+}
+
 .tb.tb-save {
     background-image: url("../img/tb-save.png");
 }

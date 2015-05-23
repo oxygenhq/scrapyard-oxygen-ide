@@ -54,6 +54,10 @@
         };
 
         Toolbar.prototype.initializeContent = function() {
+            // new button
+            var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false);
+            this.add(btnNew);
+            btnNew.setClickHandler(function() { editor.new(); });
             // save button
             var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
             this.add(btnSave);

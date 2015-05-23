@@ -320,6 +320,14 @@
         };
         
         /**
+         * Clear editor content.
+         */
+        Editor.prototype.new = function() {
+            editor.setContent('');
+            editor.currentFilename = null;
+        };
+        
+        /**
          * Save the script.
          */
         Editor.prototype.save = function() {
