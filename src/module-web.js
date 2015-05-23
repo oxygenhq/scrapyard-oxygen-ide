@@ -117,6 +117,30 @@ module.exports = function(execMethod) {
      */
     module.storeValue = function() { return execMethod('web', 'storeValue', Array.prototype.slice.call(arguments)); };
     /**
+     * Returns the value of an element's attribute.
+     * @function getAttribute
+     * @param {String} attributeLocator - An element locator followed by an &#064; sign and then the 
+     *                                    name of the attribute, e.g. "foo&#064;bar"
+     * @return {String} Attribute's value.
+     */
+    module.getAttribute = function() { return execMethod('web', 'getAttribute', Array.prototype.slice.call(arguments)); };
+    /**
+     * Returns the text (rendered text shown to the user) of an element. This works for any element 
+     * that contains text.
+     * @function getText
+     * @param {String} locator - An element locator.
+     * @return {String} Element's text.
+     */
+    module.getText = function() { return execMethod('web', 'getText', Array.prototype.slice.call(arguments)); };
+    /**
+     * Returns the (whitespace-trimmed) value of an input field (or anything else with a value 
+     * parameter). For checkbox/radio elements, the value will be "on" or "off".
+     * @function getValue
+     * @param {String} locator - An element locator.
+     * @return {String} The value.
+     */
+    module.getValue = function() { return execMethod('web', 'getValue', Array.prototype.slice.call(arguments)); };
+    /**
      * Double clicks on a link, button, checkbox, or radio button.
      * @function doubleClick
      * @param {String} locator - An element locator.
