@@ -292,17 +292,13 @@ Recorder.addEventHandler('type', 'change', function (ev, check_prev) {
     if (target.tagName) {
         var tagName = target.tagName.toLowerCase();
         var type = target.type;
-        if ('input' == tagName && Recorder.inputTypes.indexOf(type) >= 0) {
+        if ('input' == tagName && Recorder.inputTypes.indexOf(type) >= 0 ||
+            'textarea' == tagName) {
             if (target.value.length > 0) {
-                // TODO figure out if we need sendKeys or type and record it
                 this.record("type", this.findLocators(target), target.value);
             } else {
-                //use type to clear
-                this.record("type", this.findLocators(target), target.value);
+                this.record("clear", this.findLocators(target), target.value);
             }
-        } else if ('textarea' == tagName) {
-            //use type for file uploads
-            this.record("type", this.findLocators(target), target.value);
         }
     }
 });
