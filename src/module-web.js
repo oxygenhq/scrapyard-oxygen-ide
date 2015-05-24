@@ -57,7 +57,8 @@ module.exports = function(execMethod) {
      */
     module.assertTitle = function() { return execMethod('web', 'assertTitle', Array.prototype.slice.call(arguments)); };
     /**
-     * Sets the value of an input field, as though you typed it in.
+     * Simulates keystroke events on the specified element, as though you typed the value 
+     * key-by-key.
      * @function type
      * @param {String} locator - An element locator.
      * @param {String} value - The value to type.
@@ -146,13 +147,6 @@ module.exports = function(execMethod) {
      * @param {String} locator - An element locator.
      */
     module.doubleClick = function() { return execMethod('web', 'doubleClick', Array.prototype.slice.call(arguments)); };
-    /**
-     * Simulates keystroke events on the specified element, as though you typed the value key-by-key.
-     * @function sendKeys
-     * @param {String} locator - An element locator.
-     * @param {String} value - The value to type.
-     */
-    module.sendKeys = function() { return execMethod('web', 'sendKeys', Array.prototype.slice.call(arguments)); };
     /**
      * Selects an option from a drop-down using an option locator.
      * @function select
