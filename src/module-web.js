@@ -58,7 +58,7 @@ module.exports = function(execMethod) {
     module.assertTitle = function() { return execMethod('web', 'assertTitle', Array.prototype.slice.call(arguments)); };
     /**
      * Simulates keystroke events on the specified element, as though you typed the value 
-     * key-by-key.
+     * key-by-key. Previous value if any will be cleared.
      * @function type
      * @param {String} locator - An element locator.
      * @param {String} value - The value to type.
