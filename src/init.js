@@ -13,6 +13,12 @@ document.onkeydown = function(evt) {
     }
 };
 
+// clicking on any <a href="#"> changes Window title to the value of <title> element. Hence it needs
+// to be set to a title we want to show.
+var title = document.createElement('title');
+title.innerText = remote.require('app').getName() + ' ' + remote.require('app').getVersion();
+document.getElementsByTagName('head')[0].appendChild(title);
+
 // toolbar
 var toolbar = new Toolbar();
 document.body.insertBefore(toolbar, document.body.firstChild);
