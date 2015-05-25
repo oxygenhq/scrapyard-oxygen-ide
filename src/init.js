@@ -7,12 +7,6 @@ var fs = require('fs');
 var remote = require('remote');
 var dialog = remote.require('dialog');
 
-document.onkeydown = function(evt) {
-    if (evt.keyCode == 8) {     // cancel backspace to prevent 'Back' action
-        event.preventDefault();
-    }
-};
-
 // clicking on any <a href="#"> changes Window title to the value of <title> element. Hence it needs
 // to be set to a title we want to show.
 var title = document.createElement('title');
