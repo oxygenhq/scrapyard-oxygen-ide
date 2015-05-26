@@ -239,6 +239,7 @@
         Editor.prototype.appendText = function(data) {
             this.editor.navigateFileEnd();
             this.editor.insert(data);
+            this.editor.centerSelection();
         };
     
         /**
