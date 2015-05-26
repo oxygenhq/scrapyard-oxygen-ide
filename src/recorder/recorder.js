@@ -129,7 +129,41 @@ Recorder.prototype.attach = function() {
     };
     xmlhttp.send(lw);
 
+    // Set-up a load event handler for all the frames/iframes in this window which will generate
+    // frame locators and send them to the appropriate frame using postMessage.
+    this.setFrameLoadHandler(document.getElementsByTagName("iframe"));
+    this.setFrameLoadHandler(document.getElementsByTagName("frame"));
+    // Complementary, at the frame's side, setup a message listener which will receive those 
+    // locators and store them in the frame's Window object.
+    try {
+        if (window.self !== window.top) {
+            window.addEventListener(
+                "message", 
+                function(e) {
+                    if (e.data.__frameLocators) {
+                        window.__frameLocators = JSON.parse(e.data.__frameLocators);
+                    }
+                }, 
+                false
+            ); 
+        }
+    } catch (e) {
+        return true;
+    }
+
     Recorder.cmdSend('open', document.URL, null, (new Date()).getTime());
+};
+
+Recorder.prototype.setFrameLoadHandler = function (frames) {
+    var self = this;
+    for (var i = 0; i < frames.length; i++) {
+        (function (iCopy) {
+            frames[i].addEventListener('load', function() {
+                var locs = self.findFrameLocators(frames[iCopy]);
+                frames[iCopy].contentWindow.postMessage({ __frameLocators: JSON.stringify(locs) }, '*');
+            });
+        }(i));
+    } 
 };
 
 Recorder.record = function (recorder, command, target, value) {
@@ -152,7 +186,7 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
             var send_win = false;
             // it can be different window OR a different frame in same window OR different frame in different window
             if (window != window.top) { // check if frame
-                try {                   // IE9-11: results in Access Denied when accessing parent since script is injected into all "plain/html" sources
+                try {                   // accessing parent throws exception if frame is from a different origin
                     if (lw.parenthash != window.parent.__hash) {
                         send_win = true;
                     }
@@ -172,21 +206,7 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
                 Recorder.cmdSend("selectWindow", (window.name === '') ? '' : "name=" + window.name, null, (new Date()).getTime());
             }
             if (send_frame) {
-                try {
-                    var frEl = window.frameElement;
-                    var locs = this.findFrameLocators(frEl);
-                    Recorder.cmdSend("selectFrame", locs, null, (new Date()).getTime());
-                } catch (exc) {
-                    // accessing window.frameElement from different origin frame will throw. 
-                    // in such case generate xpath using the src attribute.
-                    var src = window.location.href;
-                    // remove protocol since it's possible that it's not specified in the "src" 
-                    // attribute. e.g. <iframe src="//somesite.com">
-                    src = src.substring(src.indexOf(':') + 1);
-                    
-                    var xpath = '//iframe[contains(@src,\'' + src + '\')]';
-                    Recorder.cmdSend("selectFrame", xpath, null, (new Date()).getTime()); 
-                }
+                Recorder.cmdSend("selectFrame", window.__frameLocators, null, (new Date()).getTime());
             }
         }
     }
