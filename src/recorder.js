@@ -111,9 +111,16 @@ var path = require('path');
             }
         }
 
+        // target
         var args = "'" + op.target.replace(/'/g, "\\'") + "'";
+
+        // value
         if (op.value) {
-            args += ", '" + op.value + "'";
+            if (/\r|\n/.exec(op.value)) {   // multiline text should be wrapped within backticks
+                args += ', `' + op.value + '`';
+            } else {
+                args += ", '" + op.value + "'"; 
+            }
         }
 
         editor.appendText('web.' + op.cmd + '(' + args + ');\n');
