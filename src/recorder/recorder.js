@@ -493,6 +493,9 @@ Recorder.addEventHandler('attrModified', 'DOMAttrModified', function (event) {
 }, { capture: true });
 
 Recorder.addEventHandler('nodeInserted', 'DOMNodeInserted', function (event) {
+    if (event.target.tagName !== undefined && event.target.tagName.toLowerCase() === 'iframe') {
+        this.setFrameLoadHandler([event.target]);
+    }
     console.log('event handler: nodeInserted, DOMNodeInserted');
     this.domModified();
 }, { capture: true });
