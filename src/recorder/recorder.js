@@ -488,7 +488,7 @@ Recorder.prototype.findClickableElement = function (e) {
 };
 
 Recorder.addEventHandler('attrModified', 'DOMAttrModified', function (event) {
-    console.log('event handler: attrModified, DOMAttrModified');
+    console.log('event handler: DOMAttrModified');
     this.domModified();
 }, { capture: true });
 
@@ -496,12 +496,12 @@ Recorder.addEventHandler('nodeInserted', 'DOMNodeInserted', function (event) {
     if (event.target.tagName !== undefined && event.target.tagName.toLowerCase() === 'iframe') {
         this.setFrameLoadHandler([event.target]);
     }
-    console.log('event handler: nodeInserted, DOMNodeInserted');
+    console.log('event handler: DOMNodeInserted');
     this.domModified();
 }, { capture: true });
 
 Recorder.addEventHandler('nodeRemoved', 'DOMNodeRemoved', function (event) {
-    console.log('event handler: nodeRemoved, DOMNodeRemoved');
+    console.log('event handler: DOMNodeRemoved');
     this.domModified();
 }, { capture: true });
 
