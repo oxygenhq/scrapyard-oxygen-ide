@@ -1,0 +1,62 @@
+#main-pane {
+    position: absolute;
+    left: 0;
+    top: 31px;
+    bottom: 100px;
+    right: 0;
+    background: #22252b;
+}
+
+#log-pane {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100px;
+    background: #22252b;
+    min-height: 4px;
+}
+
+#left-pane {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0px; // hide for now right panel
+    height:100%;
+    min-width: 300px;
+}
+
+#right-pane {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 0px; // hide for now right panel
+    height:100%;
+    color:#fff;
+    background: #22252b;
+    min-width: 4px;
+    -webkit-user-select: none;
+}
+
+.drag-x {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    cursor: w-resize;
+    background: #17191d;
+}
+
+.drag-y {
+    position: absolute;
+    left: 0;
+    top: 0px;
+    bottom: 0;
+    height: 4px;
+    width: 100%;
+    cursor: n-resize;
+    background: #17191d;
+}

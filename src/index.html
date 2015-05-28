@@ -5,13 +5,9 @@
 
     <link href="css/toolbar.css" rel="stylesheet" type="text/css" />
     <link href="css/editor.css" rel="stylesheet" type="text/css" />
-    <link href="css/splitter.css" rel="stylesheet" type="text/css" />
+    <link href="css/panes.css" rel="stylesheet" type="text/css" />
     <link href="css/logger.css" rel="stylesheet" type="text/css" />
     <link href="css/modals.css" rel="stylesheet" type="text/css" />
-    
-    <!-- TODO: get rid of jQuery -->
-    <script type="text/javascript">window.$ = window.jQuery = require('./jquery.min.js');</script>
-    <script src="splitter.js" type="text/javascript" charset="utf-8"></script>
 
     <style type="text/css" media="screen">
         html, body {
@@ -23,9 +19,16 @@
     </style>
 </head>
 <body>
-    <div id="hLayout">
-        <div id="paneMain"></div>
-        <div id="paneLog"></div>
+    <div id="main-pane"> 
+        <div id="left-pane"> 
+        </div>
+        <div id="right-pane">
+            <div id="drag-x" class="drag-x"></div>
+            Put stuff here...
+        </div>
+    </div>
+    <div id="log-pane">
+        <div id="drag-y" class="drag-y"></div>
     </div>
 
     <div class="modal" id="modal-settings" aria-hidden="true">
@@ -56,6 +59,7 @@
         </div>
       </div>
     </div>
+
     <script src="init.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

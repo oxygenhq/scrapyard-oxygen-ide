@@ -17,8 +17,59 @@ document.getElementsByTagName('head')[0].appendChild(title);
 var toolbar = new Toolbar();
 document.body.insertBefore(toolbar, document.body.firstChild);
 
-// layout
-$("#hLayout").splitter({ type: "h", anchorToWindow: true, sizeBottom: true });
+// panes
+var isResizingLogPane = false;
+var isResizingRightPane = false;
+
+var container = document.body;
+var mainPane = document.getElementById('main-pane');
+var logPane = document.getElementById('log-pane');
+var leftPane = document.getElementById('left-pane');
+var rightPane = document.getElementById('right-pane');
+    
+var logPaneMin = parseInt(window.getComputedStyle(logPane).getPropertyValue('min-height'), 10);
+var mainPaneMin = 100; // cannot use #main-pane min-height because it messes up the Ace editor 
+var leftPaneMin = parseInt(window.getComputedStyle(leftPane).getPropertyValue('min-width'), 10);
+var rightPaneMin = parseInt(window.getComputedStyle(rightPane).getPropertyValue('min-width'), 10); 
+
+document.getElementById('drag-y').addEventListener('mousedown', function(e){
+    isResizingLogPane = true;
+}, false);
+
+document.getElementById('drag-x').addEventListener('mousedown', function(e){
+    isResizingRightPane = true;
+}, false);
+
+document.addEventListener('mousemove', function (e) {
+    if (isResizingLogPane) {
+        e.preventDefault(); // prevents text selection
+        var offsetBottom = container.offsetHeight - 
+                            (e.clientY - container.getBoundingClientRect().top);
+
+        if (offsetBottom < logPaneMin || container.offsetHeight - offsetBottom < mainPaneMin) {
+            return;
+        }
+
+        mainPane.style.bottom = offsetBottom + 'px';
+        logPane.style.height= offsetBottom + 'px';
+        editor.editor.resize(); 
+    } else if (isResizingRightPane) {
+        var offsetRight = container.offsetWidth - 
+                            (e.clientX - container.getBoundingClientRect().left);
+        
+        if (offsetRight < rightPaneMin || container.offsetWidth - offsetRight < leftPaneMin) {
+            return;
+        }
+
+        leftPane.style.right = offsetRight + 'px';
+        rightPane.style.width = offsetRight + 'px';
+    }
+}, false);
+
+document.addEventListener('mouseup', function (e) {
+    isResizingLogPane = false;
+    isResizingRightPane = false;
+}, false);
 
 // editor
 var editor = new Editor(); 
@@ -56,11 +107,7 @@ ipc.on('file-new', function () {
     editor.new();
 });
 
-
-$('#paneMain').bind('splitresize', function(){
-    editor.editor.resize(); 
-}); 
-var paneMain = document.getElementById('paneMain');
+var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);
 
 // apidoc div
@@ -74,7 +121,7 @@ var docs = doc.init();
 
 // logger
 var logger = new Logger();
-document.getElementById('paneLog').appendChild(logger);
+document.getElementById('log-pane').appendChild(logger);
 
 // runtime settings modal dialog 
 runtimeSettings = { iterations: 1 };
