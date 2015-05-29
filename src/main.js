@@ -81,7 +81,27 @@ app.on('ready', function() {
                 accelerator: 'Ctrl+Y',
                 enabled: false,
                 click: function() { mainWindow.send('edit-redo'); }
-            }
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: 'Cu&t',
+                accelerator: 'Ctrl+X',
+                enabled: false,
+                click: function() { mainWindow.send('edit-cut'); }
+            },
+            {
+                label: '&Copy',
+                accelerator: 'Ctrl+C',
+                enabled: false,
+                click: function() { mainWindow.send('edit-copy'); }
+            },
+            {
+                label: '&Paste',
+                accelerator: 'Ctrl+V',
+                click: function() { mainWindow.send('edit-paste'); }
+            },
         ]
     },
     {

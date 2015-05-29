@@ -63,6 +63,18 @@ cb-toolbar select {
     background-image: url("../img/tb-redo.png");
 }
 
+.tb.tb-cut {
+    background-image: url("../img/tb-cut.png");
+}
+
+.tb.tb-copy {
+    background-image: url("../img/tb-copy.png");
+}
+
+.tb.tb-paste {
+    background-image: url("../img/tb-paste.png");
+}
+
 .tb.tb-start {
     background-image: url("../img/tb-start.png");
 }

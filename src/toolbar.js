@@ -69,6 +69,18 @@
             var btnRedo = this.btnRedo = new ToolbarButton('tb-redo', true, false);
             this.add(btnRedo);
             btnRedo.setClickHandler(function() { editor.redo(); });
+            // cut button
+            var btnCut = this.btnCut = new ToolbarButton('tb-cut', true, false);
+            this.add(btnCut);
+            btnCut.setClickHandler(function() { remote.getCurrentWindow().send('edit-cut'); });
+            // copy button
+            var btnCopy = this.btnCopy = new ToolbarButton('tb-copy', true, false);
+            this.add(btnCopy);
+            btnCopy.setClickHandler(function() { remote.getCurrentWindow().send('edit-copy'); });
+            // paste button
+            var btnPaste = this.btnPaste = new ToolbarButton('tb-paste', false, false);
+            this.add(btnPaste);
+            btnPaste.setClickHandler(function() { remote.getCurrentWindow().send('edit-paste'); });
             // run button
             var btnStart = new ToolbarButton('tb-start', false, false, 'Run');
             this.btnStart = btnStart;

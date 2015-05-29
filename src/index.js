@@ -112,7 +112,18 @@ ipc.on('edit-undo', function () {
 ipc.on('edit-redo', function () {
     editor.redo();
 });
-
+ipc.on('edit-cut', function () {
+    editor.editor.focus();
+    document.execCommand('cut');
+});
+ipc.on('edit-copy', function () {
+    editor.editor.focus();
+    document.execCommand('copy'); 
+});
+ipc.on('edit-paste', function () {
+    editor.editor.focus();
+    document.execCommand('paste'); 
+});
 
 var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);

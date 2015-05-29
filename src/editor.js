@@ -70,6 +70,10 @@
                     toogleUndoRedo(um);
                 }
             });
+            editor.selection.on("changeSelection", function() {
+                toogleCutCopy(!editor.selection.isEmpty());
+            });
+            
             editor.setPrintMarginColumn(100);
             editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -413,6 +417,19 @@
             }
         }
         
+        function toogleCutCopy(enable) {
+            var menu = remote.getCurrentWindow().menu;
+            menu.enable('Cut', enable);
+            menu.enable('Copy', enable);
+            
+            if (enable) {
+                toolbar.btnCut.enable();
+                toolbar.btnCopy.enable();
+            } else {
+                toolbar.btnCut.disable();
+                toolbar.btnCopy.disable();
+            }
+        }
         return Editor;
     })(HTMLElement);
 
