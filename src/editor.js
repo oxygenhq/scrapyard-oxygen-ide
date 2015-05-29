@@ -64,9 +64,10 @@
             editor.setTheme('ace/theme/cloudbeat_dark');
             editor.getSession().setMode('ace/mode/javascript');
             editor.getSession().on('change', function() {
-                if (!editor.getSession().getUndoManager().isClean()) {
+                var um = editor.getSession().getUndoManager();   
+                if (!um.isClean()) {
                     toolbar.btnSave.enable();
-                    remote.getCurrentWindow().menu.saveEnable(true);
+                    toogleUndoRedo(um);
                 }
             });
             editor.setPrintMarginColumn(100);
@@ -336,7 +337,7 @@
                 fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                     if(!err) {
                         toolbar.btnSave.disable();
-                        remote.getCurrentWindow().menu.saveEnable(false);
+                        remote.getCurrentWindow().menu.enable('Save', false);
                     }
                 }); 
             } else {
@@ -361,7 +362,7 @@
                 fs.writeFile(fileName, editor.getContent(), function(err) {
                     if(!err) {
                         toolbar.btnSave.disable();
-                        remote.getCurrentWindow().menu.saveEnable(false);
+                        remote.getCurrentWindow().menu.enable('Save', false);
                     }
                 }); 
             }
@@ -373,6 +374,44 @@
         Editor.prototype.clearBpHighlight = function() {
             this.editor.session.removeMarker(this.lastMarker);
         };
+        
+        /**
+         * Undo.
+         */
+        Editor.prototype.undo = function() {
+            var um = this.editor.session.getUndoManager();
+            um.undo();
+            toogleUndoRedo(um);
+        };
+        
+        /**
+         * Redo.
+         */
+        Editor.prototype.redo = function() {
+            var um = this.editor.session.getUndoManager();
+            um.redo();
+            toogleUndoRedo(um);
+        };
+        
+        function toogleUndoRedo(um) {
+            var menu = remote.getCurrentWindow().menu;
+            
+            var hasUndo = um.hasUndo();
+            menu.enable('Undo', hasUndo);
+            if (hasUndo) {
+                toolbar.btnUndo.enable();
+            } else {
+                toolbar.btnUndo.disable();
+            }
+            
+            var hasRedo = um.hasRedo();
+            menu.enable('Redo', hasRedo);
+            if (hasRedo) {
+                toolbar.btnRedo.enable();
+            } else {
+                toolbar.btnRedo.disable();
+            }
+        }
         
         return Editor;
     })(HTMLElement);

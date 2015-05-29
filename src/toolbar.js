@@ -61,6 +61,14 @@
             // save button
             var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
             this.add(btnSave);
+            // undo button
+            var btnUndo = this.btnUndo = new ToolbarButton('tb-undo', true, false);
+            this.add(btnUndo);
+            btnUndo.setClickHandler(function() { editor.undo(); });
+            // redo button
+            var btnRedo = this.btnRedo = new ToolbarButton('tb-redo', true, false);
+            this.add(btnRedo);
+            btnRedo.setClickHandler(function() { editor.redo(); });
             // run button
             var btnStart = new ToolbarButton('tb-start', false, false, 'Run');
             this.btnStart = btnStart;

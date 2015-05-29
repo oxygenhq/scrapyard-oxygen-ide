@@ -55,6 +55,14 @@ cb-toolbar select {
     background-image: url("../img/tb-save.png");
 }
 
+.tb.tb-undo {
+    background-image: url("../img/tb-undo.png");
+}
+
+.tb.tb-redo {
+    background-image: url("../img/tb-redo.png");
+}
+
 .tb.tb-start {
     background-image: url("../img/tb-start.png");
 }

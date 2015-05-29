@@ -106,6 +106,13 @@ ipc.on('file-save-as', function () {
 ipc.on('file-new', function () {
     editor.new();
 });
+ipc.on('edit-undo', function () {
+    editor.undo();
+});
+ipc.on('edit-redo', function () {
+    editor.redo();
+});
+
 
 var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);

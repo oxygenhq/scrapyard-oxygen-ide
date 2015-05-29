@@ -68,6 +68,23 @@ app.on('ready', function() {
         ]
     },
     {
+        label: '&Edit',
+        submenu: [
+            {
+                label: '&Undo',
+                accelerator: 'Ctrl+Z',
+                enabled: false,
+                click: function() { mainWindow.send('edit-undo'); }
+            },
+            {
+                label: '&Redo',
+                accelerator: 'Ctrl+Y',
+                enabled: false,
+                click: function() { mainWindow.send('edit-redo'); }
+            }
+        ]
+    },
+    {
         label: '[&Dev]',
         submenu: [
             {
@@ -87,11 +104,15 @@ app.on('ready', function() {
     mainWindow.menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(mainWindow.menu);
 
-    mainWindow.menu.saveEnable = function (enabled) {
-        for (var item of this.items[0].submenu.items) {
-            if (item.label === "&Save") {
-                item.enabled = enabled;
-            }
+    // generate menu items map so we can easily enable/disable them later on
+    var menuItemsMap = [];
+    for (var topItems of mainWindow.menu.items) {
+        for (var subItem of topItems.submenu.items) {
+            menuItemsMap[subItem.label.replace('&', '')] = subItem;
         }
+    }
+    // enables/disable menu item
+    mainWindow.menu.enable = function (submenuLabel, enabled) {
+        menuItemsMap[submenuLabel].enabled = enabled;
     };
 });
