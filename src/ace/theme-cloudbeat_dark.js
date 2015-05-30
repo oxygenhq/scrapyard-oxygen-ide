@@ -3,7 +3,7 @@ ace.define("ace/theme/cloudbeat_dark",["require","exports","module","ace/lib/dom
 exports.isDark = true;
 exports.cssClass = "ace-cloudbeat-dark";
 exports.cssText = ".ace-cloudbeat-dark .ace_gutter {\
-background: #22252b;\
+background: #181818;\
 color: #595959;\
 border-right: 1px solid #282828;\
 }\
@@ -23,12 +23,12 @@ padding-left: 0;\
 color: #000;\
 }\
 .ace-cloudbeat-dark .ace_print-margin {\
-border-left: 1px solid #555;\
+border-left: 1px dotted #282828;\
 right: 0;\
-background: #303338;\
+background: #181818;\
 }\
 .ace-cloudbeat-dark {\
-background-color: #303338;\
+background-color: #181818;\
 color: #E6E1DC;\
 }\
 .ace-cloudbeat-dark .ace_cursor {\

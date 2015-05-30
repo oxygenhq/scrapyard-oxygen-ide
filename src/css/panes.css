@@ -2,9 +2,9 @@
     position: absolute;
     left: 0;
     top: 31px;
-    bottom: 102px; /* log-pane height + log-pane border */
+    bottom: 99px;
     right: 0;
-    background: #22252b;
+    background: #181818;
 }
 
 #log-pane {
@@ -13,11 +13,67 @@
     right: 0;
     bottom: 0;
     height: 100px;
-    background: #22252b;
-    border-top: 2px solid #17191d;
-    min-height: 4px;
-    overflow: auto;
+    background: #181818;
+    min-height: 20px;
     padding-left: 6px;
+}
+
+#log-scrollable {
+    overflow: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 20px;
+    width: 100%;
+}
+
+#log-header {
+    height: 20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 2px;
+    background: #e3e3e3;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #a0a0a0;
+    padding-left: 5px;
+    color: #606060;
+    font: 12px "Monaco","Menlo","Ubuntu Mono","Consolas","source-code-pro",monospace;
+    -webkit-user-select: none;
+}
+
+#log-header:before {
+    border-top: 1px solid #a0a0a0;
+    content:"";
+    display:block;
+    position:absolute;
+    top:-2px;
+    left:0;
+    right:0;
+}
+
+#log-header .title {
+    float: left;
+    position: relative;
+    top: 11px; 
+    transform: translateY(-9px);
+}
+
+#log-header .close {
+    background-image: url("../img/log-close.png");
+    opacity: 0.4;
+    height: 9px;
+    width: 9px;
+    margin-top: 5px;
+    margin-right: 6px;
+    float: right;
+    background-repeat: no-repeat;
+}
+
+#log-header .close:hover {
+    opacity: 1.0;
 }
 
 #left-pane {
@@ -54,11 +110,12 @@
 }
 
 .drag-y {
-    position: float;
+    position: absolute;
     left: 0;
     top: 0px;
     bottom: 0;
-    height: 4px;
+    height: 5px;
     width: 100%;
     cursor: n-resize;
+    z-index:1000;
 }

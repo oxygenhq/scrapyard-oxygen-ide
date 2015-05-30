@@ -4,6 +4,10 @@
     margin: 0;
 }
 
+.ace_gutter-layer {
+    width: 49px !important;
+}
+
 .ace_gutter-cell.ace_breakpoint {
     background-image: url("../img/editor-breakpoint.png");
     background-position: 2px center;

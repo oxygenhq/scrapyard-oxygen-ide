@@ -120,6 +120,18 @@ app.on('ready', function() {
             }
         ]
     });
+    template.push({
+        label: '&View',
+        submenu: [
+            {
+                label: '&Event Log',
+                accelerator: 'Ctrl+Alt+L',
+                type: 'checkbox',
+                checked: true,
+                click: function() { mainWindow.send('view-event-log'); }
+            }
+        ]
+    });
     
     // show debug menu only if CLOUDBEAT_DBG environment variable is defined
     if (process.env.CLOUDBEAT_DBG && process.env.CLOUDBEAT_DBG === 'true') {
@@ -153,5 +165,9 @@ app.on('ready', function() {
     // enables/disable menu item
     mainWindow.menu.enable = function (submenuLabel, enabled) {
         menuItemsMap[submenuLabel].enabled = enabled;
+    };
+    // checks/unchecks menu item
+    mainWindow.menu.check = function (submenuLabel, checked) {
+        menuItemsMap[submenuLabel].checked = checked;
     };
 });

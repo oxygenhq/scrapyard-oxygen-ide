@@ -7,6 +7,9 @@ var fs = require('fs');
 var remote = require('remote');
 var dialog = remote.require('dialog');
 
+// retrieve current BrowserWindow object
+var currentWin = remote.getCurrentWindow();
+
 // clicking on any <a href="#"> changes Window title to the value of <title> element. Hence it needs
 // to be set to a title we want to show.
 var title = document.createElement('title');
@@ -27,9 +30,7 @@ var logPane = document.getElementById('log-pane');
 var leftPane = document.getElementById('left-pane');
 var rightPane = document.getElementById('right-pane');
 
-var cmpStyleLogPane = window.getComputedStyle(logPane);
-var logPaneBorder = parseInt(cmpStyleLogPane.getPropertyValue('border-top-width'), 10);
-var logPaneMin = parseInt(cmpStyleLogPane.getPropertyValue('min-height'), 10);
+var logPaneMin = parseInt(window.getComputedStyle(logPane).getPropertyValue('min-height'), 10);
 var mainPaneMin = 100; // cannot use #main-pane min-height because it messes up the Ace editor 
 var leftPaneMin = parseInt(window.getComputedStyle(leftPane).getPropertyValue('min-width'), 10);
 var cmpStyleRightPane = window.getComputedStyle(rightPane);
@@ -54,7 +55,7 @@ document.addEventListener('mousemove', function (e) {
             return;
         }
 
-        mainPane.style.bottom = (offsetBottom + logPaneBorder) + 'px';
+        mainPane.style.bottom = (offsetBottom - 1) + 'px';
         logPane.style.height = offsetBottom + 'px';
         editor.editor.resize(); 
     } else if (isResizingRightPane) {
@@ -70,6 +71,11 @@ document.addEventListener('mousemove', function (e) {
     }
 }, false);
 
+var logPaneClose =  document.getElementById('log-header-close');
+logPaneClose.onclick = function() {
+    currentWin.send('view-event-log');
+};
+
 document.addEventListener('mouseup', function (e) {
     isResizingLogPane = false;
     isResizingRightPane = false;
@@ -80,7 +86,7 @@ var editor = new Editor();
 toolbar.btnSave.setClickHandler(editor.save);
 ipc.on('file-open', function () {
     var file = dialog.showOpenDialog(
-        remote.getCurrentWindow(), 
+        currentWin, 
         { 
             properties: [ 'openFile', 'openFile' ],
             filters: 
@@ -134,6 +140,28 @@ ipc.on('search-find', function () {
 ipc.on('search-replace', function () {
     editor.editor.execCommand("replace");
 });
+var mainPaneBottom;
+ipc.on('view-event-log', function () {
+    if (logPane.style.display == 'none') {
+        // if log pane was extended all the way up and user closed the pane and reduced the window 
+        // size then we need adjust the offsets to fall within the current size before restoring it
+        if (parseInt(mainPaneBottom, 10) >=  container.offsetHeight) {
+            mainPane.style.bottom = Math.floor(container.offsetHeight*0.3) + 'px'; // 30% log pane
+            logPane.style.height = mainPane.style.bottom;
+        } else {
+            mainPane.style.bottom = mainPaneBottom;
+        }
+        logPane.style.display = 'block';
+        editor.editor.resize(); 
+        currentWin.menu.check('Event Log', true);
+    } else {
+        mainPaneBottom = mainPane.style.bottom;
+        mainPane.style.bottom = '0px';
+        logPane.style.display = 'none';
+        editor.editor.resize();
+        currentWin.menu.check('Event Log', false); 
+    }
+});
 
 var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);
@@ -149,7 +177,7 @@ var docs = doc.init();
 
 // logger
 var logger = new Logger();
-document.getElementById('log-pane').appendChild(logger);
+document.getElementById('log-scrollable').appendChild(logger);
 
 // runtime settings modal dialog 
 runtimeSettings = { iterations: 1 };
@@ -185,7 +213,7 @@ function selectConfigFile() {
 
 function selectFile(filters) {
     return dialog.showOpenDialog(
-        remote.getCurrentWindow(), 
+        currentWin, 
         { 
             properties: [ 'openFile', 'openFile' ],
             filters: filters
