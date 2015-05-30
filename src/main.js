@@ -69,7 +69,7 @@ app.on('ready', function() {
         ]
     });
     template.push({
-        label: '&Edit',
+        label: 'E&dit',
         submenu: [
             {
                 label: '&Undo',
