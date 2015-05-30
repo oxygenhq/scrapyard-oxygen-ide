@@ -92,7 +92,6 @@ color: #999;\
 .ace-cloudbeat-dark .ace_support.ace_function {\
 }\
 .ace-cloudbeat-dark .ace_function {\
-color:#a7a7d1;\
 }\
 .ace-cloudbeat-dark .ace_string {\
 color:#cae682;\

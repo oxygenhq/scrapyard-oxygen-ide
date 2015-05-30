@@ -1,7 +1,10 @@
 table[is=cb-logger]  {
     padding-top: 5px;
+    padding-left: 4px;
     color: #969896;
-    font: 14px "Monaco","Menlo","Ubuntu Mono","Consolas","source-code-pro",monospace
+    font: 14px "Monaco","Menlo","Ubuntu Mono","Consolas","source-code-pro",monospace;
+    border-spacing: 0px;
+    border-collapse: separate;
 }
 
 table[is=cb-logger] td {
