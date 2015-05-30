@@ -13,7 +13,7 @@ cb-toolbar select {
     margin-left: 8px;
 }
 
-.tb {
+cb-toolbar .btn {
     height:22px;
     min-width:22px;
     margin-top:3px;
@@ -24,12 +24,12 @@ cb-toolbar select {
     background-position: 3px center;
 }
 
-.tb.right {
+cb-toolbar .btn.right {
     float: right !important;
     margin-right: 5px;
 }
 
-.tb span {
+cb-toolbar .btn span {
     padding-left: 22px;
     padding-right: 4px;
     position: relative;
@@ -37,67 +37,67 @@ cb-toolbar select {
     font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
-.tb-disabled span {
+cb-toolbar .btn.disabled span {
     opacity: 0.6; 
 }
 
-.tb-disabled {
+cb-toolbar .btn.disabled {
     -webkit-filter: grayscale(1);
     opacity: 0.4;
     pointer-events: none;
 }
 
-.tb.tb-new {
+cb-toolbar .btn.tb-new {
     background-image: url("../img/tb-new.png");
 }
 
-.tb.tb-save {
+cb-toolbar .btn.tb-save {
     background-image: url("../img/tb-save.png");
 }
 
-.tb.tb-undo {
+cb-toolbar .btn.tb-undo {
     background-image: url("../img/tb-undo.png");
 }
 
-.tb.tb-redo {
+cb-toolbar .btn.tb-redo {
     background-image: url("../img/tb-redo.png");
 }
 
-.tb.tb-cut {
+cb-toolbar .btn.tb-cut {
     background-image: url("../img/tb-cut.png");
 }
 
-.tb.tb-copy {
+cb-toolbar .btn.tb-copy {
     background-image: url("../img/tb-copy.png");
 }
 
-.tb.tb-paste {
+cb-toolbar .btn.tb-paste {
     background-image: url("../img/tb-paste.png");
 }
 
-.tb.tb-start {
+cb-toolbar .btn.tb-start {
     background-image: url("../img/tb-start.png");
 }
 
-.tb.tb-stop {
+cb-toolbar .btn.tb-stop {
     background-image: url("../img/tb-stop.png");
 }
 
-.tb.tb-settings {
+cb-toolbar .btn.tb-settings {
     background-image: url("../img/tb-settings.png");
 }
 
-.tb.tb-camera {
+cb-toolbar .btn.tb-camera {
     background-image: url("../img/tb-camera.png");
 }
 
-.tb.tb-camera-active {
+cb-toolbar .btn.tb-camera-active {
     background-color: #b03939;
     border: 1px solid #717171;
     border-radius: 50%;
 }
 
-.tb:hover {
+cb-toolbar .btn:hover {
     border: 1px solid #717171;
     border-radius: 2px;
     background-color:#c4c4c4;

@@ -18,8 +18,8 @@
 
     ToolbarButton.prototype.createComponent = function() {
         var div = this.el = document.createElement('div');
-        var clazz = 'tb ' + this.imgClass;
-        clazz += (this.disabled ? ' tb-disabled' : '');
+        var clazz = 'btn ' + this.imgClass;
+        clazz += (this.disabled ? ' disabled' : '');
         clazz += this.right ? ' right': '';
         div.setAttribute('class', clazz);
         div.onclick = this.onClick;
@@ -39,14 +39,14 @@
 
     ToolbarButton.prototype.disable = function() {
         this.disabled = true;
-        if (this.el.className.indexOf('tb-disabled') < 0) {
-            this.el.className += ' tb-disabled';
+        if (this.el.className.indexOf('disabled') < 0) {
+            this.el.className += ' disabled';
         }
     };
 
     ToolbarButton.prototype.enable = function() {
         this.disabled = false;
-        this.el.className = this.el.className.replace(/\btb-disabled\b/,'');
+        this.el.className = this.el.className.replace(/\bdisabled\b/,'');
     };
     
     ToolbarButton.prototype.setText = function(text) {
