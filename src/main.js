@@ -105,6 +105,21 @@ app.on('ready', function() {
             },
         ]
     });
+    template.push({
+        label: '&Search',
+        submenu: [
+            {
+                label: '&Find',
+                accelerator: 'Ctrl+F',
+                click: function() { mainWindow.send('search-find'); }
+            },
+            {
+                label: '&Replace',
+                accelerator: 'Ctrl+H',
+                click: function() { mainWindow.send('search-replace'); }
+            }
+        ]
+    });
     
     // show debug menu only if CLOUDBEAT_DBG environment variable is defined
     if (process.env.CLOUDBEAT_DBG && process.env.CLOUDBEAT_DBG === 'true') {

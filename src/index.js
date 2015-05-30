@@ -124,6 +124,12 @@ ipc.on('edit-paste', function () {
     editor.editor.focus();
     document.execCommand('paste'); 
 });
+ipc.on('search-find', function () {
+    editor.editor.execCommand("find");
+});
+ipc.on('search-replace', function () {
+    editor.editor.execCommand("replace");
+});
 
 var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);
