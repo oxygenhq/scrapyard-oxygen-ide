@@ -2,7 +2,7 @@
     position: absolute;
     left: 0;
     top: 31px;
-    bottom: 100px;
+    bottom: 102px; /* log-pane height + log-pane border */
     right: 0;
     background: #22252b;
 }
@@ -14,7 +14,10 @@
     bottom: 0;
     height: 100px;
     background: #22252b;
+    border-top: 2px solid #17191d;
     min-height: 4px;
+    overflow: auto;
+    padding-left: 6px;
 }
 
 #left-pane {
@@ -22,7 +25,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    right: 0px; // hide for now right panel
+    right: 0px; /* hide for now right panel*/
     height:100%;
     min-width: 300px;
 }
@@ -32,11 +35,12 @@
     right: 0;
     top: 0;
     bottom: 0;
-    width: 0px; // hide for now right panel
+    width: 0px; /* hide for now right panel */
     height:100%;
     color:#fff;
     background: #22252b;
-    min-width: 4px;
+    border-left: 2px solid #17191d;
+    min-width: 0px;
     -webkit-user-select: none;
 }
 
@@ -47,16 +51,14 @@
     bottom: 0;
     width: 4px;
     cursor: w-resize;
-    background: #17191d;
 }
 
 .drag-y {
-    position: absolute;
+    position: float;
     left: 0;
     top: 0px;
     bottom: 0;
     height: 4px;
     width: 100%;
     cursor: n-resize;
-    background: #17191d;
 }

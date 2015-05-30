@@ -26,11 +26,15 @@ var mainPane = document.getElementById('main-pane');
 var logPane = document.getElementById('log-pane');
 var leftPane = document.getElementById('left-pane');
 var rightPane = document.getElementById('right-pane');
-    
-var logPaneMin = parseInt(window.getComputedStyle(logPane).getPropertyValue('min-height'), 10);
+
+var cmpStyleLogPane = window.getComputedStyle(logPane);
+var logPaneBorder = parseInt(cmpStyleLogPane.getPropertyValue('border-top-width'), 10);
+var logPaneMin = parseInt(cmpStyleLogPane.getPropertyValue('min-height'), 10);
 var mainPaneMin = 100; // cannot use #main-pane min-height because it messes up the Ace editor 
 var leftPaneMin = parseInt(window.getComputedStyle(leftPane).getPropertyValue('min-width'), 10);
-var rightPaneMin = parseInt(window.getComputedStyle(rightPane).getPropertyValue('min-width'), 10); 
+var cmpStyleRightPane = window.getComputedStyle(rightPane);
+var rightPaneBorder = parseInt(cmpStyleRightPane.getPropertyValue('border-left-width'), 10);
+var rightPaneMin = parseInt(cmpStyleRightPane.getPropertyValue('min-width'), 10); 
 
 document.getElementById('drag-y').addEventListener('mousedown', function(e){
     isResizingLogPane = true;
@@ -50,8 +54,8 @@ document.addEventListener('mousemove', function (e) {
             return;
         }
 
-        mainPane.style.bottom = offsetBottom + 'px';
-        logPane.style.height= offsetBottom + 'px';
+        mainPane.style.bottom = (offsetBottom + logPaneBorder) + 'px';
+        logPane.style.height = offsetBottom + 'px';
         editor.editor.resize(); 
     } else if (isResizingRightPane) {
         var offsetRight = container.offsetWidth - 
@@ -61,7 +65,7 @@ document.addEventListener('mousemove', function (e) {
             return;
         }
 
-        leftPane.style.right = offsetRight + 'px';
+        leftPane.style.right = (offsetRight + rightPaneBorder) + 'px';
         rightPane.style.width = offsetRight + 'px';
     }
 }, false);
