@@ -28,8 +28,9 @@ app.on('ready', function() {
         mainWindow = null;
     });
   
-    var template = [
-    {
+    var template = [];
+
+    template.push({
         label: '&File',
         submenu: [
             {
@@ -66,8 +67,8 @@ app.on('ready', function() {
                 click: function() { mainWindow.close(); }
             },
         ]
-    },
-    {
+    });
+    template.push({
         label: '&Edit',
         submenu: [
             {
@@ -103,23 +104,26 @@ app.on('ready', function() {
                 click: function() { mainWindow.send('edit-paste'); }
             },
         ]
-    },
-    {
-        label: '[&Dev]',
-        submenu: [
-            {
-                label: '&Reload',
-                accelerator: 'Ctrl+R',
-                click: function() { mainWindow.restart(); }
-            },
-            {
-                label: '&Toggle DevTools',
-                accelerator: 'Ctrl+D',
-                click: function() { mainWindow.toggleDevTools(); }
-            },
-        ]
-    },
-    ];
+    });
+    
+    // show debug menu only if CLOUDBEAT_DBG environment variable is defined
+    if (process.env.CLOUDBEAT_DBG && process.env.CLOUDBEAT_DBG === 'true') {
+        template.push({
+            label: '[Dev]',
+            submenu: [
+                {
+                    label: 'Reload',
+                    accelerator: 'Ctrl+R',
+                    click: function() { mainWindow.restart(); }
+                },
+                {
+                    label: 'Toggle DevTools',
+                    accelerator: 'Ctrl+D',
+                    click: function() { mainWindow.toggleDevTools(); }
+                },
+            ]
+        });
+    }
 
     mainWindow.menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(mainWindow.menu);
