@@ -102,3 +102,12 @@ cb-toolbar select {
     border-radius: 2px;
     background-color:#c4c4c4;
 }
+
+cb-toolbar .separator {
+    height: 22px;
+    width: 1px;
+    margin-top: 4px;
+    margin-left: 4px;
+    border-right: 1px solid #cdcdcd;
+    float:left;
+}
