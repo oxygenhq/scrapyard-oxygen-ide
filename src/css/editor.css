@@ -1,7 +1,14 @@
+/* NOTE: In addition to the following overrides a number of Ace css/js files were edited as well:
+ *       mode-javascript.js - patched (http://ace.c9.io/tool/mode_creator.html)
+ *       theme-cloudbeat_dark.js - created
+ *       ext-language-tools.js - patched (see editor.js)
+ */
+
 .ace_editor {
     width:100%;
 	height:100%;
     margin: 0;
+    font: 14px/normal Consolas, 'Lucida Console', Monaco, monospace !important;
 }
 
 .ace_gutter-layer {

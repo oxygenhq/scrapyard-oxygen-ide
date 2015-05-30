@@ -3,7 +3,7 @@ ace.define("ace/theme/cloudbeat_dark",["require","exports","module","ace/lib/dom
 exports.isDark = true;
 exports.cssClass = "ace-cloudbeat-dark";
 exports.cssText = ".ace-cloudbeat-dark .ace_gutter {\
-background: #181818;\
+background: #242424;\
 color: #595959;\
 border-right: 1px solid #282828;\
 }\
@@ -23,12 +23,12 @@ padding-left: 0;\
 color: #000;\
 }\
 .ace-cloudbeat-dark .ace_print-margin {\
-border-left: 1px dotted #282828;\
+border-left: 1px dotted #383838;\
 right: 0;\
-background: #181818;\
+background: #242424;\
 }\
 .ace-cloudbeat-dark {\
-background-color: #181818;\
+background-color: #242424;\
 color: #E6E1DC;\
 }\
 .ace-cloudbeat-dark .ace_cursor {\
@@ -39,7 +39,7 @@ border-left: 0px;\
 border-bottom: 1px solid #FFFFFF;\
 }\
 .ace-cloudbeat-dark .ace_marker-layer .ace_selection {\
-background: #494836;\
+background: #898941;\
 }\
 .ace-cloudbeat-dark .ace_marker-layer .ace_step {\
 background: rgb(198, 219, 174);\
@@ -58,50 +58,51 @@ background-color: #222;\
 color: #404040;\
 }\
 .ace-cloudbeat-dark .ace_keyword {\
-color:#00698F;\
+color:#8ac6f2;\
+}\
+.ace-cloudbeat-dark .ace_storage {\
+color:#8ac6f2;\
 }\
 .ace-cloudbeat-dark .ace_keyword.ace_operator {\
-color:#FF308F;\
+color:#f3f6ee;\
 }\
 .ace-cloudbeat-dark .ace_constant {\
 color:#1EDAFB;\
 }\
 .ace-cloudbeat-dark .ace_constant.ace_language {\
-color:#FDC251;\
+color:#f08080;\
 }\
 .ace-cloudbeat-dark .ace_constant.ace_library {\
 color:#8DFF0A;\
 }\
 .ace-cloudbeat-dark .ace_constant.ace_numeric {\
-color:#58C554;\
+color:#f08080;\
 }\
 .ace-cloudbeat-dark .ace_invalid {\
-color:#FFFFFF;\
+color:#f3f6ee;\
 background-color:#990000;\
 }\
 .ace-cloudbeat-dark .ace_invalid.ace_deprecated {\
-color:#FFFFFF;\
+color:#f3f6ee;\
 background-color:#990000;\
 }\
 .ace-cloudbeat-dark .ace_support {\
 color: #999;\
 }\
 .ace-cloudbeat-dark .ace_support.ace_function {\
-color:#00AEEF;\
 }\
 .ace-cloudbeat-dark .ace_function {\
-color:#00AEEF;\
+color:#a7a7d1;\
 }\
 .ace-cloudbeat-dark .ace_string {\
-color:#58C554;\
+color:#cae682;\
 }\
 .ace-cloudbeat-dark .ace_comment {\
-color:#555;\
-font-style:italic;\
+color:#99968b;\
 padding-bottom: 0px;\
 }\
 .ace-cloudbeat-dark .ace_variable {\
-color:#997744;\
+color:#D4C4A9;\
 }\
 .ace-cloudbeat-dark .ace_meta.ace_tag {\
 color:#BE53E6;\
@@ -135,8 +136,6 @@ content: '▴'\
 content: '‣'\
 }\
 .ace-cloudbeat-dark .ace_indent-guide {\
-border-right:1px dotted #333;\
-margin-right:-1px;\
 }\
 .ace-cloudbeat-dark .ace_fold { \
 background: #222; \

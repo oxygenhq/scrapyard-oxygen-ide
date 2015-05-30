@@ -74,7 +74,7 @@
                 toogleCutCopy(!editor.selection.isEmpty());
             });
             
-            editor.setPrintMarginColumn(100);
+            editor.setPrintMarginColumn(99);
             editor.setOptions({
                 enableBasicAutocompletion: true,
                 enableSnippets: false,
