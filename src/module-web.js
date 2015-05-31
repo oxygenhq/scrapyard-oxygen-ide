@@ -80,9 +80,14 @@ module.exports = function(execMethod) {
     module.assertText = function() { return execMethod('web', 'assertText', Array.prototype.slice.call(arguments)); };
     /**
      * Selects a popup window using a window locator; once a popup window has been selected, all
-     * commands go to that window. To select the main window again, use null as the target.
+     * commands go to that window.
      * @function selectWindow
-     * @param {String} windowID - Window title or internal JavaScript "name".
+     * @param {String} windowLocator - <code>title=windowTitle</code> - switch to the first window 
+     *                                 which matches the specified title.</br>
+     *                                 <code>empty string</code> - switch to the last opened window.
+     *                                 </br><code>windowHandle</code> - switch to a window with the 
+     *                                 specified handle.
+     * @return {String} windowHandle which can be used with selectWindow.
      */
     module.selectWindow = function() { return execMethod('web', 'selectWindow', Array.prototype.slice.call(arguments)); };
     /**
