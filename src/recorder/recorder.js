@@ -71,10 +71,10 @@ Recorder.prototype.reattachWindowMethods = function() {
             self.openCalled = true;
             var result = self.windowMethods.open.call(window, url, windowName, windowFeatures, replaceFlag);
             self.openCalled = false;
-            if (result.wrappedJSObject) {
-                result = result.wrappedJSObject;
-            }
-            setTimeout(Recorder.record, 0, self, 'waitForPopUp', windowName, "30000");
+            result.addEventListener('load', function() {
+                var title = this.document.title === '' ? '' : this.document.title;
+                self.record('waitForPopUp', 'title=' + title, 30000);
+            }, false);
             return result;
         }
     };
@@ -164,10 +164,6 @@ Recorder.prototype.setFrameLoadHandler = function (frames) {
             });
         }(i));
     } 
-};
-
-Recorder.record = function (recorder, command, target, value) {
-    recorder.record(command, target, value);
 };
 
 Recorder.prototype.record = function (command, target, value, insertBeforeLastCommand) {

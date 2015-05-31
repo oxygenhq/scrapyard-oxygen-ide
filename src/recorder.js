@@ -119,7 +119,11 @@ var path = require('path');
             if (/\r|\n/.exec(op.value)) {   // multiline text should be wrapped within backticks
                 args += ', `' + op.value + '`';
             } else {
-                args += ", '" + op.value + "'"; 
+                if (op.value.toFixed) { // don't enclose in quotes if number
+                    args += ", " + op.value; 
+                } else {
+                    args += ", '" + op.value + "'"; 
+                }
             }
         }
 
