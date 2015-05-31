@@ -63,6 +63,11 @@ color:#8ac6f2;\
 .ace-cloudbeat-dark .ace_storage {\
 color:#8ac6f2;\
 }\
+.ace-cloudbeat-dark .ace_transaction {\
+font-weight: bold;\
+text-decoration: underline;\
+color: #c4a433;\
+}\
 .ace-cloudbeat-dark .ace_keyword.ace_operator {\
 color:#f3f6ee;\
 }\

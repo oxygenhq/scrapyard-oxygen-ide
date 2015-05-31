@@ -79,8 +79,8 @@ var JavaScriptHighlightRules = function(options) {
             "const|let|var|function",
         "constant.language":
             "null|Infinity|NaN|undefined",
-        "support.function":
-            "alert",
+        "transaction.function":
+            "transaction",
         "constant.language.boolean": "true|false"
     }, "identifier");
 
@@ -128,6 +128,13 @@ var JavaScriptHighlightRules = function(options) {
                 token : "constant.numeric", // float
                 regex : /[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/
             }, {
+                // web.transaction
+                token : [
+                    "transaction.function"
+                ],
+                regex : "(web\\.transaction)\\s*",
+            },
+            {
                 // Sound.prototype.play =
                 token : [
                     "storage.type", "punctuation.operator", "support.function",
