@@ -166,12 +166,12 @@ module.exports = function(execMethod) {
      */
     module.pause = function() { return execMethod('web', 'pause', Array.prototype.slice.call(arguments)); };
     /**
-     * Waits for a popup window to appear and load up.
+     * Waits for a popup window to appear.
      * @function waitForPopUp
-     * @param {String} windowID - The JavaScript window "name" of the window that will appear (not 
-     *                            the title bar). If unspecified, or specified as "null", this 
-     *                            command will wait for the first non-top window to appear.
-     * @param {String} timeout - A timeout in milliseconds, after which the action will return with 
+     * @param {String} windowLocator - Window title locator <code>title=windowTitle</code> - 
+     *                                 wait for a new window which matches the specified title.</br>
+     *                                 <code>empty string</code> - wait for any new window to appear.
+     * @param {Number} timeout - A timeout in milliseconds, after which the action will return with 
      *                           an error. If this value is not specified, the default Selenium      
      *                           timeout will be used. See the <code>setTimeout</code> command.
      */
