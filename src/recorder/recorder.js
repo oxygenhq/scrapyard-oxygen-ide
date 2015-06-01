@@ -202,7 +202,10 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
                 Recorder.cmdSend("selectWindow", (window.name === '') ? '' : "name=" + window.name, null, (new Date()).getTime());
             }
             if (send_frame) {
-                Recorder.cmdSend("selectFrame", window.__frameLocators, null, (new Date()).getTime());
+                 // record selectFrame only if locators were successfully generated
+                if (window.__frameLocators) {
+                    Recorder.cmdSend("selectFrame", window.__frameLocators, null, (new Date()).getTime());
+                }
             }
         }
     }
