@@ -71,7 +71,7 @@ Recorder.prototype.reattachWindowMethods = function() {
             self.openCalled = true;
             var result = self.windowMethods.open.call(window, url, windowName, windowFeatures, replaceFlag);
             self.openCalled = false;
-            result.addEventListener('load', function() {
+            result.addEventListener('DOMContentLoaded', function() {
                 var title = this.document.title === '' ? '' : this.document.title;
                 self.record('waitForPopUp', 'title=' + title, 30000);
             }, false);
