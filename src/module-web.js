@@ -91,38 +91,6 @@ module.exports = function(execMethod) {
      */
     module.selectWindow = function() { return execMethod('web', 'selectWindow', Array.prototype.slice.call(arguments)); };
     /**
-     * Stores value in a Selenium variable.
-     * @function store
-     * @param {String} expression - The value to store.
-     * @param {String} variableName - The name of a variable in which the result is to be stored.
-     */
-    module.store = function() { return execMethod('web', 'store', Array.prototype.slice.call(arguments)); };
-    /**
-     * Stores the value of an element attribute in a Selenium variable.
-     * @function storeAttribute
-     * @param {String} attributeLocator - An element locator followed by an &#064; sign and then the 
-     *                                    name of the attribute, e.g. "foo&#064;bar"
-     * @param {String} variableName - The name of a variable in which the result is to be stored.
-     */
-    module.storeAttribute = function() { return execMethod('web', 'storeAttribute', Array.prototype.slice.call(arguments)); };
-    /**
-     * Stores the text (rendered text shown to the user) of an element in a Selenium variable. This 
-     * works for any element that contains text.
-     * @function storeText
-     * @param {String} locator - An element locator.
-     * @param {String} variableName - The name of a variable in which the result is to be stored.
-     */
-    module.storeText = function() { return execMethod('web', 'storeText', Array.prototype.slice.call(arguments)); };
-    /**
-     * Stores the (whitespace-trimmed) value of an input field (or anything else with a value 
-     * parameter) in a Selenium variable. For checkbox/radio elements, the value will be "on" or 
-     * "off".
-     * @function storeValue
-     * @param {String} locator - An element locator.
-     * @param {String} variableName - The name of a variable in which the result is to be stored.
-     */
-    module.storeValue = function() { return execMethod('web', 'storeValue', Array.prototype.slice.call(arguments)); };
-    /**
      * Returns the value of an element's attribute.
      * @function getAttribute
      * @param {String} attributeLocator - An element locator followed by an &#064; sign and then the 
