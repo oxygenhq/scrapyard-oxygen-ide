@@ -93,8 +93,8 @@ module.exports = function(execMethod) {
     /**
      * Returns the value of an element's attribute.
      * @function getAttribute
-     * @param {String} attributeLocator - An element locator followed by an &#064; sign and then the 
-     *                                    name of the attribute, e.g. "foo&#064;bar"
+     * @param {String} locator - An element locator.
+     * @param {String} attributeName - Name of the attribute to retrieve.
      * @return {String} Attribute's value.
      */
     module.getAttribute = function() { return execMethod('web', 'getAttribute', Array.prototype.slice.call(arguments)); };
