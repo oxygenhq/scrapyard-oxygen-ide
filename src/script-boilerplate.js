@@ -9,7 +9,7 @@ var edge = require(path.resolve(cwd, 'node_modules/electron-edge'));
 var fs = require('fs');
 
 var multiplexer = edge.func({
-    assemblyFile: path.resolve(cwd, 'selenium/Oxygen.dll'),
+    assemblyFile: path.resolve(cwd, 'oxygen/Oxygen.dll'),
     typeName: 'CloudBeat.Oxygen.JSEngine.Engine',
     methodName: 'Invoke'
 });

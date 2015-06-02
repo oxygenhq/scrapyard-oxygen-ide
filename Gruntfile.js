@@ -49,7 +49,7 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        src: ['package.json', 'LICENSE', 'selenium/**'], 
+                        src: ['package.json', 'LICENSE', 'oxygen/**'], 
                         dest: OUTDIR + '/resources/app' 
                     },
                 ], 

@@ -1,4 +1,3 @@
-selenium/
 node_modules/
 browser-extensions/ie/bin/
 browser-extensions/ie/obj/
@@ -7,3 +6,4 @@ browser-extensions/ie/*.suo
 build/*
 *.zip
 npm-debug.log
+oxygen/*
