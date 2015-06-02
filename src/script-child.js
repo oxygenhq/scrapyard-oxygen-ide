@@ -53,13 +53,14 @@ var fork = require('child_process').fork;
             //console.log('dbg change');
         });
 
+        toolbar.btnStart.setClickHandler(function() {
+            toolbar.btnStart.disable();
+            dbg.request('continue', null, function(err, response) { });
+        });
+        
         dbg.on('break', function(breakpoint) {
-            //console.log('dbg break:' + JSON.stringify(breakpoint));
             editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
-            toolbar.btnStart.setClickHandler(function() {
-                dbg.request('continue', null, function(err, response) { });
-            });
-            
+
             // enable Continue button but only if the break is not due to --debug-brk
             if (breakpoint.body.sourceLine >= userScriptOffset) {
                 toolbar.btnStart.enable();
