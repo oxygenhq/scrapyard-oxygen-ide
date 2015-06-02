@@ -6,15 +6,19 @@ var ipc = require('ipc');
 var fs = require('fs');
 var remote = require('remote');
 var dialog = remote.require('dialog');
+var path = require('path');
 
 // retrieve current BrowserWindow object
 var currentWin = remote.getCurrentWindow();
 
-// clicking on any <a href="#"> changes Window title to the value of <title> element. Hence it needs
-// to be set to a title we want to show.
-var title = document.createElement('title');
-title.innerText = remote.require('app').getName() + ' ' + remote.require('app').getVersion();
-document.getElementsByTagName('head')[0].appendChild(title);
+var appFullName = remote.require('app').getName() + ' ' + remote.require('app').getVersion();
+function setWindowTitle(title) {
+    if (title === '') {
+        currentWin.setTitle(appFullName);
+    } else {
+        currentWin.setTitle(title + ' - ' + appFullName);
+    }
+}
 
 // toolbar
 var toolbar = new Toolbar();
@@ -98,6 +102,7 @@ ipc.on('file-open', function () {
     );
     if (file) {
         editor.currentFilename = file[0];
+        setWindowTitle(path.basename(file[0], '.js'));
         fs.readFile(file[0], 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
@@ -114,6 +119,7 @@ ipc.on('file-save-as', function () {
     editor.saveAs();
 });
 ipc.on('file-new', function () {
+    setWindowTitle('');
     editor.new();
 });
 ipc.on('edit-undo', function () {

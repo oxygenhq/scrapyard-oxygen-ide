@@ -27,6 +27,8 @@ app.on('ready', function() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
+    // prevent native window title updating to that of <title> element when clicking on <a href="#">
+    mainWindow.on('page-title-updated', function(e) { e.preventDefault(); });
   
     var template = [];
 

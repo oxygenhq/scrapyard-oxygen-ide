@@ -331,6 +331,7 @@
         Editor.prototype.new = function() {
             editor.setContent('');
             editor.currentFilename = null;
+            setWindowTitle('');
         };
         
         /**
