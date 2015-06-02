@@ -119,7 +119,6 @@ ipc.on('file-save-as', function () {
     editor.saveAs();
 });
 ipc.on('file-new', function () {
-    setWindowTitle('');
     editor.new();
 });
 ipc.on('edit-undo', function () {
