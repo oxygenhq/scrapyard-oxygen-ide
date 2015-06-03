@@ -32,6 +32,14 @@ module.exports = function(execMethod) {
      */
     module.open = function() { return execMethod('web', 'open', Array.prototype.slice.call(arguments)); };
     /**
+     * Scrolls the page to the location of the specified element.
+     * @function scrollToElement
+     * @param {String} locator - An element locator.
+     * @param {String} yOffset - Y offset from the element. Positive value means page will be
+     *                           scrolled to the element's location minus yOffset pixels.
+     */
+    module.scrollToElement = function() { return execMethod('web', 'scrollToElement', Array.prototype.slice.call(arguments)); };
+    /**
      * Point the mouse cursor over the specified element.
      * @function point
      * @param {String} locator - An element locator.
