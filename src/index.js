@@ -107,7 +107,8 @@ ipc.on('file-open', function () {
             if (err) {
                 return console.log(err);
             }
-            editor.setContent(data);
+            // strip BOM before sending to the editor
+            editor.setContent(data.replace(/^\uFEFF/, ''));
             toolbar.btnSave.disable();
         });
     }
