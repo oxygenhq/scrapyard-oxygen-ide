@@ -135,8 +135,8 @@ app.on('ready', function() {
         ]
     });
     
-    // show debug menu only if CLOUDBEAT_DBG environment variable is defined
-    if (process.env.CLOUDBEAT_DBG && process.env.CLOUDBEAT_DBG === 'true') {
+    // show debug menu only if OXYGEN_DBG environment variable is defined
+    if (process.env.OXYGEN_DBG && process.env.OXYGEN_DBG === 'true') {
         template.push({
             label: '[Dev]',
             submenu: [

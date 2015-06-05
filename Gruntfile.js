@@ -59,10 +59,10 @@ module.exports = function(grunt) {
         compress: {
             main: {
                 options: {
-                    archive: 'cloudbeat-v' + pkg.version + '.zip'
+                    archive: 'oxygen-v' + pkg.version + '.zip'
                 },
                 files: [
-                    { expand: true, cwd: OUTDIR, src: ['**'], dest: 'cloudbeat-v' + pkg.version }
+                    { expand: true, cwd: OUTDIR, src: ['**'], dest: 'oxygen-v' + pkg.version }
                 ]
             }
         },

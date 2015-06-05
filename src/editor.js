@@ -61,7 +61,7 @@
             langTools.setCompleters(); // remove default completers
             var editor = this.editor = ace.edit(this);
             editor.$blockScrolling = Infinity;
-            editor.setTheme('ace/theme/cloudbeat_dark');
+            editor.setTheme('ace/theme/oxygen_dark');
             editor.getSession().setMode('ace/mode/javascript');
             editor.getSession().on('change', function() {
                 var um = editor.getSession().getUndoManager();   

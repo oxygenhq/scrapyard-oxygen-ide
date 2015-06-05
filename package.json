@@ -1,7 +1,7 @@
 {
-  "name" : "cloudbeatide",
-  "productName" : "CloudBeat IDE",
   "version" : "0.4.0",
+  "name" : "oxygenide",
+  "productName" : "Oxygen IDE",
   "description": "",
   "main" : "main.js",
   "devDependencies": {
@@ -19,15 +19,15 @@
   "dependencies": {
     "tmp": "0.0.25",
     "doctrine": "0.6.4",
-    "electron-edge": "git+https://github.com/cloudbeat-io/electron-edge.git",
+    "electron-edge": "git+https://github.com/oxygenhq/electron-edge.git",
     "q": "^1.2.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cloudbeat-io/cloudbeat-ide.git"
+    "url": "https://github.com/oxygenhq/oxygen-ide.git"
   },
   "license": "GPLv2",
   "bugs": {
-    "url": "https://github.com/cloudbeat-io/cloudbeat-ide/issues"
+    "url": "https://github.com/oxygenhq/oxygen-ide/issues"
   }
 }
