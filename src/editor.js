@@ -307,6 +307,7 @@
             this.prevCurLine = line - 1;
             
             this.editor.session.removeMarker(this.lastMarker);
+            this.editor.scrollToLine(line - 1, true, true, function() {});
         };
 
         /**
