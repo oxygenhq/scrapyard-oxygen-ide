@@ -7,7 +7,9 @@ var fork = require('child_process').fork;
 (function() {
     module.exports = ScriptChild;
     function ScriptChild(scriptFilename, userScriptOffset) {
-        var dbgPort = 10001;
+        const portMin = 1024;
+        const portMax = 65535;
+        var dbgPort = Math.floor(Math.random() * (portMax - portMin)) + portMin;
         this.scriptFilename = scriptFilename;
         this.userScriptOffset = userScriptOffset;
         
@@ -59,6 +61,13 @@ var fork = require('child_process').fork;
         });
         
         dbg.on('break', function(breakpoint) {
+            // continue over the initial breakpoint. line number needs to match the very first code
+            // line in the script-boilerplate script.
+            if (breakpoint.body.sourceLine == 5) {
+                dbg.request('continue', null, function(err, response) {
+                });
+            }
+ 
             editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
 
             // enable Continue button but only if the break is not due to --debug-brk
@@ -103,6 +112,7 @@ var fork = require('child_process').fork;
      * Terminates script execution.
      */
     ScriptChild.prototype.kill = function() {
+        this.dbg.disconnect();
         this.child.kill();
         logger.add('INFO', 'Script terminated.');
     };
