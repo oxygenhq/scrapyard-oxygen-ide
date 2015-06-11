@@ -56,7 +56,7 @@ app.on('ready', function() {
             },
             {
                 label: 'Save As',
-                accelerator: 'Alt+Ctrl+S',
+                accelerator: 'Ctrl+Shift+S',
                 enabled: true,
                 click: function() { mainWindow.send('file-save-as'); }
             },
@@ -127,7 +127,7 @@ app.on('ready', function() {
         submenu: [
             {
                 label: '&Event Log',
-                accelerator: 'Ctrl+Alt+L',
+                accelerator: 'Ctrl+Shift+L',
                 type: 'checkbox',
                 checked: true,
                 click: function() { mainWindow.send('view-event-log'); }
