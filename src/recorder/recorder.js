@@ -72,8 +72,8 @@ Recorder.prototype.reattachWindowMethods = function() {
             var result = self.windowMethods.open.call(window, url, windowName, windowFeatures, replaceFlag);
             self.openCalled = false;
             result.addEventListener('DOMContentLoaded', function() {
-                var title = this.document.title === '' ? '' : this.document.title;
-                self.record('waitForPopUp', 'title=' + title, 30000);
+                var winLocator = this.document.title === '' ? '' : 'title=' + this.document.title;
+                self.record('waitForPopUp', winLocator, 30000);
             }, false);
             return result;
         }
@@ -190,7 +190,9 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
                 send_frame = true;
             } else {
                 try {
-                    if (lw.isTopLevel && window.top == window.top.parent) {
+                    if (lw.isTopLevel === undefined) {   // different origin => different window
+                        send_win = true;
+                    } else if (lw.isTopLevel && window.top == window.top.parent) {
                         send_win = lw.topName != window.top.name;
                     } else {
                         send_win = false;
@@ -199,7 +201,8 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
             }
 
             if (send_win) {
-                Recorder.cmdSend("selectWindow", (window.name === '') ? '' : "name=" + window.name, null, (new Date()).getTime());
+                var winLocator = window.document.title === '' ? '' : 'title=' + window.document.title;
+                Recorder.cmdSend("selectWindow", winLocator, null, (new Date()).getTime());
             }
             if (send_frame) {
                  // record selectFrame only if locators were successfully generated
