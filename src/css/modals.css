@@ -102,3 +102,19 @@
 #modal-settings .input-path {
     width: 370px;
 }
+
+#modal-settings .clear {
+    width: 16px;
+    height: 16px;
+    margin-top: 6px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-image: url("../img/log-close.png");
+    position: absolute;
+    left: 380px;
+    opacity: 0.4;
+}
+
+#modal-settings .clear:hover {
+    opacity: 1.0;
+}

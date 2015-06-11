@@ -45,17 +45,19 @@
             <div class="hr">Test Parameters</div>
             <span>Choose parameter file:</span>
             <input id="paramsFilePath" type="text" class="input-path" readonly />
+            <div class="clear" onclick="clearParamsFile();"></div> 
             <input type="button" value="Browse..." onclick="selectParamsFile();" />
             <div style="margin-top:15px;">
                 <span>Read next value:</span>
                 <select id="paramNextValue">
                     <option value="random">Randomly</option>
-                    <option value="sequential">Sequentialy</option>
+                    <option value="sequential">Sequentially</option>
                 </select>
             </div>
             <div class="hr">Page Objects</div>
             <span>Choose configuration file:</span>
             <input id="configFilePath" type="text" class="input-path" readonly />
+            <div class="clear" onclick="clearConfigFile();"></div> 
             <input type="button" value="Browse..."  onclick="selectConfigFile();" />
         </div>
         <div class="modal-footer">

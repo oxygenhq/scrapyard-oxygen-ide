@@ -205,6 +205,11 @@ function selectParamsFile() {
     }
 }
 
+function clearParamsFile() {
+    
+    document.getElementById('paramsFilePath').value = '';
+}
+
 function selectConfigFile() {
     var file = selectFile(
         [
@@ -215,6 +220,10 @@ function selectConfigFile() {
     if (file) {
         document.getElementById('configFilePath').value = file;
     }
+}
+
+function clearConfigFile() {
+    document.getElementById('configFilePath').value = '';
 }
 
 function selectFile(filters) {
@@ -228,15 +237,8 @@ function selectFile(filters) {
 }
 
 function runtimeSettingsSave() {
-    var paramsFilePath = document.getElementById('paramsFilePath').value;
-    if (paramsFilePath !== '') {
-        runtimeSettings.paramsFilePath = paramsFilePath;
-    }
-    
-    var configFilePath = document.getElementById('configFilePath').value;
-    if (configFilePath !== '') {
-        runtimeSettings.configFilePath = configFilePath;
-    }
+    runtimeSettings.paramsFilePath = document.getElementById('paramsFilePath').value;
+    runtimeSettings.configFilePath = document.getElementById('configFilePath').value;
     
     var iterations = document.getElementById('iterations').value;
     if (iterations !== '') {
