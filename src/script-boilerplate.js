@@ -35,7 +35,9 @@ try {
         true
     ); 
 } catch (exc) { 
-    process.send({ event: 'log-add', level: 'ERROR', msg: exc.toString() });
+    var excStr = (exc.InnerException || exc).toString();
+    excStr = excStr.substring(excStr.indexOf(':') + 2);
+    process.send({ event: 'log-add', level: 'ERROR', msg: excStr });
     process.exit();
 }
 
@@ -69,11 +71,13 @@ function execMethod(module, cmd, args) {
         return multiplexer({module: module, cmd: cmd, args: args}, true);
     } catch (exc) { 
        // process.send({ event: 'net-exception', exc: exc.toString() });
+        var excStr = (exc.InnerException || exc).toString();
+        excStr = excStr.substring(excStr.indexOf(':'));
         process.send(
         { 
             event: 'log-add', 
             level: 'ERROR', 
-            msg: module + '.' + cmd + ': ' + (exc.InnerException||exc).toString() 
+            msg: module + '.' + cmd + excStr
         });
         process.exit();
     }
