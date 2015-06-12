@@ -300,7 +300,7 @@ Recorder.isSameWindow = function (lastwin, window) {
 
 Recorder.inputTypes = ["text", "password", "file", "datetime", "datetime-local", "date", "month", "time", "week", "number", "range", "email", "url", "search", "tel", "color"];
 Recorder.addEventHandler('type', 'change', function (ev, check_prev) {
-    console.log('event handler: type, change');
+    console.log('event: type, change');
     var ev = ev || window.event;                // IE 9 quirks mode fix. event is global. also srcElement instead of target.
     var target = ev.target || ev.srcElement;
     if (check_prev && target.value == this.activeElementValue) {    // value hasn't changed
@@ -324,7 +324,7 @@ Recorder.addEventHandler('type', 'change', function (ev, check_prev) {
 if (browserVersion.isIE && browserVersion.ieMode < 11) {
     // TODO: select multiselect
     Recorder.addEventHandler('input-select', 'focusin', function (ev) {
-        console.log('event handler: input-select, focusin');
+        console.log('event: input-select, focusin');
         var target = ev.srcElement;
 
         if (target.nodeName.toLowerCase() === "input" || target.nodeName.toLowerCase() === "textarea") {
@@ -335,7 +335,7 @@ if (browserVersion.isIE && browserVersion.ieMode < 11) {
     });
 
     Recorder.addEventHandler('input-select', 'focusout', function (ev) {
-        console.log('event handler: input-select, focusout');
+        console.log('event: input-select, focusout');
         if (!this.activeElementValue) return;
 
         var target = ev.srcElement;
@@ -383,7 +383,7 @@ if (!browserVersion.isIE || browserVersion.ieMode >= 11) {
 }
 
 Recorder.addEventHandler('selectMousedown', 'mousedown', function (ev) {
-    console.log('event handler: selectMousedown, mousedown');
+    console.log('event: selectMousedown, mousedown');
     var ev = ev || window.event;
     var target = ev.target || ev.srcElement;
     if (target.nodeName) {
@@ -418,7 +418,7 @@ Recorder.prototype.getOptionLocator = function (option) {
 };
 
 Recorder.addEventHandler('select', 'change', function(ev, check_prev) {
-    console.log('event handler: select, change');
+    console.log('event: select, change');
     var ev = ev || window.event;
     var target = ev.target || ev.srcElement;
     if (target.tagName) {
@@ -455,7 +455,7 @@ Recorder.addEventHandler('select', 'change', function(ev, check_prev) {
 });
 
 Recorder.addEventHandler('clickLocator', 'click', function (ev) {
-    console.log('event handler: clickLocator, click');
+    console.log('event: clickLocator, click');
     var ev = ev || window.event;
     var target = ev.target || ev.srcElement;
     if (ev.button === 0) {
@@ -490,7 +490,7 @@ Recorder.prototype.findClickableElement = function (e) {
 };
 
 Recorder.addEventHandler('attrModified', 'DOMAttrModified', function (event) {
-    console.log('event handler: DOMAttrModified');
+    console.log('event: DOMAttrModified');
     this.domModified();
 }, { capture: true });
 
@@ -498,12 +498,12 @@ Recorder.addEventHandler('nodeInserted', 'DOMNodeInserted', function (event) {
     if (event.target.tagName !== undefined && event.target.tagName.toLowerCase() === 'iframe') {
         this.setFrameLoadHandler([event.target]);
     }
-    console.log('event handler: DOMNodeInserted');
+    console.log('event: DOMNodeInserted');
     this.domModified();
 }, { capture: true });
 
 Recorder.addEventHandler('nodeRemoved', 'DOMNodeRemoved', function (event) {
-    console.log('event handler: DOMNodeRemoved');
+    console.log('event: DOMNodeRemoved');
     this.domModified();
 }, { capture: true });
 
