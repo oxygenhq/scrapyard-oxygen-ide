@@ -509,11 +509,15 @@ Recorder.addEventHandler('nodeRemoved', 'DOMNodeRemoved', function (event) {
 
 Recorder.prototype.domModified = function () {
     if (this.delayedRecorder) {
-        this.delayedRecorder.apply(this);
+        // recorder might take some time to complete so it should be cleared before it's executed
+        // otherwise too many consecutive DOMNode* events might lead to a situation with multiple
+        // recorders being invoked.
+        var delayedRec = this.delayedRecorder;
         this.delayedRecorder = null;
         if (this.domModifiedTimeout) {
             clearTimeout(this.domModifiedTimeout);
         }
+        delayedRec.apply(this);
     }
 };
 
