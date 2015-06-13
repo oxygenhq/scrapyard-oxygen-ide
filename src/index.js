@@ -1,6 +1,7 @@
 var Toolbar = require('./toolbar');
 var Editor = require('./editor');
 var Logger = require('./logger');
+var Tabs = require('./tabs');
 var doc = require('./doc');
 var ipc = require('ipc');
 var fs = require('fs');
@@ -29,9 +30,9 @@ var isResizingLogPane = false;
 var isResizingRightPane = false;
 
 var container = document.body;
-var mainPane = document.getElementById('main-pane');
+var mainPane = document.getElementById('editor-pane');
 var logPane = document.getElementById('log-pane');
-var leftPane = document.getElementById('left-pane');
+var leftPane = document.getElementById('file-tree-pane');
 var rightPane = document.getElementById('right-pane');
 
 var logPaneMin = parseInt(window.getComputedStyle(logPane).getPropertyValue('min-height'), 10);
@@ -61,7 +62,7 @@ document.addEventListener('mousemove', function (e) {
 
         mainPane.style.bottom = (offsetBottom - 1) + 'px';
         logPane.style.height = offsetBottom + 'px';
-        editor.editor.resize(); 
+        tabs.currentEditor.editor.resize(); 
     } else if (isResizingRightPane) {
         var offsetRight = container.offsetWidth - 
                             (e.clientX - container.getBoundingClientRect().left);
@@ -85,9 +86,44 @@ document.addEventListener('mouseup', function (e) {
     isResizingRightPane = false;
 }, false);
 
-// editor
-var editor = new Editor(); 
-toolbar.btnSave.setClickHandler(editor.save);
+// tabs
+var tabs = new Tabs();
+document.getElementById('editor-pane').appendChild(tabs);
+
+// menu actions
+ipc.on('file-new', function () {
+    tabs.add('Untitled');
+});
+ipc.on('file-save', function () {
+    tabs.currentEditor.save();
+});
+ipc.on('file-save-as', function () {
+    tabs.currentEditor.saveAs();
+});
+ipc.on('edit-undo', function () {
+    tabs.currentEditor.undo();
+});
+ipc.on('edit-redo', function () {
+    tabs.currentEditor.redo();
+});
+ipc.on('edit-cut', function () {
+    tabs.currentEditor.editor.focus();
+    document.execCommand('cut');
+});
+ipc.on('edit-copy', function () {
+    tabs.currentEditor.editor.focus();
+    document.execCommand('copy'); 
+});
+ipc.on('edit-paste', function () {
+    tabs.currentEditor.editor.focus();
+    document.execCommand('paste'); 
+});
+ipc.on('search-find', function () {
+    tabs.currentEditor.editor.execCommand("find");
+});
+ipc.on('search-replace', function () {
+    tabs.currentEditor.editor.execCommand("replace");
+});
 ipc.on('file-open', function () {
     var file = dialog.showOpenDialog(
         currentWin, 
@@ -101,50 +137,17 @@ ipc.on('file-open', function () {
         }
     );
     if (file) {
-        editor.currentFilename = file[0];
+        tabs.currentEditor.currentFilename = file[0];
         setWindowTitle(path.basename(file[0], '.js'));
         fs.readFile(file[0], 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
             // strip BOM before sending to the editor
-            editor.setContent(data.replace(/^\uFEFF/, ''));
+            tabs.currentEditor.setContent(data.replace(/^\uFEFF/, ''));
             toolbar.btnSave.disable();
         });
     }
-});
-ipc.on('file-save', function () {
-    editor.save();
-});
-ipc.on('file-save-as', function () {
-    editor.saveAs();
-});
-ipc.on('file-new', function () {
-    editor.new();
-});
-ipc.on('edit-undo', function () {
-    editor.undo();
-});
-ipc.on('edit-redo', function () {
-    editor.redo();
-});
-ipc.on('edit-cut', function () {
-    editor.editor.focus();
-    document.execCommand('cut');
-});
-ipc.on('edit-copy', function () {
-    editor.editor.focus();
-    document.execCommand('copy'); 
-});
-ipc.on('edit-paste', function () {
-    editor.editor.focus();
-    document.execCommand('paste'); 
-});
-ipc.on('search-find', function () {
-    editor.editor.execCommand("find");
-});
-ipc.on('search-replace', function () {
-    editor.editor.execCommand("replace");
 });
 var mainPaneBottom;
 ipc.on('view-event-log', function () {
@@ -158,19 +161,16 @@ ipc.on('view-event-log', function () {
             mainPane.style.bottom = mainPaneBottom;
         }
         logPane.style.display = 'block';
-        editor.editor.resize(); 
+        tabs.currentEditor.editor.resize(); 
         currentWin.menu.check('Event Log', true);
     } else {
         mainPaneBottom = mainPane.style.bottom;
         mainPane.style.bottom = '0px';
         logPane.style.display = 'none';
-        editor.editor.resize();
+        tabs.currentEditor.editor.resize();
         currentWin.menu.check('Event Log', false); 
     }
 });
-
-var paneMain = document.getElementById('left-pane');
-paneMain.appendChild(editor);
 
 // apidoc div
 var apiDoc = this.el = document.createElement('div');

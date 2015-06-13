@@ -8,7 +8,8 @@
     <link href="css/panes.css" rel="stylesheet" type="text/css" />
     <link href="css/logger.css" rel="stylesheet" type="text/css" />
     <link href="css/modals.css" rel="stylesheet" type="text/css" />
-
+    <link href="css/tabs.css" rel="stylesheet" type="text/css" />
+    
     <style type="text/css" media="screen">
         html, body {
             overflow: hidden;
@@ -20,21 +21,21 @@
     </style>
 </head>
 <body>
-    <div id="main-pane"> 
-        <div id="left-pane"> 
-        </div>
-        <div id="right-pane">
-            <div id="drag-x" class="drag-x"></div>
-            Put stuff here...
-        </div>
+
+    <div id="file-tree-pane"> 
+    
     </div>
-    <div id="log-pane">
-        <div id="drag-y" class="drag-y"></div>
-        <div id="log-header">
-            <div class="title">Event Log</div>
-            <div id="log-header-close" class="close"></div>
-        </div> 
-        <div id="log-scrollable"></div>
+    <div id="right-pane">
+        <div id="drag-x" class="drag-x"></div>
+        <div id="editor-pane"></div>
+        <div id="log-pane">
+            <div id="drag-y" class="drag-y"></div>
+            <div id="log-header">
+                <div class="title">Event Log</div>
+                <div id="log-header-close" class="close"></div>
+            </div> 
+            <div id="log-scrollable"></div>
+        </div>
     </div>
 
     <div class="modal" id="modal-settings" aria-hidden="true">

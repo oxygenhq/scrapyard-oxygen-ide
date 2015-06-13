@@ -58,7 +58,7 @@
             // new button
             var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false);
             this.add(btnNew);
-            btnNew.setClickHandler(function() { editor.new(); });
+            btnNew.setClickHandler(function() { tabs.add('Untitled'); });
             // save button
             var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
             this.add(btnSave);
@@ -81,11 +81,11 @@
             // undo button
             var btnUndo = this.btnUndo = new ToolbarButton('tb-undo', true, false);
             this.add(btnUndo);
-            btnUndo.setClickHandler(function() { editor.undo(); });
+            btnUndo.setClickHandler(function() { tabs.currentEditor.undo(); });
             // redo button
             var btnRedo = this.btnRedo = new ToolbarButton('tb-redo', true, false);
             this.add(btnRedo);
-            btnRedo.setClickHandler(function() { editor.redo(); });
+            btnRedo.setClickHandler(function() { tabs.currentEditor.redo(); });
             // separator
             this.add(new ToolbarSeparator());
             // run button
@@ -145,10 +145,10 @@
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
             this.parentElement.btnStart.setText('Continue');
-            editor.disable();
+            tabs.currentEditor.disable();
 
             // inject boilerplate with the user script
-            var script = editor.getContent();
+            var script = tabs.currentEditor.getContent();
             var boilerplate = fs.readFileSync(path.resolve(__dirname, 'script-boilerplate.js'))+'';
             // TODO: should probably optimize this...
             var boilerplateLines = boilerplate.split('\n');

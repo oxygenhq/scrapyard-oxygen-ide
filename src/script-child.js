@@ -35,8 +35,8 @@ var fork = require('child_process').fork;
         var self = this;
         
         dbg.connect(dbgPort).then(function(connection) {
-            var bps = editor.getBreakpoints();
-            for (var bp of editor.getBreakpoints()) {
+            var bps = tabs.currentEditor.getBreakpoints();
+            for (var bp of tabs.currentEditor.getBreakpoints()) {
                 dbg.request(
                     'setbreakpoint', 
                     { type: 'script', target: scriptFilename, line: userScriptOffset + bp }, 
@@ -67,8 +67,8 @@ var fork = require('child_process').fork;
                 dbg.request('continue', null, function(err, response) {
                 });
             }
- 
-            editor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
+
+            tabs.currentEditor.setBpHighlight(breakpoint.body.sourceLine-userScriptOffset);
 
             // enable Continue button but only if the break is not due to --debug-brk
             if (breakpoint.body.sourceLine >= userScriptOffset) {
@@ -93,13 +93,13 @@ var fork = require('child_process').fork;
             toolbar.btnStart.setText('Run');
             toolbar.btnStart.setClickHandler(toolbar.start);
             toolbar.btnStop.disable();
-            editor.clearBpHighlight();
-            editor.enable();
+            tabs.currentEditor.clearBpHighlight();
+            tabs.currentEditor.enable();
         });
 
         child.on('message', function(m) {
             if (m.event === 'line-update') {
-                editor.setCmdHighlight(m.line - userScriptOffset - 1);
+                tabs.currentEditor.setCmdHighlight(m.line - userScriptOffset - 1);
             } else if (m.event === 'log-add') {
                 logger.add(m.level, m.msg);
             }

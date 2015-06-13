@@ -327,27 +327,18 @@
         };
         
         /**
-         * Clear editor content.
-         */
-        Editor.prototype.new = function() {
-            editor.setContent('');
-            editor.currentFilename = null;
-            setWindowTitle('');
-        };
-        
-        /**
          * Save the script.
          */
         Editor.prototype.save = function() {
-            if (editor.currentFilename) {
-                fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
+            if (this.currentFilename) {
+                fs.writeFile(this.currentFilename, this.getContent(), function(err) {
                     if(!err) {
                         toolbar.btnSave.disable();
                         remote.getCurrentWindow().menu.enable('Save', false);
                     }
                 }); 
             } else {
-                editor.saveAs();
+                this.saveAs();
             }
         };
         
@@ -364,8 +355,9 @@
                 }
             );
             if (fileName) {
-                editor.currentFilename = fileName;
-                fs.writeFile(fileName, editor.getContent(), function(err) {
+                this.currentFilename = fileName; 
+                tabs.setCurrentTabTitle(path.basename(fileName, '.js'));
+                fs.writeFile(fileName, this.getContent(), function(err) {
                     if(!err) {
                         toolbar.btnSave.disable();
                         remote.getCurrentWindow().menu.enable('Save', false);
