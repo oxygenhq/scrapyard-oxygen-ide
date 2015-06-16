@@ -140,8 +140,8 @@
         /**
          * Executes user script.
          */
-        Toolbar.prototype.start = function() {
-            logger.clear();
+        Toolbar.prototype.start = function() {       
+            logGeneral.clear();
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
             this.parentElement.btnStart.setText('Continue');
@@ -174,7 +174,7 @@
          * Terminates currently executing script.
          */
         Toolbar.prototype.stop = function() {
-            logger.add('INFO', 'Stopping...');
+            logGeneral.add('INFO', 'Stopping...');
             toolbar.scriptChild.kill(); 
         };
         

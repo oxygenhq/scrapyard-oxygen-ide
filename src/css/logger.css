@@ -1,25 +1,53 @@
-table[is=cb-logger]  {
-    padding-top: 5px;
-    padding-left: 4px;
+/*
+ * General log
+ */
+
+table[is=cb-logger-gen] {
+    padding: 4px 4px 4px 4px;
     color: #969896;
     font: 14px "Monaco","Menlo","Ubuntu Mono","Consolas","source-code-pro",monospace;
     border-spacing: 0px;
     border-collapse: separate;
 }
 
-table[is=cb-logger] td {
+table[is=cb-logger-gen].hidden {
+    display: none;
+}
+
+table[is=cb-logger-gen] tr {
+    line-height: 14px;
+}
+
+table[is=cb-logger-gen] td {
     vertical-align: top;
 }
 
-table[is=cb-logger] td.date {
+table[is=cb-logger-gen] td.date {
     min-width: 85px;
 }
 
-table[is=cb-logger] td.level {
+table[is=cb-logger-gen] td.level {
     padding-left: 10px;
     padding-right: 10px;
 }
 
-table[is=cb-logger] td.level-error {
+table[is=cb-logger-gen] td.level-error {
     color: #bc3f3c;
+}
+
+/*
+ * Selenium log
+ */
+ 
+cb-logger-sel {
+    color: #969896;
+    font: 14px "Monaco","Menlo","Ubuntu Mono","Consolas","source-code-pro",monospace;
+}
+
+cb-logger-sel > div {
+    padding: 4px 4px 4px 4px;
+}
+
+cb-logger-sel.hidden {
+    display: none;
 }

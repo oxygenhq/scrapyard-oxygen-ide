@@ -86,7 +86,7 @@ var fork = require('child_process').fork;
       
         child.on('exit', function (code) {
             if (code === 1) {
-                logger.add('ERROR', 'Script terminated abruptly. Possibly due to a syntax error?');
+                logGeneral.add('ERROR', 'Script terminated abruptly. Possibly due to a syntax error?');
             }
             toolbar.btnStop.disable();
             toolbar.btnStart.enable();
@@ -101,7 +101,7 @@ var fork = require('child_process').fork;
             if (m.event === 'line-update') {
                 editor.setCmdHighlight(m.line - userScriptOffset - 1);
             } else if (m.event === 'log-add') {
-                logger.add(m.level, m.msg);
+                logGeneral.add(m.level, m.msg);
             }
         });
     }
@@ -114,7 +114,7 @@ var fork = require('child_process').fork;
     ScriptChild.prototype.kill = function() {
         this.dbg.disconnect();
         this.child.kill();
-        logger.add('INFO', 'Script terminated.');
+        logGeneral.add('INFO', 'Script terminated.');
     };
     
     /**

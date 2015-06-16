@@ -1,6 +1,7 @@
 var Toolbar = require('./toolbar');
 var Editor = require('./editor');
-var Logger = require('./logger');
+var LoggerGeneral = require('./logger-general');
+var LoggerSelenium = require('./logger-selenium');
 var doc = require('./doc');
 var ipc = require('ipc');
 var fs = require('fs');
@@ -181,9 +182,23 @@ document.body.appendChild(apiDoc);
 // docs
 var docs = doc.init();
 
-// logger
-var logger = new Logger();
-document.getElementById('log-scrollable').appendChild(logger);
+// general logger
+var logGeneral = new LoggerGeneral();
+document.getElementById('log-scrollable').appendChild(logGeneral);
+
+// selenium logger
+var logSelenium = new LoggerSelenium();
+document.getElementById('log-scrollable').appendChild(logSelenium);
+
+document.getElementById('log-header-selenium').addEventListener("change", function() {
+    if (this.value == 'general') {
+        logGeneral.activate(true);
+        logSelenium.activate(false);
+    } else {
+        logSelenium.activate(true);
+        logGeneral.activate(false);
+    }
+});
 
 // runtime settings modal dialog 
 runtimeSettings = { iterations: 1 };
@@ -250,3 +265,19 @@ function runtimeSettingsSave() {
     
     hideSettings();
 }
+
+// initialize Selenium server
+
+var sel = require('child_process').execFile('java', 
+    [  '-jar', 'selenium-server-standalone-2.46.0.jar', '-timeout', '240', '-browserTimeout', '240', 
+    '-ensureCleanSession', '-trustAllSSLCertificates', '-Dwebdriver.chrome.driver=C:\\Users\\roma\\Desktop\\chromedriver.exe',
+    '-Dwebdriver.ie.driver=C:\\Users\\roma\\Desktop\\IEDriverServer.exe' ], 
+    { cwd: 'C:\\Users\\roma\\Desktop'}
+);
+            
+sel.stderr.on('data', function (data) {
+    logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+});        
+sel.stdout.on('data', function(data) {
+    logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+});

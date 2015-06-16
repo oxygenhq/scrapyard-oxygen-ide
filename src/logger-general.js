@@ -1,5 +1,5 @@
 /*
- * Logger component.
+ * General logger component.
  */ 
 
 (function() {
@@ -19,27 +19,27 @@
         return child;  
     };
     
-    var Logger = (function(_super) {
-        __extends(Logger, _super);
+    var LoggerGeneral = (function(_super) {
+        __extends(LoggerGeneral, _super);
 
         /*
          * Section: Construction and Destruction
          */
-         
-        function Logger() {
+
+        function LoggerGeneral() {
         }
 
-        Logger.prototype.attached = false;
+        LoggerGeneral.prototype.attached = false;
 
-        Logger.prototype.createdCallback = function() {
+        LoggerGeneral.prototype.createdCallback = function() { 
             this.attached = false;
         };
 
-        Logger.prototype.attachedCallback = function() {
+        LoggerGeneral.prototype.attachedCallback = function() {
             this.attached = true;
         };
 
-        Logger.prototype.detachedCallback = function() {
+        LoggerGeneral.prototype.detachedCallback = function() {
             this.attached = false;
         };
     
@@ -50,7 +50,7 @@
         /**
          * Clears the log.
          */
-        Logger.prototype.clear = function() {
+        LoggerGeneral.prototype.clear = function() {
             this.innerHTML = '';
         };
     
@@ -60,7 +60,7 @@
          * @param {string} msg - Message to log.
          * @param {string|undefined} date - Optional log date. If not specified current time will be used.
          */
-        Logger.prototype.add = function(level, msg, date) {
+        LoggerGeneral.prototype.add = function(level, msg, date) {
             date = date || __timeNow;
             var row = document.createElement('tr');
             var dateCol = document.createElement('td');
@@ -80,6 +80,17 @@
             this.appendChild(row);
         };
     
+        /**
+         * Actives current log.
+         */
+        LoggerGeneral.prototype.activate = function(activate) {
+            if (activate) {
+                this.className = this.className.replace(/\bhidden\b/,'');
+            } else {
+                this.className += " hidden";
+            }
+        };
+
         /*
          * Section: Global helpers
          */
@@ -90,11 +101,11 @@
             }
         });
 
-        return Logger;
+        return LoggerGeneral;
     })(HTMLElement);
   
-    module.exports = document.registerElement('cb-logger', {
-        prototype: Logger.prototype,
+    module.exports = document.registerElement('cb-logger-gen', {
+        prototype: LoggerGeneral.prototype,
         extends: 'table'
     });
 }).call(this);

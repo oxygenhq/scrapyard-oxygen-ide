@@ -24,7 +24,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    top: 20px;
+    top: 24px;
     width: 100%;
 }
 
@@ -70,6 +70,13 @@
     margin-right: 6px;
     float: right;
     background-repeat: no-repeat;
+}
+
+#log-header .selenium {
+    height: 10px;
+    margin-top: 0px;
+    margin-left: 6px;
+    float: left;
 }
 
 #log-header .close:hover {
