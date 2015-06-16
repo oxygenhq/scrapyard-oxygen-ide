@@ -8,6 +8,9 @@ var fs = require('fs');
 var remote = require('remote');
 var dialog = remote.require('dialog');
 var path = require('path');
+var cp = require('child_process');
+var cfg = require('./settings.json');
+var selSettings = cfg.selenium;
 
 // retrieve current BrowserWindow object
 var currentWin = remote.getCurrentWindow();
@@ -267,17 +270,30 @@ function runtimeSettingsSave() {
 }
 
 // initialize Selenium server
+var selArgs = ['-jar', selSettings.jar].concat(selSettings.args);
+if (selSettings.chromeDriver) {
+    selArgs.push('-Dwebdriver.chrome.driver=' + selSettings.chromeDriver);
+}
+if (selSettings.ieDriver) {
+    selArgs.push('-Dwebdriver.ie.driver=' + selSettings.ieDriver);
+}
+if (selSettings.port) {
+    selArgs.push('-port');
+    selArgs.push(selSettings.port.toString()); 
+} else {
+    selSettings.port = 4444; // set default port if not specified
+}
 
-var sel = require('child_process').execFile('java', 
-    [  '-jar', 'selenium-server-standalone-2.46.0.jar', '-timeout', '240', '-browserTimeout', '240', 
-    '-ensureCleanSession', '-trustAllSSLCertificates', '-Dwebdriver.chrome.driver=C:\\Users\\roma\\Desktop\\chromedriver.exe',
-    '-Dwebdriver.ie.driver=C:\\Users\\roma\\Desktop\\IEDriverServer.exe' ], 
-    { cwd: 'C:\\Users\\roma\\Desktop'}
-);
-            
-sel.stderr.on('data', function (data) {
+var selProcess = cp.execFile('java', selArgs, { cwd: selSettings.basePath });
+
+selProcess.stderr.on('data', function (data) {
     logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 });        
-sel.stdout.on('data', function(data) {
+selProcess.stdout.on('data', function(data) {
     logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+});
+selProcess.on('exit', function(code) {
+    if (code === 1) {
+        logGeneral.add('ERROR', 'Selenium couldn\'t be started. See the Selenium Server log for more details.');
+    }
 });

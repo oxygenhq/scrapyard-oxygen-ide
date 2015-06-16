@@ -22,7 +22,8 @@ var fork = require('child_process').fork;
                 runtimeSettings.paramsFilePath,
                 runtimeSettings.configFilePath,
                 runtimeSettings.iterations,
-                runtimeSettings.paramNextValue
+                runtimeSettings.paramNextValue,
+                selSettings.port
             ],
             { execArgv: ['--debug-brk=' + dbgPort] }
         ); 

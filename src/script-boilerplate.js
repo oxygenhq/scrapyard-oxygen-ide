@@ -26,7 +26,7 @@ try {
             cmd: 'initialize', 
             args: [
                 process.argv[3], 
-                'http://127.0.0.1:4444/wd/hub', 
+                'http://127.0.0.1:' + process.argv[8] + '/wd/hub', 
                 paramFilePath, 
                 configFilePath,
                 paramNextValue
