@@ -72,11 +72,12 @@
     background-repeat: no-repeat;
 }
 
-#log-header .selenium {
-    height: 10px;
-    margin-top: 0px;
+#log-header #log-header-selenium {
+    margin-top: 1px;
     margin-left: 6px;
     float: left;
+    height: 17px;
+    font-size: 12px;
 }
 
 #log-header .close:hover {
