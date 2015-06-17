@@ -14,13 +14,15 @@
     "grunt-sync": "~0.2.3",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-contrib-jshint": "~0.11.0",
-    "rimraf": "2.3.3"
+    "rimraf": "2.3.3",
+    "grunt-msbuild": "~0.3.3"
   },
   "dependencies": {
     "tmp": "0.0.25",
     "doctrine": "0.6.4",
     "electron-edge": "git+https://github.com/oxygenhq/electron-edge.git",
-    "q": "^1.2.0"
+    "q": "^1.2.0",
+    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#9fb57cdfb74a23d2771458aaeff481a93263922a"
   },
   "repository": {
     "type": "git",

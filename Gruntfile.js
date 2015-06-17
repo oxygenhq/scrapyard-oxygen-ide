@@ -8,16 +8,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-msbuild');
 
     grunt.loadTasks('./tools/grunt-tasks');
 
-    grunt.registerTask('default', ['download-electron', 'rebrand', 'sync']);
+    grunt.registerTask('default', ['download-electron', 'msbuild', 'rebrand', 'sync']);
     grunt.registerTask('release', ['default', 'compress']);
 
     const OUTDIR = 'build';
     
     var dependencies = [];
     for(var dep in pkg.dependencies) {
+        if (dep == 'oxygen') {  // don't drag sources into dist. this will be copied separately.
+            continue;
+        }
         dependencies.push(dep + '/**');
     }
 
@@ -49,8 +53,13 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        src: ['package.json', 'LICENSE', 'oxygen/**'], 
+                        src: ['package.json', 'LICENSE'], 
                         dest: OUTDIR + '/resources/app' 
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen/bin/Debug', src: ['*.dll', '*.pdb'], 
+                        dest: OUTDIR + '/resources/app/node_modules/oxygen' 
                     },
                 ], 
                 verbose: true
@@ -81,6 +90,21 @@ module.exports = function(grunt) {
                     loopfunc: true,
                     shadow: true
                 }
+        },
+        msbuild: {
+            dev: {
+                src: ['node_modules/oxygen/Oxygen.csproj'],
+                options: {
+                    projectConfiguration: 'Debug',
+                    targets: ['Clean', 'Rebuild'],
+                    version: 12.0,
+                    maxCpuCount: 4,
+                    buildParameters: {
+                        WarningLevel: 2
+                    },
+                    verbosity: 'quiet'
+                }
+            }
         }
     });
 };
