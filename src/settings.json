@@ -1,11 +1,11 @@
 {
   "selenium": {
-    "basePath": "C:\\Users\\roma\\Desktop",
+    "basePath": "../../../selenium",
     "jar": "selenium-server-standalone-2.46.0.jar",
     "args": ["-timeout", "240", "-browserTimeout", "240", "-ensureCleanSession", 
                 "-trustAllSSLCertificates"],
-    "chromeDriver": "chromedriver.exe",
-    "ieDriver": "IEDriverServer.exe",
+    "chromeDriver": "win/chromedriver.exe",
+    "ieDriver": "win/IEDriverServer_x86.exe",
     "port": 44444
   }
 }
