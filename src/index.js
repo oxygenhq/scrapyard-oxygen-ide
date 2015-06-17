@@ -295,15 +295,15 @@ if (selSettings.port) {
     selSettings.port = 4444; // set default port if not specified
 }
 
-var selProcess = cp.execFile('java', selArgs, { cwd: selSettings.basePath });
+var selProc = cp.execFile('java', selArgs, { cwd: path.resolve(__dirname, selSettings.basePath) });
 
-selProcess.stderr.on('data', function (data) {
+selProc.stderr.on('data', function (data) {
     logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 });        
-selProcess.stdout.on('data', function(data) {
+selProc.stdout.on('data', function(data) {
     logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 });
-selProcess.on('exit', function(code) {
+selProc.on('exit', function(code) {
     if (code === 1) {
         logGeneral.add('ERROR', 'Selenium couldn\'t be started. See the Selenium Server log for more details.');
     }
