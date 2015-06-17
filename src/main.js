@@ -134,24 +134,37 @@ app.on('ready', function() {
             }
         ]
     });
-    
-    // show debug menu only if OXYGEN_DBG environment variable is defined
+    template.push({
+        label: '&Help',
+        submenu: [
+            {
+                label: '&Documentation',
+                click: function() { require('opn')('http://docs.oxygenhq.org'); }
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: 'Toggle Developer Tools',
+                click: function() { mainWindow.toggleDevTools(); }
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: '&About',
+                click: function() { mainWindow.send('about'); }
+            }
+        ]
+    });
+    // show Reload submenu only if OXYGEN_DBG environment variable is defined
     if (process.env.OXYGEN_DBG && process.env.OXYGEN_DBG === 'true') {
-        template.push({
-            label: '[Dev]',
-            submenu: [
-                {
-                    label: 'Reload',
-                    accelerator: 'Ctrl+R',
-                    click: function() { mainWindow.restart(); }
-                },
-                {
-                    label: 'Toggle DevTools',
-                    accelerator: 'Ctrl+D',
-                    click: function() { mainWindow.toggleDevTools(); }
-                },
-            ]
-        });
+        template[template.length-1].submenu.push(
+            {
+                label: 'Reload',
+                accelerator: 'Ctrl+R',
+                click: function() { mainWindow.restart(); }
+            });
     }
 
     mainWindow.menu = Menu.buildFromTemplate(template);

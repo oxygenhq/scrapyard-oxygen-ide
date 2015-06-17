@@ -22,6 +22,7 @@
     "doctrine": "0.6.4",
     "electron-edge": "git+https://github.com/oxygenhq/electron-edge.git",
     "q": "^1.2.0",
+    "opn": "^2.0.0",
     "oxygen": "git+https://github.com/oxygenhq/oxygen.git#9fb57cdfb74a23d2771458aaeff481a93263922a"
   },
   "repository": {

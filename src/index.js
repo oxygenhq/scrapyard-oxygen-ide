@@ -10,12 +10,13 @@ var dialog = remote.require('dialog');
 var path = require('path');
 var cp = require('child_process');
 var cfg = require('./settings.json');
+var pkg = require('./package.json');
 var selSettings = cfg.selenium;
 
 // retrieve current BrowserWindow object
 var currentWin = remote.getCurrentWindow();
 
-var appFullName = remote.require('app').getName() + ' ' + remote.require('app').getVersion();
+var appFullName = pkg.productName + ' v' + pkg.version;
 function setWindowTitle(title) {
     if (title === '') {
         currentWin.setTitle(appFullName);
@@ -175,6 +176,16 @@ ipc.on('view-event-log', function () {
 
 var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);
+
+// misc menu actions
+ipc.on('about', function () {
+    var oxygenVer = pkg.dependencies.oxygen.substring(pkg.dependencies.oxygen.indexOf('#') + 1);
+    alert(appFullName + '\n\n' +
+            'Oxygen: ' + oxygenVer + '\n' +
+            'Electron: ' + process.versions.electron + '\n' +
+            'Chromium: ' + process.versions.chrome
+            ); 
+});
 
 // apidoc div
 var apiDoc = this.el = document.createElement('div');
