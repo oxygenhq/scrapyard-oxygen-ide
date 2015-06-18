@@ -29,6 +29,7 @@
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
+!define MUI_FINISHPAGE_RUN_NOTCHECKED
 !define MUI_FINISHPAGE_RUN "$INSTDIR\oxygenide.exe"
 !insertmacro MUI_PAGE_FINISH
 ; Uninstaller pages
