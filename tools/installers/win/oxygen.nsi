@@ -5,10 +5,13 @@
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\oxygenide.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-!define CHROME_EXTENSION_KEY "Software\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
+!define CHROME_EXTENSION_KEY_X86 "Software\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
+!define CHROME_EXTENSION_KEY_X64 "Software\Wow6432Node\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
+
+!include x64.nsh
 
 ; MUI Settings ------
-!include "MUI.nsh"
+!include MUI.nsh
 
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
@@ -94,12 +97,16 @@ SectionEnd
 
 
 Function RegisterExtensionChrome
-    WriteRegStr HKLM ${CHROME_EXTENSION_KEY} "update_url" "http://clients2.google.com/service/update2/crx"
+    ${If} ${RunningX64}
+        WriteRegStr HKLM ${CHROME_EXTENSION_KEY_X64} "update_url" "http://clients2.google.com/service/update2/crx"
+    ${Else}
+        WriteRegStr HKLM ${CHROME_EXTENSION_KEY_X86} "update_url" "http://clients2.google.com/service/update2/crx"
+    ${EndIf}
 FunctionEnd
 
 Function RegisterExtensionIE
     Push $R0
-
+    # remove any previously registered version
     ReadRegStr $R0 HKEY_LOCAL_MACHINE "Software\Microsoft\.NETFramework" "InstallRoot"
 
     IfFileExists $R0\v4.0.30319\regasm.exe FileExists
@@ -107,6 +114,9 @@ Function RegisterExtensionIE
     Abort
 
     FileExists:
+    ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
+    
+    # register new version
     ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /codebase'
 
     Pop $R0
@@ -155,7 +165,12 @@ FunctionEnd
 Section Uninstall
     # remove extensions
     Call un.RegisterExtensionIE
-    DeleteRegKey HKLM ${CHROME_EXTENSION_KEY}
+
+    ${If} ${RunningX64}
+        DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X64}
+    ${Else}
+        DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X86}
+    ${EndIf}
 
     # remove start menu and desktop links
     Delete "$SMPROGRAMS\Oxygen\Uninstall.lnk"
