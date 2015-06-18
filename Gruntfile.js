@@ -93,7 +93,7 @@ module.exports = function(grunt) {
                 }
         },
         msbuild: {
-            dev: {
+            oxygen: {
                 src: ['node_modules/oxygen/Oxygen.csproj'],
                 options: {
                     projectConfiguration: 'Debug',
@@ -103,7 +103,20 @@ module.exports = function(grunt) {
                     buildParameters: {
                         WarningLevel: 2
                     },
-                    verbosity: 'quiet'
+                    verbosity: 'minimal'
+                }
+            },
+            ieaddon: {
+                src: ['browser-extensions/ie/IEAddon.csproj'],
+                options: {
+                    projectConfiguration: 'Release',
+                    targets: ['Clean', 'Rebuild'],
+                    version: 12.0,
+                    maxCpuCount: 4,
+                    buildParameters: {
+                        WarningLevel: 2
+                    },
+                    verbosity: 'minimal'
                 }
             }
         },
