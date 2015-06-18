@@ -13,7 +13,7 @@ namespace CloudBeat.IEAddon
 	[ComVisible(true)]
 	[ClassInterface(ClassInterfaceType.None)]
     [Guid("D8FAF7A1-1D88-11E2-AE2C-001C230C8ABD")]
-	[ProgId("CloudBeat.IEAddon")]
+	[ProgId("Oxygen")]
     public class RecorderExtension : IObjectWithSite, IOleCommandTarget {
         IWebBrowser2 browser;
 
@@ -171,7 +171,7 @@ namespace CloudBeat.IEAddon
             RegistryKey key = registryKey.OpenSubKey(guid);
             if (key == null)
                 key = registryKey.CreateSubKey(guid);
-            key.SetValue("", "CloudBeatRecorder");
+            key.SetValue("", "Oxygen");
             key.SetValue("NoExplorer", 1);
             registryKey.Close();
             key.Close();
@@ -179,7 +179,7 @@ namespace CloudBeat.IEAddon
             // name to display in the addons management screen
             using (key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + type.GUID.ToString("B")))
             {
-                key.SetValue(string.Empty, "CloudBeat Recorder");
+                key.SetValue(string.Empty, "Oxygen");
             }
         }
 
