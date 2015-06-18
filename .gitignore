@@ -4,5 +4,5 @@ browser-extensions/ie/obj/
 browser-extensions/ie/*.csproj.user
 browser-extensions/ie/*.suo
 build/*
-*.zip
 npm-debug.log
+dist/*

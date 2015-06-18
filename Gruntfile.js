@@ -13,7 +13,8 @@ module.exports = function(grunt) {
     grunt.loadTasks('./tools/grunt-tasks');
 
     grunt.registerTask('default', ['download-electron', 'msbuild', 'rebrand', 'sync']);
-    grunt.registerTask('release', ['default', 'compress']);
+    grunt.registerTask('dev-dist', ['default', 'compress']);
+    grunt.registerTask('dist', ['default', 'win-installer']);
 
     const OUTDIR = 'build';
     
@@ -68,7 +69,7 @@ module.exports = function(grunt) {
         compress: {
             main: {
                 options: {
-                    archive: 'oxygen-v' + pkg.version + '.zip'
+                    archive: 'dist/oxygen-v' + pkg.version + '.zip'
                 },
                 files: [
                     { expand: true, cwd: OUTDIR, src: ['**'], dest: 'oxygen-v' + pkg.version }
@@ -105,6 +106,9 @@ module.exports = function(grunt) {
                     verbosity: 'quiet'
                 }
             }
+        },
+        'win-installer': {
+          version: pkg.version,
         }
     });
 };
