@@ -1,7 +1,7 @@
 {
-  "name": "CloudBeat Script Recorder",
-  "version": "0.1",
-  "description": "CloudBeat Script Recorder extension",
+  "name": "Oxygen",
+  "version": "0.9",
+  "description": "Script recorder for Oxygen Framework.",
   "manifest_version": 2,
   "permissions": [    
     "contextMenus",
@@ -9,8 +9,9 @@
     "storage",
     "webNavigation",
     "<all_urls>"],
+  "icons": { "16": "32x32.png", "48": "48x48.png", "128": "128x128.png"},
   "content_scripts": [ {
-    "js": [ "content-rec.js" ],
+    "js": [ "content.js" ],
     "matches": [ "<all_urls>"],
      "run_at" : "document_end",
      "all_frames" : true
