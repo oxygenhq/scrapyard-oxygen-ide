@@ -48,6 +48,7 @@ Section "Common Files (Required)" SEC01
     File /r "${BASEDIR}\build\*"
     File "${BASEDIR}\resources\win\app.ico"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
+    File "${BASEDIR}\src\recorder\CARoot.cer"
     
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
@@ -62,6 +63,10 @@ SectionEnd
 
 Section "Internet Explorer Extension" SEC03
     Call RegisterExtensionIE
+SectionEnd
+
+Section "Certificate for HTTPS recording" SEC04
+    Call InstallCert
 SectionEnd
 
 Section -AdditionalIcons
@@ -84,6 +89,7 @@ SectionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Common files."
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Enables recording support in Chrome."
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Enables recording support in Internet Explorer."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Enables HTTPS recording."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -119,6 +125,15 @@ Function un.RegisterExtensionIE
     ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
 
     Pop $R0
+FunctionEnd
+
+Function InstallCert
+    IfFileExists $WINDIR\System32\certutil.exe FileExists
+      MessageBox MB_ICONSTOP|MB_OK "certutil.exe was not detected!"
+    Abort
+
+    FileExists:
+    ExecWait '$WINDIR\System32\certutil -addstore "Root" "$INSTDIR\CARoot.cer"'
 FunctionEnd
 
 Function .onInit
