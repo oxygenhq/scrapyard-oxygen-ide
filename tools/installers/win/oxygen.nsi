@@ -47,18 +47,25 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Section "Common Files (Required)" SEC01
+    SetShellVarContext all
+
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r "${BASEDIR}\build\*"
     File "${BASEDIR}\resources\win\app.ico"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
+    SetOverwrite ifnewer
+    
+    SetOutPath "$INSTDIR\selenium"
+    SetOverwrite try
+    File "${BASEDIR}\src\selenium\*.jar"
+    File "${BASEDIR}\src\selenium\*.exe"
+    SetOverwrite ifnewer
     
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
     CreateShortCut "$DESKTOP\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
-
-    SetOverwrite ifnewer
 SectionEnd
 
 Section "Chrome Extension" SEC02
@@ -95,7 +102,6 @@ SectionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Enables recording support in Internet Explorer."
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Enables HTTPS recording."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
 
 Function RegisterExtensionChrome
     ${If} ${RunningX64}
@@ -147,6 +153,15 @@ Function InstallCert
     ExecWait '$WINDIR\System32\certutil -addstore "Root" "$INSTDIR\CARoot.cer"'
 FunctionEnd
 
+Function un.InstallCert
+    IfFileExists $WINDIR\System32\certutil.exe FileExists
+      MessageBox MB_ICONSTOP|MB_OK "certutil.exe was not detected!"
+    Abort
+
+    FileExists:
+    ExecWait '$WINDIR\System32\certutil -delstore "Root" "eaf541d6e35e82bf449f6d21d257ec7c"'
+FunctionEnd
+
 Function .onInit
   # set SEC01 section as selected and read-only
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
@@ -164,9 +179,15 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+    # see http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista
+    SetShellVarContext all
+    
     # remove extensions
     Call un.RegisterExtensionIE
-
+    
+    # remove certs
+    Call un.InstallCert
+    
     ${If} ${RunningX64}
         DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X64}
     ${Else}
