@@ -1,6 +1,6 @@
 {
   "name": "Oxygen",
-  "version": "0.9",
+  "version": "0.10",
   "description": "Script recorder for Oxygen Framework.",
   "manifest_version": 2,
   "permissions": [    
@@ -13,7 +13,10 @@
   "content_scripts": [ {
     "js": [ "content.js" ],
     "matches": [ "<all_urls>"],
-     "run_at" : "document_end",
-     "all_frames" : true
-  }]
+    "run_at" : "document_end",
+    "all_frames" : true
+  }],
+  "background": {
+    "scripts": [ "background.js" ]
+  }
 }

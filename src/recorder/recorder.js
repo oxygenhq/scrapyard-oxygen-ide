@@ -150,8 +150,6 @@ Recorder.prototype.attach = function() {
     } catch (e) {
         return true;
     }
-
-    Recorder.cmdSend('open', document.URL, null, (new Date()).getTime());
 };
 
 Recorder.prototype.setFrameLoadHandler = function (frames) {

@@ -20,8 +20,6 @@ var path = require('path');
     /*
      * Section: Construction and Destruction
      */
- 
-    var recordOpen = false;
 
     function Recorder() {
         // bundle files
@@ -73,19 +71,7 @@ var path = require('path');
                         self.lastWin = body;
                         response.write(tmpLastWin ? tmpLastWin : 'False');
                     } else {
-                        var op = JSON.parse(body);
-                        if (op.cmd == "open" && !recordOpen)
-                        {
-                            recordOpen = true;
-                            self.print(op);
-                        }
-                        else if (op.cmd == "open" && recordOpen)
-                        {
-                        }
-                        else
-                        {
-                            self.print(op);
-                        }  
+                        self.print(JSON.parse(body));
                     }
                     response.end();
                 });      

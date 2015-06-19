@@ -3,7 +3,6 @@ using SHDocVw;
 using System;
 using System.Runtime.InteropServices;
 using mshtml;
-using System.Windows;
 using System.Net;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -14,16 +13,26 @@ namespace CloudBeat.IEAddon
 	[ClassInterface(ClassInterfaceType.None)]
     [Guid("D8FAF7A1-1D88-11E2-AE2C-001C230C8ABD")]
 	[ProgId("Oxygen")]
-    public class RecorderExtension : IObjectWithSite, IOleCommandTarget {
-        IWebBrowser2 browser;
+    public class RecorderExtension : IObjectWithSite, IOleCommandTarget, DWebBrowserEvents
+    {
+        private const string IDE_ADDR = "http://localhost:7778/";
 
+        IWebBrowser2 browser;
         HashSet<string> seenPages = new HashSet<string>();
+
+        private static string recScript = null;
 
         #region
 		private string GetResourceContent()
 		{
-            WebClient myWebClient = new WebClient();
-            return myWebClient.DownloadString("http://localhost:7778/res");		
+            if (recScript == null)
+            {
+                using (WebClient myWebClient = new WebClient())
+                {
+                    recScript = myWebClient.DownloadString(IDE_ADDR + "res");
+                }
+            }
+            return recScript;
 		}
 
 		private void InjectScriptToHead(HTMLDocument doc, string script)
@@ -114,6 +123,11 @@ namespace CloudBeat.IEAddon
         }
         #endregion
 
+        private int cookie = -1;
+#pragma warning disable 618
+        private UCOMIConnectionPoint icp;
+#pragma warning restore 618
+
         #region Implementation of IObjectWithSite
         int IObjectWithSite.SetSite(object site)
         {
@@ -125,14 +139,26 @@ namespace CloudBeat.IEAddon
             if (site != null)
             {
                 browser = (IWebBrowser2)site;
+
+                // can't simply subscribe to OnBeforeNavigate2 from .NET - https://support.microsoft.com/en-us/kb/325079?wa=wsignin1.0
+#pragma warning disable 618
+                UCOMIConnectionPointContainer icpc = (UCOMIConnectionPointContainer)site;
+#pragma warning restore 618
+                Guid g = typeof(DWebBrowserEvents).GUID;
+                icpc.FindConnectionPoint(ref g, out icp);
+                icp.Advise(this, out cookie);
+
                 ((DWebBrowserEvents2_Event)browser).DocumentComplete += new DWebBrowserEvents2_DocumentCompleteEventHandler(this.OnDocumentComplete);
                 ((DWebBrowserEvents2_Event)browser).DownloadBegin += new DWebBrowserEvents2_DownloadBeginEventHandler(this.OnDownloadBegin);
                 ((DWebBrowserEvents2_Event)browser).DownloadComplete += new DWebBrowserEvents2_DownloadCompleteEventHandler(this.OnDownloadComplete);
             }
             else
             {
+                icp.Unadvise(cookie);
+
                 ((DWebBrowserEvents2_Event)browser).DocumentComplete -= new DWebBrowserEvents2_DocumentCompleteEventHandler(this.OnDocumentComplete);
                 ((DWebBrowserEvents2_Event)browser).DownloadComplete -= new DWebBrowserEvents2_DownloadCompleteEventHandler(this.OnDownloadComplete);
+
                 browser = null;
             }
             return 0;
@@ -192,5 +218,71 @@ namespace CloudBeat.IEAddon
                 registryKey.DeleteSubKey(guid, false);
         }
         #endregion
-	}
+
+        #region Implementation of DWebBrowserEvents
+        public void BeforeNavigate(string url, int flags, string targetFrameName,
+        ref object postData, string headers, ref bool cancel)
+        {
+            // try to determine navigation type using undocumented flags:
+
+            // IE 11 x86 (tested on Win 7 x86, Server 2012 R2 x64)
+            //      256 - typing in the address bar or opening a bookmark
+            //      320 - link click, back/forward navigation
+            // IE 10 x86 (tested on Win 8 x86)
+            //        0 - typing in the address bar or opening a bookmark
+            //       64 - link click, back/forward navigation
+            if ((flags != 256 && flags != 0) ||
+                url == "about:Tabs" || url == "about:blank" ||
+                targetFrameName != "")    // don't generate open cmd for popup windows
+                return;
+
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    const string CMD_OPEN_TMPL = "{{\"cmd\":\"open\",\"target\":\"{0}\",\"timestamp\":{1}}}";
+                    var cmd = string.Format(CMD_OPEN_TMPL, url, (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+                    var result = client.UploadString(IDE_ADDR, "POST", cmd);
+                }
+            } 
+            catch (Exception) 
+            {
+                // fail silently
+            }
+        }
+
+        public void PropertyChange(string Property) { }
+
+        public void NavigateComplete(string URL) { }
+
+        public void WindowActivate() { }
+
+        public void FrameBeforeNavigate(string URL, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Cancel) { }
+
+        public void NewWindow(string URL, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Processed) { }
+
+        public void FrameNewWindow(string URL, int Flags, string TargetFrameName, ref object PostData, string Headers, ref bool Processed) { }
+
+        public void TitleChange(string Text) { }
+
+        public void DownloadBegin() { }
+
+        public void DownloadComplete() { }
+
+        public void WindowMove() { }
+
+        public void WindowResize() { }
+
+        public void Quit(ref bool Cancel) { }
+
+        public void ProgressChange(int Progress, int ProgressMax) { }
+
+        public void StatusTextChange(string Text) { }
+
+        public void CommandStateChange(int Command, bool Enable) { }
+
+        public void FrameNavigateComplete(string URL) { }
+        #endregion
+    }
 }
