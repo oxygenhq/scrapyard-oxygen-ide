@@ -40,7 +40,7 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${BASEDIR}\dist\OxygenSetup.exe"
+OutFile "${BASEDIR}\dist\oxygen-setup-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\Oxygen"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
