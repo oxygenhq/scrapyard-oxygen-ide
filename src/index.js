@@ -308,3 +308,12 @@ selProc.on('exit', function(code) {
         logGeneral.add('ERROR', 'Selenium couldn\'t be started. See the Selenium Server log for more details.');
     }
 });
+
+// exit cleanups
+function exitHandler(options, err) {
+    selProc.kill();
+}
+
+process.on('exit', exitHandler.bind(null, { cleanup:true }));
+process.on('SIGINT', exitHandler.bind(null, { exit:true }));
+process.on('uncaughtException', exitHandler.bind(null, { exit:true }));
