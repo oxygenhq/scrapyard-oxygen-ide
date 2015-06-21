@@ -29,7 +29,7 @@ var path = require('path');
         }
 
         this.httpSrv = http.createServer(onRequest);
-        this.httpSrv.listen(PORT_HTTP, function(){ });
+        this.httpSrv.listen(PORT_HTTP, "localhost", function(){ });
         
         var options = {
             key: fs.readFileSync(path.resolve(__dirname, RECORDER_DIR + 'cloudbeat-key.pem')),
@@ -38,7 +38,7 @@ var path = require('path');
             rejectUnauthorized: false
         };
         this.httpsSrv = https.createServer(options, onRequest);
-        this.httpsSrv.listen(PORT_HTTPS, function(){ });
+        this.httpsSrv.listen(PORT_HTTPS, "localhost", function(){ });
         
         var self = this;
         function onRequest(request, response) {
