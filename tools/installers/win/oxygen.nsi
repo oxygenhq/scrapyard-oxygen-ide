@@ -66,6 +66,8 @@ Section "Common Files (Required)" SEC01
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
     CreateShortCut "$DESKTOP\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
+    
+    Call AddFirewallRule
 SectionEnd
 
 Section "Chrome Extension" SEC02
@@ -117,14 +119,14 @@ Function RegisterExtensionIE
     ReadRegStr $R0 HKEY_LOCAL_MACHINE "Software\Microsoft\.NETFramework" "InstallRoot"
 
     IfFileExists $R0\v4.0.30319\regasm.exe FileExists
-      MessageBox MB_ICONSTOP|MB_OK "Microsoft .NET Framework 4.0/4.5 was not detected!"
+      MessageBox MB_ICONSTOP|MB_OK "Cannot locate regasm utility."
     Abort
 
     FileExists:
     ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
     
     # register new version
-    ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /codebase'
+    nsExec::Exec '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /codebase'
 
     Pop $R0
 FunctionEnd
@@ -135,11 +137,11 @@ Function un.RegisterExtensionIE
     ReadRegStr $R0 HKEY_LOCAL_MACHINE "Software\Microsoft\.NETFramework" "InstallRoot"
 
     IfFileExists $R0\v4.0.30319\regasm.exe FileExists
-      MessageBox MB_ICONSTOP|MB_OK "Microsoft .NET Framework 4.0/4.5 was not detected!"
+      MessageBox MB_ICONSTOP|MB_OK "Cannot locate regasm utility."
     Abort
 
     FileExists:
-    ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
+    nsExec::Exec '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
 
     Pop $R0
 FunctionEnd
@@ -150,7 +152,7 @@ Function InstallCert
     Abort
 
     FileExists:
-    ExecWait '$WINDIR\System32\certutil -addstore "Root" "$INSTDIR\CARoot.cer"'
+    nsExec::Exec '$WINDIR\System32\certutil -addstore "Root" "$INSTDIR\CARoot.cer"'
 FunctionEnd
 
 Function un.InstallCert
@@ -159,13 +161,24 @@ Function un.InstallCert
     Abort
 
     FileExists:
-    ExecWait '$WINDIR\System32\certutil -delstore "Root" "eaf541d6e35e82bf449f6d21d257ec7c"'
+    nsExec::Exec '$WINDIR\System32\certutil -delstore "Root" "eaf541d6e35e82bf449f6d21d257ec7c"'
 FunctionEnd
+
+Function AddFirewallRule
+    nsExec::Exec 'netsh advfirewall firewall add rule name="Oxygen" dir=in program="$INSTDIR\oxygenide.exe" protocol=TCP action=allow'
+FunctionEnd
+
+Function un.AddFirewallRule
+    nsExec::Exec 'netsh advfirewall firewall delete rule name="Oxygen" dir=in program="$INSTDIR\oxygenide.exe" protocol=TCP'
+FunctionEnd
+
 
 Function .onInit
   # set SEC01 section as selected and read-only
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${SEC01} $0
+  
+  Call CheckDotNet45
 FunctionEnd
 
 Function un.onUninstSuccess
@@ -181,12 +194,10 @@ FunctionEnd
 Section Uninstall
     # see http://nsis.sourceforge.net/Shortcuts_removal_fails_on_Windows_Vista
     SetShellVarContext all
-    
-    # remove extensions
+
     Call un.RegisterExtensionIE
-    
-    # remove certs
     Call un.InstallCert
+    Call un.AddFirewallRule
     
     ${If} ${RunningX64}
         DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X64}
@@ -209,3 +220,17 @@ Section Uninstall
 
     SetAutoClose true
 SectionEnd
+
+Function CheckDotNet45
+    Var /GLOBAL net45ok
+
+    ReadRegDWORD $net45ok HKLM "SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" "Release"
+    IntCmp $net45ok 378389 success failure success
+
+    failure:
+        MessageBox MB_OK|MB_ICONSTOP "Installation failed.$\n$\n\
+             This software requires Microsoft .NET Framework v4.5 or higher."
+        abort
+
+    success:
+FunctionEnd
