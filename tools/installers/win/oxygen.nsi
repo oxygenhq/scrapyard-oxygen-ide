@@ -123,7 +123,7 @@ Function RegisterExtensionIE
     Abort
 
     FileExists:
-    ExecWait '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
+    nsExec::Exec '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /unregister'
     
     # register new version
     nsExec::Exec '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /codebase'
