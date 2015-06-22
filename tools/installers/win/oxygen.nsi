@@ -106,11 +106,17 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function RegisterExtensionChrome
-    ${If} ${RunningX64}
-        WriteRegStr HKLM ${CHROME_EXTENSION_KEY_X64} "update_url" "http://clients2.google.com/service/update2/crx"
-    ${Else}
-        WriteRegStr HKLM ${CHROME_EXTENSION_KEY_X86} "update_url" "http://clients2.google.com/service/update2/crx"
-    ${EndIf}
+    SetRegView 64
+    WriteRegStr HKLM ${CHROME_EXTENSION_KEY_X64} "update_url" "http://clients2.google.com/service/update2/crx"
+    SetRegView 32
+    WriteRegStr HKLM ${CHROME_EXTENSION_KEY_X86} "update_url" "http://clients2.google.com/service/update2/crx"
+FunctionEnd
+
+Function un.RegisterExtensionChrome
+    SetRegView 64
+    DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X64}
+    SetRegView 32
+    DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X86}
 FunctionEnd
 
 Function RegisterExtensionIE
@@ -198,12 +204,7 @@ Section Uninstall
     Call un.RegisterExtensionIE
     Call un.InstallCert
     Call un.AddFirewallRule
-    
-    ${If} ${RunningX64}
-        DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X64}
-    ${Else}
-        DeleteRegKey HKLM ${CHROME_EXTENSION_KEY_X86}
-    ${EndIf}
+    Call un.RegisterExtensionChrome
 
     # remove start menu and desktop links
     Delete "$SMPROGRAMS\Oxygen\Uninstall.lnk"
