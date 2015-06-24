@@ -17,9 +17,12 @@ var multiplexer = edge.func({
 process.send({ event: 'log-add', level: 'INFO', msg: 'Initializing...' });
 
 try { 
-    var paramFilePath = (process.argv[4] != 'undefined' ? process.argv[4] : null);
-    var configFilePath = (process.argv[5] != 'undefined' ? process.argv[5] : null);
-    var paramNextValue = (process.argv[7] != 'undefined' ? process.argv[7] : null);
+    var paramFilePath = (process.argv[4] != 'undefined' && process.argv[4] !== '' ? 
+                            process.argv[4] : null);
+    var configFilePath = (process.argv[5] != 'undefined' && process.argv[5] !== ''  ? 
+                            process.argv[5] : null);
+    var paramNextValue = (process.argv[7] != 'undefined' && process.argv[7] !== ''  ? 
+                            process.argv[7] : null);
     multiplexer(
         { 
             module: 'utils', 
