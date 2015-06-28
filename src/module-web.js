@@ -129,12 +129,28 @@ module.exports = function(execMethod) {
      */
     module.doubleClick = function() { return execMethod('web', 'doubleClick', Array.prototype.slice.call(arguments)); };
     /**
-     * Selects an option from a drop-down using an option locator.
+     * Selects an option from a drop-down using an option locator. This command works with 
+     * multiple-choice lists as well.
      * @function select
      * @param {String} selectLocator - An element locator identifying a drop-down menu.
-     * @param {String} optionLocator - An option locator (a label by default).
+     * @param {String} optionLocator - An option locator (a label by default). Supported prefixes:
+     *                                 <br />                                 
+     *                                 <code>label=</code> - Matches option based on the visible 
+     *                                 text.<br />
+     *                                 <code>value=</code> - Matches options based on their values.
      */
     module.select = function() { return execMethod('web', 'select', Array.prototype.slice.call(arguments)); };
+    /**
+     * Deselects an option from multiple-choice drop-down list.
+     * @function deselect
+     * @param {String} selectLocator - An element locator identifying a drop-down menu.
+     * @param {String} optionLocator - An option locator (a label by default). Supported prefixes:
+     *                                 <br />                                 
+     *                                 <code>label=</code> - Matches option based on the visible 
+     *                                 text.<br />
+     *                                 <code>value=</code> - Matches options based on their values.
+     */
+    module.deselect = function() { return execMethod('web', 'deselect', Array.prototype.slice.call(arguments)); };
     /**
      * Waits for the specified amount of time (in milliseconds).
      * @function pause
