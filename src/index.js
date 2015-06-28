@@ -295,13 +295,13 @@ if (selSettings.port) {
     selSettings.port = 4444; // set default port if not specified
 }
 
-var selProc = cp.execFile('java', selArgs, { cwd: path.resolve(__dirname, selSettings.basePath) });
+var selProc = cp.spawn('java', selArgs, { cwd: path.resolve(__dirname, selSettings.basePath) });
 
 selProc.stderr.on('data', function (data) {
-    logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+    logSelenium.add(data.toString().replace(/(?:\r\n|\r|\n)/g, '<br />'));
 });        
 selProc.stdout.on('data', function(data) {
-    logSelenium.add(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+    logSelenium.add(data.toString().replace(/(?:\r\n|\r|\n)/g, '<br />'));
 });
 selProc.on('exit', function(code) {
     if (code === 1) {
