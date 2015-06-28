@@ -23,7 +23,7 @@
     "electron-edge": "git+https://github.com/oxygenhq/electron-edge.git",
     "q": "^1.2.0",
     "opn": "^2.0.0",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#f8f778317c52e87bbc7df258c0e775bf00f6dc1c"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#fcce37bcf2c064df6be8693a997667ff4a8af675"
   },
   "repository": {
     "type": "git",
