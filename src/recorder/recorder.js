@@ -440,9 +440,9 @@ Recorder.addEventHandler('select', 'change', function(ev, check_prev) {
                     if (options[i]._wasSelected != options[i].selected) {
                         var value = this.getOptionLocator(options[i]);
                         if (options[i].selected) {
-                            this.record("addSelection", this.findLocators(target), value);
+                            this.record("select", this.findLocators(target), value);
                         } else {
-                            this.record("removeSelection", this.findLocators(target), value);
+                            this.record("deselect", this.findLocators(target), value);
                         }
                         options[i]._wasSelected = options[i].selected;
                     }
