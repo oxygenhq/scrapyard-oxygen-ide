@@ -199,7 +199,7 @@ module.exports = function(execMethod) {
      */
     module.waitForElementPresent = function() { return execMethod('web', 'waitForElementPresent', Array.prototype.slice.call(arguments)); };
     /**
-     * Checks if elements is present in the DOM. Returns false if element was not found within the 
+     * Checks if element is present in the DOM. Returns false if element was not found within the 
      * specified timeout.
      * @function isElementPresent
      * @param {String} locator - An element locator.
@@ -207,6 +207,15 @@ module.exports = function(execMethod) {
      * @return {Boolean} True if element was found. False otherwise.
      */
     module.isElementPresent = function() { return execMethod('web', 'isElementPresent', Array.prototype.slice.call(arguments)); };
+    /**
+     * Checks if element is present and visible. Returns false if element was not found or wasn't 
+     * visible within the specified timeout.
+     * @function isElementVisible
+     * @param {String} locator - An element locator.
+     * @param {Integer} timeout - Timeout in milliseconds to wait for element to appear.
+     * @return {Boolean} True if element was found and it was visible. False otherwise.
+     */
+    module.isElementVisible = function() { return execMethod('web', 'isElementVisible', Array.prototype.slice.call(arguments)); };
     /**
      * Waits for inner text of the given element to match the specified pattern.
      * @function waitForText
