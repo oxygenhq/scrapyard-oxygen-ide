@@ -171,7 +171,11 @@ Function un.InstallCert
 FunctionEnd
 
 Function AddFirewallRule
-    nsExec::Exec 'netsh advfirewall firewall add rule name="Oxygen" dir=in program="$INSTDIR\oxygenide.exe" protocol=TCP action=allow'
+    nsExec::Exec 'netsh advfirewall firewall show rule name=Oxygen'
+    Pop $R0
+    ${If} $R0 != 0
+        nsExec::Exec 'netsh advfirewall firewall add rule name="Oxygen" dir=in program="$INSTDIR\oxygenide.exe" protocol=TCP action=allow'
+    ${EndIf}
 FunctionEnd
 
 Function un.AddFirewallRule
