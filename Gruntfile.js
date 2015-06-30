@@ -93,6 +93,7 @@ module.exports = function(grunt) {
                 }
         },
         msbuild: {
+           /* no need to build separately since oxygen-server builds it anyway
             oxygen: {
                 src: ['node_modules/oxygen/Oxygen.csproj'],
                 options: {
@@ -105,9 +106,22 @@ module.exports = function(grunt) {
                     },
                     verbosity: 'minimal'
                 }
-            },
+            },*/
             ieaddon: {
                 src: ['browser-extensions/ie/IEAddon.csproj'],
+                options: {
+                    projectConfiguration: 'Release',
+                    targets: ['Clean', 'Rebuild'],
+                    version: 12.0,
+                    maxCpuCount: 4,
+                    buildParameters: {
+                        WarningLevel: 2
+                    },
+                    verbosity: 'minimal'
+                }
+            },
+            oxygensrv: {
+                src: ['node_modules/oxygen-server/OxygenServer.csproj'],
                 options: {
                     projectConfiguration: 'Release',
                     targets: ['Clean', 'Rebuild'],
