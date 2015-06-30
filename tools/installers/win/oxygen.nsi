@@ -9,6 +9,7 @@
 !define CHROME_EXTENSION_KEY_X64 "Software\Wow6432Node\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
 
 !include x64.nsh
+!include EnvVarUpdate.nsh
 
 ; MUI Settings ------
 !include MUI.nsh
@@ -59,6 +60,10 @@ Section "Common Files (Required)" SEC01
     SetOutPath "$INSTDIR\selenium"
     File "${BASEDIR}\src\selenium\*.jar"
     File "${BASEDIR}\src\selenium\*.exe"
+    
+    SetOutPath "$INSTDIR\server"
+    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\*"
+    ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\server"
 
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
@@ -215,6 +220,9 @@ Section Uninstall
     
     # remove installation dir
     RMDir /r /REBOOTOK "$INSTDIR"
+    
+    # remove from PATH
+    ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR\server"
 
     # remove installation reg keys
     DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
