@@ -48,21 +48,18 @@ ShowUnInstDetails show
 
 Section "Common Files (Required)" SEC01
     SetShellVarContext all
-
+    
+    SetOverwrite ifnewer
     SetOutPath "$INSTDIR"
-    SetOverwrite try
     File /r "${BASEDIR}\build\*"
     File "${BASEDIR}\resources\win\app.ico"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
-    SetOverwrite ifnewer
     
     SetOutPath "$INSTDIR\selenium"
-    SetOverwrite try
     File "${BASEDIR}\src\selenium\*.jar"
     File "${BASEDIR}\src\selenium\*.exe"
-    SetOverwrite ifnewer
-    
+
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
     CreateShortCut "$DESKTOP\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
