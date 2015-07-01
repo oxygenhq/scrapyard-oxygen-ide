@@ -140,8 +140,8 @@ Recorder.prototype.attach = function() {
             window.addEventListener(
                 "message", 
                 function(e) {
-                    if (e.data.__frameLocators) {
-                        window.__frameLocators = JSON.parse(e.data.__frameLocators);
+                    if (e.data && e.data.indexOf('__frameLocators') === 0) {
+                        window.__frameLocators = JSON.parse(e.data.substring('__frameLocators'.length));
                     }
                 }, 
                 false
@@ -158,7 +158,9 @@ Recorder.prototype.setFrameLoadHandler = function (frames) {
         (function (iCopy) {
             frames[i].addEventListener('load', function() {
                 var locs = self.findFrameLocators(frames[iCopy]);
-                frames[iCopy].contentWindow.postMessage({ __frameLocators: JSON.stringify(locs) }, '*');
+                // NOTE: IE 9 is very unreliable when it comes to objects/Arrays passed to 
+                //       postMessage. use String instead!
+                frames[iCopy].contentWindow.postMessage('__frameLocators' + JSON.stringify(locs), '*');
             });
         }(i));
     } 
