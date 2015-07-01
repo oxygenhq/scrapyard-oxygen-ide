@@ -201,7 +201,12 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
             }
 
             if (send_win) {
-                var winLocator = window.document.title === '' ? '' : 'title=' + window.document.title;
+                var winLocator;
+                try {
+                    winLocator = parent.document.title === '' ? '' : 'title=' + parent.document.title;
+                } catch (e) {
+                    winLocator = window.document.title === '' ? '' : 'title=' + window.document.title;
+                }
                 Recorder.cmdSend("selectWindow", winLocator, null, (new Date()).getTime());
             }
             if (send_frame) {
