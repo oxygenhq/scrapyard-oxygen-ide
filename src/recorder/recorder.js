@@ -192,10 +192,8 @@ Recorder.prototype.record = function (command, target, value, insertBeforeLastCo
                 try {
                     if (lw.isTopLevel === undefined) {   // different origin => different window
                         send_win = true;
-                    } else if (lw.isTopLevel && window.top == window.top.parent) {
-                        send_win = lw.topName != window.top.name;
                     } else {
-                        send_win = false;
+                        send_win = lw.topName != window.top.name;
                     }
                 } catch (e) { }
             }
