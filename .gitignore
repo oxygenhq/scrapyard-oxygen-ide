@@ -6,3 +6,4 @@ browser-extensions/ie/*.suo
 build/*
 npm-debug.log
 dist/*
+apidocs/*
