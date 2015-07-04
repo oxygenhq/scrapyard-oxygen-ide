@@ -278,6 +278,23 @@ module.exports = function(execMethod) {
      *                           <code>regexpi</code>, <code>exact</code>, <code>glob</code>.
      */
     module.assertAlert = function() { return execMethod('web', 'assertAlert', Array.prototype.slice.call(arguments)); };
-
+    /**
+     * Gets the source of the last loaded page.
+     * @function getPageSource
+     * @return {String} Page source.
+     */
+    module.getPageSource = function() { return execMethod('web', 'getPageSource', Array.prototype.slice.call(arguments)); };
+    /**
+     * Gets the source of the last loaded <code>text/xml</code> page.
+     * @function getXMLPageSource
+     * @return {String} XML source.
+     */
+    module.getXMLPageSource = function() { return execMethod('web', 'getXMLPageSourceAsJSON', Array.prototype.slice.call(arguments)); };
+    /**
+     * Gets the source of the last loaded <code>text/xml</code> page and converts it to JSON object.
+     * @function getXMLPageSourceAsJSON
+     * @return {String} JSON string.
+     */
+    module.getXMLPageSourceAsJSON = function() { return execMethod('web', 'getXMLPageSourceAsJSON', Array.prototype.slice.call(arguments)); };
     return module;
 };
