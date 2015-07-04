@@ -20,7 +20,8 @@ module.exports = function(grunt) {
     
     var dependencies = [];
     for(var dep in pkg.dependencies) {
-        if (dep == 'oxygen') {  // don't drag sources into dist. this will be copied separately.
+        // don't drag sources into dist. oxygen backend will be copied separately.
+        if (dep.indexOf('oxygen') == 0) {
             continue;
         }
         dependencies.push(dep + '/**');
@@ -59,7 +60,7 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Debug', src: ['*.dll', '*.pdb'], 
+                        cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll', '*.pdb'], 
                         dest: OUTDIR + '/resources/app/node_modules/oxygen' 
                     },
                 ], 
