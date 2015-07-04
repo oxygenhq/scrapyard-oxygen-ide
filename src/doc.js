@@ -90,6 +90,7 @@
         this.load('db');
         this.load('log');
         this.load('web');
+        this.load('assert');
         return docs;
     };
     
