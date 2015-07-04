@@ -10,7 +10,7 @@ module.exports = function(execMethod) {
      * @param {String} serviceName - Service name (case sensitive).
      * @param {String} methodName - Method name (case sensitive).
      * @param {Array=} args - Array of arguments.
-     * @return {JSON} Response object.
+     * @return {String} JSON representing the response object.
      */
     module.get = function() { return execMethod('soap', 'get', Array.prototype.slice.call(arguments)); };
     /**
@@ -20,7 +20,7 @@ module.exports = function(execMethod) {
      * @param {String} serviceName - Service name (case sensitive).
      * @param {String} methodName - Method name (case sensitive).
      * @param {Array=} args - Array of arguments.
-     * @return {JSON} Response object.
+     * @return {String} JSON representing the response object.
      */
     module.get12 = function() { return execMethod('soap', 'get12', Array.prototype.slice.call(arguments)); };
     return module;
