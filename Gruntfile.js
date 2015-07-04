@@ -21,7 +21,7 @@ module.exports = function(grunt) {
     var dependencies = [];
     for(var dep in pkg.dependencies) {
         // don't drag sources into dist. oxygen backend will be copied separately.
-        if (dep.indexOf('oxygen') == 0) {
+        if (dep.indexOf('oxygen') === 0) {
             continue;
         }
         dependencies.push(dep + '/**');
