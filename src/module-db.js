@@ -1,5 +1,5 @@
 /**
- * Connect to a DataBase (ODBC) and execute queries.
+ * Provides methods for working with Data Bases through ODBC.
  */
 module.exports = function(execMethod) {
     var module = {};

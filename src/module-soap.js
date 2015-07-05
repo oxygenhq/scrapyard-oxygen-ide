@@ -1,5 +1,7 @@
 /**
- * Collection of methods for working with SOAP based Web Services.
+ * Provides methods for working with SOAP based Web Services.
+ * <br /><br />
+ * NOTE: Multi-argument calls are not supported yet.
  */
 module.exports = function(execMethod) {
     var module = {};

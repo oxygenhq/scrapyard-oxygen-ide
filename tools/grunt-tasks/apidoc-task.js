@@ -16,6 +16,8 @@ var MD = '---\n' +
         'currentMenu: api-{0}\n' +
         '---\n';
 
+var DESC_MAIN = '<div class="desc-module">{0}</div>';
+
 var INDEX = '<div class="index">' +
             '<div id="index-col-1" class="index-col">{0}</div>' +
             '<div id="index-col-2" class="index-col">{1}</div>' +
@@ -58,12 +60,13 @@ module.exports = function(grunt) {
         var mdb = load('db');
         var mlog = load('log');
         var mweb = load('web');
-
+        var massert = load('assert');
+        
         generate(msoap, 'soap');
         generate(mdb, 'db');
         generate(mlog, 'log');
         generate(mweb, 'web');
-
+        generate(massert, 'assert');
         /*
          * Loads up JSDoc comments from a module-*.js file and stores them in a JSON (Doctrine) form.
          */
@@ -143,11 +146,18 @@ module.exports = function(grunt) {
                 fs.unlinkSync(outFile);
             } catch (e) { }
             
-            
+            // YAML front matter
             fs.appendFileSync(outFile, MD.format(moduleName));
-
+            
+            // header
+            fs.appendFileSync(outFile, '\n' + moduleName + '\n==\n');
+            
+            // main div wrapper
             fs.appendFileSync(outFile, '<div class="apidoc">');
 
+            // description
+            fs.appendFileSync(outFile, DESC_MAIN.format(module.description));
+            
             // index links
             var methodsUnsorted = [];
             for (var method of module.methods) {

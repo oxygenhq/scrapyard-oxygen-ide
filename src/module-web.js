@@ -1,5 +1,9 @@
 /**
- * Collection of Selenium methods for browser automation.
+ * Provides methods for browser automation. 
+ * <br /><br />
+ * Commands which operate on elements such as click, assert*, type, select, etc will automatically 
+ * wait for a period of time for element to appear in DOM and become visible. By default this
+ * period equals to 60 seconds, but can be changed using <code>setTimeout</code>.
  */
 module.exports = function(execMethod) {
     var module = {};
@@ -289,12 +293,18 @@ module.exports = function(execMethod) {
      * @function getXMLPageSource
      * @return {String} XML source.
      */
-    module.getXMLPageSource = function() { return execMethod('web', 'getXMLPageSourceAsJSON', Array.prototype.slice.call(arguments)); };
+    module.getXMLPageSource = function() { return execMethod('web', 'getXMLPageSource', Array.prototype.slice.call(arguments)); };
     /**
      * Gets the source of the last loaded <code>text/xml</code> page and converts it to JSON object.
      * @function getXMLPageSourceAsJSON
      * @return {String} JSON string.
      */
     module.getXMLPageSourceAsJSON = function() { return execMethod('web', 'getXMLPageSourceAsJSON', Array.prototype.slice.call(arguments)); };
+    /**
+     * Gets handles, titles, and URLs of all currently open windows.
+     * @function getWindowHandles
+     * @return {String} JSON array containing all avaialble windows.
+     */
+    module.getWindowHandles = function() { return execMethod('web', 'getWindowHandles', Array.prototype.slice.call(arguments)); };
     return module;
 };

@@ -1,5 +1,5 @@
 /**
- * Collection of methods for sending messages to the Log window.
+ * [IDE ONLY] Provides methods for sending messages to the Event Log window.
  */
 module.exports = {
     /**
