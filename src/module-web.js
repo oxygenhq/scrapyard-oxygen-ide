@@ -2,7 +2,7 @@
  * Provides methods for browser automation. 
  * <br /><br />
  * Commands which operate on elements such as click, assert*, type, select, etc will automatically 
- * wait for a period of time for element to appear in DOM and become visible. By default this
+ * wait for a period of time for element to appear in DOM and become visible. By default this 
  * period equals to 60 seconds, but can be changed using <code>setTimeout</code>.
  */
 module.exports = function(execMethod) {
@@ -306,5 +306,10 @@ module.exports = function(execMethod) {
      * @return {String} JSON array containing all avaialble windows.
      */
     module.getWindowHandles = function() { return execMethod('web', 'getWindowHandles', Array.prototype.slice.call(arguments)); };
+    /**
+     * Closes the currently active window.
+     * @function closeWindow
+     */
+    module.closeWindow = function() { return execMethod('web', 'closeWindow', Array.prototype.slice.call(arguments)); };
     return module;
 };
