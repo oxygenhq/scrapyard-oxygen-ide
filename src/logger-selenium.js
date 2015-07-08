@@ -27,10 +27,11 @@
         /*
          * Section: Construction and Destruction
          */
-
+         
         function LoggerSelenium() {
-            this.logSize = 0;
         }
+
+        LoggerSelenium.prototype.logSize = 0;
 
         LoggerSelenium.prototype.attached = false;
 
@@ -60,14 +61,31 @@
             this.logSize = 0;
             this.div.innerHTML = '';
         };
-    
+
+        /**
+         * Clears first half of the log.
+         */
+        LoggerSelenium.prototype.clearOldestHalf = function() {
+            var half =  Math.floor(this.logSize/2);
+            var logContent = this.div.innerHTML;
+            var cutIndex = logContent.indexOf('<br>', half);
+            // if it's a very long line w/o breaks just clear it
+            if (cutIndex === -1) {
+                this.div.innerHTML = '';
+                this.logSize = 0;
+                return;
+            }
+            this.div.innerHTML = logContent.substring(cutIndex + '<br>'.length);
+            this.logSize = this.div.innerHTML.length;
+        };
+
         /**
          * Appends new entry to the log.
          * @param {string} data - Data to append to the log.
          */
         LoggerSelenium.prototype.add = function(data) {
             if (this.logSize > BUFFER_SIZE) {
-                this.clear();
+                this.clearOldestHalf();
             }   
             this.div.innerHTML += data;
             this.logSize += data.length;
