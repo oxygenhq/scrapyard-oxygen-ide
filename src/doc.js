@@ -41,6 +41,22 @@
                         }
                     }
                 };
+                commentParsed.getSummary = function() {
+                    for (var tag of this.tags)
+                    {
+                        if (tag.title === 'summary') {
+                            return tag.description.replace(/(\r\n|\n)/gm,'');
+                        }
+                    }
+                };
+                commentParsed.getDescription = function() {
+                    for (var tag of this.tags)
+                    {
+                        if (tag.title === 'description') {
+                            return tag.description.replace(/(\r\n|\n)/gm,''); 
+                        }
+                    }
+                };
                 commentParsed.getReturn = function() {
                     for (var tag of this.tags)
                     {

@@ -97,6 +97,22 @@ module.exports = function(grunt) {
                             }
                         }
                     };
+                    commentParsed.getSummary = function() {
+                        for (var tag of this.tags)
+                        {
+                            if (tag.title === 'summary') {
+                                return tag.description.replace(/(\r\n|\n)/gm,'');
+                            }
+                        }
+                    };
+                    commentParsed.getDescription = function() {
+                        for (var tag of this.tags)
+                        {
+                            if (tag.title === 'description') {
+                                return tag.description.replace(/(\r\n|\n)/gm,''); 
+                            }
+                        }
+                    };
                     commentParsed.getReturn = function() {
                         for (var tag of this.tags)
                         {
@@ -197,7 +213,11 @@ module.exports = function(grunt) {
                                                 paramConcat.join(', '), 
                                                 ret === undefined ? '' : '&rarr; {' + ret.type + '}');
 
-                var descHtml = DESCRIPTION.format(method.description);                              
+                var methodDesc = method.getDescription();
+                      
+                var descHtml = DESCRIPTION.format(method.getSummary() + 
+                                                  (methodDesc !== undefined ? 
+                                                    '<br/><br/>' + methodDesc : ''));                              
                 fs.appendFileSync(outFile, sigHtml + descHtml);
                 
                 // parameters
