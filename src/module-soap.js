@@ -6,7 +6,7 @@
 module.exports = function(execMethod) {
     var module = {};
     /**
-     * Initiates a SOAP request and returns the response.
+     * @summary Initiates a SOAP request and returns the response.
      * @function get
      * @param {String} wsdlUrl - URL pointing to the WSDL XML.
      * @param {String} serviceName - Service name (case sensitive).
@@ -16,7 +16,7 @@ module.exports = function(execMethod) {
      */
     module.get = function() { return execMethod('soap', 'get', Array.prototype.slice.call(arguments)); };
     /**
-     * Initiates a SOAP 1.2 request and returns the response.
+     * @summary Initiates a SOAP 1.2 request and returns the response.
      * @function get12
      * @param {String} wsdlUrl - URL pointing to the WSDL XML.
      * @param {String} serviceName - Service name (case sensitive).

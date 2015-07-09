@@ -4,7 +4,7 @@
 module.exports = function(execMethod) {
     var module = {};
     /**
-     * Asserts that two values are equal.
+     * @summary Asserts that two values are equal.
      * @function equal
      * @param {String} expected - Expected value.
      * @param {String} actual - Actual value.
@@ -12,7 +12,7 @@ module.exports = function(execMethod) {
      */
     module.equal = function() { return execMethod('assert', 'equal', Array.prototype.slice.call(arguments)); };
     /**
-     * Asserts that two values are not equal.
+     * @summary Asserts that two values are not equal.
      * @function notEqual
      * @param {String} expected - Expected value.
      * @param {String} actual - Actual value.
@@ -20,7 +20,7 @@ module.exports = function(execMethod) {
      */
     module.notEqual = function() { return execMethod('assert', 'notEqual', Array.prototype.slice.call(arguments)); };
     /**
-     * Fails a test with the given message.
+     * @summary Fails a test with the given message.
      * @function fail
      * @param {String} message - Message to throw.
      */
