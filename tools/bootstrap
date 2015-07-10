@@ -11,7 +11,7 @@ var child = cp.exec('npm install --msvs_version=2013',
                         {
                             npm_config_disturl: 'https://atom.io/download/atom-shell',
                             npm_config_target: TARGET,
-                            npm_config_arch: process.arch
+                            npm_config_arch: 'ia32'
                         }
                     },
                     function(error, stdout, stderr) {
