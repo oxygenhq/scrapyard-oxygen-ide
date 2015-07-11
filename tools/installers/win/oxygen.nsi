@@ -191,6 +191,7 @@ Function .onInit
   SectionSetFlags ${SEC01} $0
   
   Call CheckDotNet45
+  Call CheckOpenApps
 FunctionEnd
 
 Function un.onUninstSuccess
@@ -243,4 +244,36 @@ Function CheckDotNet45
         abort
 
     success:
+FunctionEnd
+
+!macro FindProc result processName
+    nsExec::ExecToLog 'cmd.exe /C %SystemRoot%\System32\tasklist /NH /FI "IMAGENAME eq ${processName}" | %SystemRoot%\System32\find /I "${processName}"'
+    Pop ${result}
+!macroend
+
+Function CheckOpenApps
+    Var /GLOBAL ieFound
+    !insertmacro FindProc $ieFound "iexplore.exe"
+    Var /GLOBAL oxygenFound
+    !insertmacro FindProc $oxygenFound "oxygenide.exe"
+    Var /GLOBAL oxygenServerFound
+    !insertmacro FindProc $oxygenServerFound "oxygen-server.exe"
+    
+    ${If} $ieFound == "0"
+        StrCpy $0 "Internet Explorer$\n"
+    ${EndIf}
+    ${If} $oxygenFound == "0"
+        StrCpy $1 "Oxygen IDE$\n"
+    ${EndIf} 
+    ${If} $oxygenServerFound == "0"
+        StrCpy $2 "Oxygen Server$\n"
+    ${EndIf}
+    
+    ${If} $ieFound == 0
+    ${OrIf} $oxygenFound == 0
+    ${OrIf} $oxygenServerFound == 0
+        MessageBox MB_OK|MB_ICONSTOP "Following applications should be closed before starting the installation:$\n$\n\
+             $0$1$2"
+        abort
+    ${EndIf}
 FunctionEnd
