@@ -23,8 +23,8 @@
     "electron-edge": "git+https://github.com/oxygenhq/electron-edge.git",
     "q": "^1.2.0",
     "opn": "^2.0.0",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#1cd879d1a27b12ab3133dab153d74683c1f78517",
-    "oxygen-server": "git+https://github.com/oxygenhq/oxygen-server#a4661de160c650bb819d49db9042930704d2126f"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#20e5f5db5d0b9660ee566bc3a481254ca876c956",
+    "oxygen-server": "git+https://github.com/oxygenhq/oxygen-server#96b145bd412c5aa37f82653cee4f0ccca5d98eb6"
   },
   "repository": {
     "type": "git",
