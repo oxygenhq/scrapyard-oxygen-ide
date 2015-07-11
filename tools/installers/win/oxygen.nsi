@@ -247,7 +247,7 @@ Function CheckDotNet45
 FunctionEnd
 
 !macro FindProc result processName
-    nsExec::ExecToLog 'cmd.exe /C %SystemRoot%\System32\tasklist /NH /FI "IMAGENAME eq ${processName}" | %SystemRoot%\System32\find /I "${processName}"'
+    nsExec::Exec 'cmd.exe /C %SystemRoot%\System32\tasklist /NH /FI "IMAGENAME eq ${processName}" | %SystemRoot%\System32\find /I "${processName}"'
     Pop ${result}
 !macroend
 
@@ -272,7 +272,7 @@ Function CheckOpenApps
     ${If} $ieFound == 0
     ${OrIf} $oxygenFound == 0
     ${OrIf} $oxygenServerFound == 0
-        MessageBox MB_OK|MB_ICONSTOP "Following applications should be closed before starting the installation:$\n$\n\
+        MessageBox MB_OK|MB_ICONSTOP "Following applications must be closed before running the setup:$\n$\n\
              $0$1$2"
         abort
     ${EndIf}
