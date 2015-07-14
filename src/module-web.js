@@ -193,7 +193,7 @@ module.exports = function(execMethod) {
      *              </ul>
      * @function selectWindow
      * @param {String} windowLocator - Window locator.
-     * @return {String} windowHandle of the newly selected window.
+     * @return {String} windowHandle of the previously selected window.
      */
     module.selectWindow = function() { return execMethod('web', 'selectWindow', Array.prototype.slice.call(arguments)); };
     /**
