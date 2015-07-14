@@ -15,7 +15,8 @@
  *  <li><code>exact:STRING</code> - Match the string verbatim.</li>
  *  <li><code>glob:PATTERN</code> - Match using case-insensitive glob pattern. 
  *      <code>?</code> will match any single character except new line (\n).
- *      <code>*</code> will match any sequence of characters except new line.</li>
+ *      <code>*</code> will match any sequence of characters except new line. Empty PATTERN will 
+ *      match only other empty strings.</li>
  *  <li><code>PATTERN</code> - Same as glob matching.</li>
  *  </ul>
  * </div>
