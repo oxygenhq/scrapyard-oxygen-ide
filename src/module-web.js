@@ -415,5 +415,25 @@ module.exports = function(execMethod) {
      * @function closeWindow
      */
     module.closeWindow = function() { return execMethod('web', 'closeWindow', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Checks if alert box is present.
+     * @function isAlertPresent
+     * @param {String} text - Alert's text.
+     * @param {Integer} timeout - Timeout in milliseconds to wait for the alert box.
+     * @return {Boolean} True if alert with the specified text is present. False otherwise.
+     */
+    module.isAlertPresent = function() { return execMethod('web', 'isAlertPresent', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Accepts an alert or a confirmation dialog. 
+     * @description In case of an alert box this command is identical to <code>alertDismiss</code>.
+     * @function alertAccept
+     */
+    module.alertAccept = function() { return execMethod('web', 'alertAccept', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Dismisses an alert or a confirmation dialog.
+     * @description In case of an alert box this command is identical to <code>alertAccept</code>.
+     * @function alertDismiss
+     */
+    module.alertDismiss = function() { return execMethod('web', 'alertDismiss', Array.prototype.slice.call(arguments)); };
     return module;
 };
