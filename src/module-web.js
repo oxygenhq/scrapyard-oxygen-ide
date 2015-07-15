@@ -436,5 +436,23 @@ module.exports = function(execMethod) {
      * @function alertDismiss
      */
     module.alertDismiss = function() { return execMethod('web', 'alertDismiss', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Asserts text of the currently selected option in a drop-down list.
+     * @description Assertion pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
+     * @function assertSelectedLabel
+     * @param {String} locator - An element locator.
+     * @param {String} pattern - The assertion pattern.
+     */
+    module.assertSelectedLabel = function() { return execMethod('web', 'assertSelectedLabel', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Asserts value of the currently selected option in a drop-down list.
+     * @description Assertion pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
+     * @function assertSelectedValue
+     * @param {String} locator - An element locator.
+     * @param {String} pattern - The assertion pattern.
+     */
+    module.assertSelectedValue = function() { return execMethod('web', 'assertSelectedValue', Array.prototype.slice.call(arguments)); };
     return module;
 };
