@@ -454,5 +454,11 @@ module.exports = function(execMethod) {
      * @param {String} pattern - The assertion pattern.
      */
     module.assertSelectedValue = function() { return execMethod('web', 'assertSelectedValue', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Gets the text displayed by an alert or confirm dialog.
+     * @function getAlertText
+     * @return {String} The alert's text.
+     */
+    module.getAlertText = function() { return execMethod('web', 'getAlertText', Array.prototype.slice.call(arguments)); };
     return module;
 };
