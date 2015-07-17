@@ -35,7 +35,9 @@ var fork = require('child_process').fork;
 
         var self = this;
         
-        dbg.connect(dbgPort).then(function(connection) {
+        dbg.connect(dbgPort);
+
+        dbg.on('connected', function() {
             var bps = editor.getBreakpoints();
             for (var bp of editor.getBreakpoints()) {
                 dbg.request(
@@ -47,13 +49,7 @@ var fork = require('child_process').fork;
                 );
             }
             
-            dbg.request('continue', null, function(err, response) {
-                //console.log('dbg continue:' + JSON.stringify(response));
-            });
-        });
-
-        dbg.on('change', function() {
-            //console.log('dbg change');
+            dbg.request('continue', null, function(err, response) {});
         });
 
         toolbar.btnStart.setClickHandler(function() {
@@ -113,7 +109,7 @@ var fork = require('child_process').fork;
      * Terminates script execution.
      */
     ScriptChild.prototype.kill = function() {
-        this.dbg.disconnect();
+        this.dbg.disconnect(function(err, response) {});
         this.child.kill();
         logGeneral.add('INFO', 'Script terminated.');
     };
