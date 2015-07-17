@@ -9,6 +9,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-msbuild');
+    grunt.loadNpmTasks('grunt-chmod');
 
     grunt.loadTasks('./tools/grunt-tasks');
 
@@ -20,6 +21,10 @@ module.exports = function(grunt) {
     defaultTasks.push('msbuild:oxygensrv');
     defaultTasks.push('rebrand');
     defaultTasks.push('sync');
+    // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
+    if (process.platform === 'linux') {
+        defaultTasks.push('chmod');
+    }
 
     grunt.registerTask('default', defaultTasks);
     grunt.registerTask('dist', ['default', 'installer']);
@@ -74,6 +79,14 @@ module.exports = function(grunt) {
                     },
                 ], 
                 verbose: true
+            }
+        },
+        chmod: {
+            options: {
+                mode: '775'
+            },
+            'xdg-open': {
+                src: [OUTDIR + '/resources/app/node_modules/opn/xdg-open' ]
             }
         },
         compress: {
