@@ -87,6 +87,9 @@ module.exports = function(grunt) {
             },
             'xdg-open': {
                 src: [OUTDIR + '/resources/app/node_modules/opn/xdg-open' ]
+            },
+            chromedriver: {
+                src: [OUTDIR + '/resources/app/selenium/chromedriver' ]
             }
         },
         compress: {

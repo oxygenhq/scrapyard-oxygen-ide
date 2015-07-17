@@ -282,11 +282,10 @@ function runtimeSettingsSave() {
 
 // initialize Selenium server
 var selArgs = ['-jar', selSettings.jar].concat(selSettings.args);
-if (selSettings.chromeDriver) {
-    selArgs.push('-Dwebdriver.chrome.driver=' + selSettings.chromeDriver);
-}
-if (selSettings.ieDriver) {
-    selArgs.push('-Dwebdriver.ie.driver=' + selSettings.ieDriver);
+var chromedriver = (process.platform === 'win32' ? 'chromedriver.exe' : 'chromedriver');
+selArgs.push('-Dwebdriver.chrome.driver=' + chromedriver);
+if (process.platform === 'win32') {
+    selArgs.push('-Dwebdriver.ie.driver=IEDriverServer_x86.exe');
 }
 if (selSettings.port) {
     selArgs.push('-port');
