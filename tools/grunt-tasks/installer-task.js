@@ -4,9 +4,9 @@ var path = require('path');
 var os = require('os');
 
 module.exports = function(grunt) {
-    grunt.registerTask('win-installer', 'description', function() {
+    grunt.registerTask('installer', 'description', function() {
         if (os.platform() === 'win32') {
-            var cfg = grunt.config.get('win-installer');
+            var cfg = grunt.config.get('installer');
             var nsiPath = path.resolve(__dirname, '..', 'installers', 'win', 'oxygen.nsi');
 
             var child = cp.execFileSync('makensis', 

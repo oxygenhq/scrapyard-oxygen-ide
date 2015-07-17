@@ -12,9 +12,18 @@ module.exports = function(grunt) {
 
     grunt.loadTasks('./tools/grunt-tasks');
 
-    grunt.registerTask('default', ['download-electron', 'msbuild', 'rebrand', 'sync']);
+    var defaultTasks = [];
+    defaultTasks.push('download-electron');
+    if (process.platform === 'win32') {
+        defaultTasks.push('msbuild:ieaddon');
+    }
+    defaultTasks.push('msbuild:oxygensrv');
+    defaultTasks.push('rebrand');
+    defaultTasks.push('sync');
+
+    grunt.registerTask('default', defaultTasks);
+    grunt.registerTask('dist', ['default', 'installer']);
     grunt.registerTask('dev-dist', ['default', 'compress']);
-    grunt.registerTask('dist', ['default', 'win-installer']);
 
     const OUTDIR = 'build';
     
@@ -125,7 +134,7 @@ module.exports = function(grunt) {
                 src: ['node_modules/oxygen-server/OxygenServer.csproj'],
                 options: {
                     projectConfiguration: 'Release',
-                    targets: ['Clean', 'Rebuild'],
+                    targets: ['Rebuild'],
                     version: 12.0,
                     maxCpuCount: 4,
                     buildParameters: {
@@ -135,7 +144,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        'win-installer': {
+        installer: {
           version: pkg.version,
         }
     });
