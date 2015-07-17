@@ -13,11 +13,15 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-    mainWindow = new BrowserWindow({
+    var options = {
         width: 800, 
         height: 600, 
         title: app.getName() + ' ' + app.getVersion() 
-    });
+    };
+    if (process.platform === 'linux') {
+        options.icon = __dirname + '/app.png';
+    }
+    mainWindow = new BrowserWindow(options);
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
     mainWindow.focus();
     // Emitted when the window is closed.

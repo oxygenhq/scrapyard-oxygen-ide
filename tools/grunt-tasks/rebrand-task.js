@@ -25,7 +25,7 @@ module.exports = function(grunt) {
             // re-brand icon & version
             var child = cp.spawnSync(rceditPath, 
                                     [ path.join(distPath, electronExe + '.exe'), 
-                                      '--set-icon', 'resources/win/app.ico',
+                                      '--set-icon', 'resources/app.ico',
                                       '--set-file-version', cfg.version,
                                       '--set-product-version', cfg.version                                              
                                     ]);         

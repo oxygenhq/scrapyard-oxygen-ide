@@ -20,9 +20,10 @@ module.exports = function(grunt) {
     }
     defaultTasks.push('msbuild:oxygensrv');
     defaultTasks.push('rebrand');
-    defaultTasks.push('sync');
-    // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
+    defaultTasks.push('sync:main');
     if (process.platform === 'linux') {
+        defaultTasks.push('sync:linux');
+        // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
         defaultTasks.push('chmod');
     }
 
@@ -79,6 +80,16 @@ module.exports = function(grunt) {
                     },
                 ], 
                 verbose: true
+            },
+            linux: {
+                files: [
+                    { 
+                        expand: true, 
+                        src: ['resources/app.png'], 
+                        dest: OUTDIR + '/resources/app' 
+                    }
+                ], 
+                verbose: true
             }
         },
         chmod: {
@@ -105,7 +116,7 @@ module.exports = function(grunt) {
         watch: {
             scripts: {
                 files: ['src/**'],
-                tasks: ['jshint', 'sync']
+                tasks: ['jshint', 'sync:main', 'sync:linux']
             },
         },
         jshint: {

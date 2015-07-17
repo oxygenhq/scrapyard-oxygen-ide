@@ -16,8 +16,8 @@
 
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
-!define MUI_ICON "${BASEDIR}\resources\win\app.ico"
-!define MUI_UNICON "${BASEDIR}\resources\win\app.ico"
+!define MUI_ICON "${BASEDIR}\resources\app.ico"
+!define MUI_UNICON "${BASEDIR}\resources\app.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -53,7 +53,6 @@ Section "Common Files (Required)" SEC01
     SetOverwrite ifnewer
     SetOutPath "$INSTDIR"
     File /r "${BASEDIR}\build\*"
-    File "${BASEDIR}\resources\win\app.ico"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
     
