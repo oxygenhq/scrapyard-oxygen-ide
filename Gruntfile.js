@@ -142,24 +142,24 @@ module.exports = function(grunt) {
         compress: {
             linux: {
                 options: {
-                    archive: 'dist/oxygen-v' + pkg.version + '-linux-x64.zip',
+                    archive: 'dist/oxygen-' + pkg.version + '-linux-x64.zip',
                     level: 9
                 },
                 files: [
                     { 
                         expand: true, 
                         cwd: OUTDIR, src: ['**'], 
-                        dest: 'oxygen-v' + pkg.version + '-linux-x64'
+                        dest: 'oxygen-' + pkg.version + '-linux-x64'
                     },
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
-                        dest: 'oxygen-v' + pkg.version + '-linux-x64/server'
+                        dest: 'oxygen-' + pkg.version + '-linux-x64/server'
                     },
                     { 
                         expand: true, 
                         cwd: OUTDIR + '/resources/app/recorder', src: ['CARoot.pem'], 
-                        dest: 'oxygen-v' + pkg.version + '-linux-x64'
+                        dest: 'oxygen-' + pkg.version + '-linux-x64'
                     }
                 ]
             }
