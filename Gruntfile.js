@@ -158,7 +158,7 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: OUTDIR + '/resources/app/recorder', src: ['CARoot.cer'], 
+                        cwd: OUTDIR + '/resources/app/recorder', src: ['CARoot.pem'], 
                         dest: 'oxygen-v' + pkg.version + '-linux-x64'
                     }
                 ]
