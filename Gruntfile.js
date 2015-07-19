@@ -25,11 +25,17 @@ module.exports = function(grunt) {
         defaultTasks.push('sync:linux');
         // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
         defaultTasks.push('chmod');
+    } else if (process.platform === 'win32') {
+        defaultTasks.push('sync:windows');
     }
 
     grunt.registerTask('default', defaultTasks);
-    grunt.registerTask('dist', ['default', 'installer']);
-    grunt.registerTask('dev-dist', ['default', 'compress']);
+    
+    if (process.platform === 'linux') {
+        grunt.registerTask('dist', ['default', 'compress:linux']);
+    } else if (process.platform === 'win32') {
+        grunt.registerTask('dist', ['default', 'installer-win']);
+    }
 
     const OUTDIR = 'build';
     
@@ -75,12 +81,12 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'selenium', src: ['**'], 
+                        cwd: 'selenium', src: ['*.jar'], 
                         dest: OUTDIR + '/selenium'
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll', 'Oxygen.?db'], 
+                        cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll'], 
                         dest: OUTDIR + '/resources/app/node_modules/oxygen' 
                     },
                 ], 
@@ -90,8 +96,33 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        src: ['resources/app.png'], 
-                        dest: OUTDIR + '/resources/app' 
+                        cwd: 'resources', src: ['app.png'], 
+                        dest: OUTDIR + '/resources/app'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'selenium', src: ['chromedriver'], 
+                        dest: OUTDIR + '/selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
+                        dest: OUTDIR + '/resources/app/node_modules/oxygen' 
+                    }
+                ], 
+                verbose: true
+            },
+            windows: {
+                files: [
+                    { 
+                        expand: true, 
+                        cwd: 'selenium', src: ['*.exe'], 
+                        dest: OUTDIR + '/selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.pdb'], 
+                        dest: OUTDIR + '/resources/app/node_modules/oxygen' 
                     }
                 ], 
                 verbose: true
@@ -109,12 +140,27 @@ module.exports = function(grunt) {
             }
         },
         compress: {
-            main: {
+            linux: {
                 options: {
-                    archive: 'dist/oxygen-v' + pkg.version + '.zip'
+                    archive: 'dist/oxygen-v' + pkg.version + '-linux-x64.zip',
+                    level: 9
                 },
                 files: [
-                    { expand: true, cwd: OUTDIR, src: ['**'], dest: 'oxygen-v' + pkg.version }
+                    { 
+                        expand: true, 
+                        cwd: OUTDIR, src: ['**'], 
+                        dest: 'oxygen-v' + pkg.version + '-linux-x64'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
+                        dest: 'oxygen-v' + pkg.version + '-linux-x64/server'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: OUTDIR + '/resources/app/recorder', src: ['CARoot.pem'], 
+                        dest: 'oxygen-v' + pkg.version + '-linux-x64'
+                    }
                 ]
             }
         },
@@ -176,7 +222,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        installer: {
+        'installer-win': {
           version: pkg.version,
         }
     });
