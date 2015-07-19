@@ -52,7 +52,7 @@ Section "Common Files (Required)" SEC01
     
     SetOverwrite ifnewer
     SetOutPath "$INSTDIR"
-    File /r /x chromedriver "${BASEDIR}\build\*"
+    File /r /x chromedriver /x CARoot.* "${BASEDIR}\build\*"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
 
