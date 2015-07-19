@@ -1,6 +1,6 @@
 {
   "selenium": {
-    "basePath": "selenium",
+    "basePath": "../../selenium",
     "jar": "selenium-server-standalone-2.46.0.jar",
     "args": ["-timeout", "240", "-browserTimeout", "240", "-ensureCleanSession", 
                 "-trustAllSSLCertificates"],

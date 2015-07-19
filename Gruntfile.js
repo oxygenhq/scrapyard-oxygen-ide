@@ -75,7 +75,12 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll', '*.pdb'], 
+                        cwd: 'selenium', src: ['**'], 
+                        dest: OUTDIR + '/selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll', 'Oxygen.?db'], 
                         dest: OUTDIR + '/resources/app/node_modules/oxygen' 
                     },
                 ], 
@@ -100,7 +105,7 @@ module.exports = function(grunt) {
                 src: [OUTDIR + '/resources/app/node_modules/opn/xdg-open' ]
             },
             chromedriver: {
-                src: [OUTDIR + '/resources/app/selenium/chromedriver' ]
+                src: [OUTDIR + '/selenium/chromedriver' ]
             }
         },
         compress: {

@@ -52,16 +52,15 @@ Section "Common Files (Required)" SEC01
     
     SetOverwrite ifnewer
     SetOutPath "$INSTDIR"
-    File /r "${BASEDIR}\build\*"
+    File /r /x chromedriver "${BASEDIR}\build\*"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
-    
-    SetOutPath "$INSTDIR\selenium"
-    File "${BASEDIR}\src\selenium\*.jar"
-    File "${BASEDIR}\src\selenium\*.exe"
-    
+
     SetOutPath "$INSTDIR\server"
-    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\*"
+    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\*.dll"
+    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\*.config"
+    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\Oxygen.pdb"
+    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\oxygen-server.*"
     ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\server"
 
     CreateDirectory "$SMPROGRAMS\Oxygen"
