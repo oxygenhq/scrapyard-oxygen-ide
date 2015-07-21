@@ -16,6 +16,12 @@ var selSettings = cfg.selenium;
 // retrieve current BrowserWindow object
 var currentWin = remote.getCurrentWindow();
 
+// prevent dropping files into the main window
+document.ondragover = document.ondrop = function(e) {
+    e.preventDefault();
+    return false;
+};
+
 var appFullName = pkg.productName + ' v' + pkg.version;
 function setWindowTitle(title) {
     if (title === '') {
