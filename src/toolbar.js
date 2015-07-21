@@ -100,9 +100,13 @@
             // browser dropdown
             var browserSel = document.createElement("select");
             browserSel.setAttribute('style', 'float:left;');
-            for (var browser of [['Chrome', 'chrome'], 
-                                ['Internet Explorer', 'ie'], 
-                                ['Firefox', 'firefox']]) {
+            var browsers = [];
+            browsers.push(['Chrome', 'chrome']);
+            if (process.platform === 'win32') {
+                browsers.push(['Internet Explorer', 'ie']);
+            }
+            browsers.push(['Firefox', 'firefox']);
+            for (var browser of browsers) {
                 var opt = document.createElement("option"); 
                 opt.text = browser[0];
                 opt.value = browser[1];
