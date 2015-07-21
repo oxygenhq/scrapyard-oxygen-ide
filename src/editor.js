@@ -365,6 +365,7 @@
             );
             if (fileName) {
                 editor.currentFilename = fileName;
+                setWindowTitle(path.basename(fileName, '.js'));
                 fs.writeFile(fileName, editor.getContent(), function(err) {
                     if(!err) {
                         toolbar.btnSave.disable();
