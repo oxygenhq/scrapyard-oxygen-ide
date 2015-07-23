@@ -99,8 +99,8 @@ module.exports = function(execMethod) {
     module.clickHidden = function() { return execMethod('web', 'clickHidden', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Asserts the page title.
-     * @description Assertion pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Assertion pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function assertTitle
      * @param {String} pattern - The assertion pattern.
      */
@@ -321,8 +321,8 @@ module.exports = function(execMethod) {
     module.isElementVisible = function() { return execMethod('web', 'isElementVisible', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Waits for inner text of the given element to match the specified pattern.
-     * @description Text pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Text pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function waitForText
      * @param {String} locator - An element locator.
      * @param {String} pattern - Text pattern.
@@ -330,8 +330,8 @@ module.exports = function(execMethod) {
     module.waitForText = function() { return execMethod('web', 'waitForText', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Waits for inner text of the given element to stop matching the specified pattern.
-     * @description Text pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Text pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function waitForNotText
      * @param {String} locator - An element locator.
      * @param {String} pattern - Text pattern.
@@ -339,8 +339,8 @@ module.exports = function(execMethod) {
     module.waitForNotText = function() { return execMethod('web', 'waitForNotText', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Waits for input element's value to match the specified pattern.
-     * @description Value pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Value pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function waitForValue
      * @param {String} locator - An element locator.
      * @param {String} pattern - Value pattern.
@@ -348,8 +348,8 @@ module.exports = function(execMethod) {
     module.waitForValue = function() { return execMethod('web', 'waitForValue', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Waits for input element's value to stop matching the specified pattern.
-     * @description Value pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Value pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function waitForNotValue
      * @param {String} locator - An element locator.
      * @param {String} pattern - Value pattern.
@@ -357,8 +357,8 @@ module.exports = function(execMethod) {
     module.waitForNotValue = function() { return execMethod('web', 'waitForNotValue', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Asserts element's value.
-     * @description Value pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Value pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function assertValue
      * @param {String} locator - An element locator.
      * @param {String} pattern - Value pattern.
@@ -379,8 +379,8 @@ module.exports = function(execMethod) {
     module.assertElementPresent = function() { return execMethod('web', 'assertElementPresent', Array.prototype.slice.call(arguments)); };
     /**
      * @summary Asserts whether alert matches the specified pattern and dismisses it.
-     * @description Text pattern can be any of the supported <a href="#patterns">.
-     *              string matching patterns</a>
+     * @description Text pattern can be any of the supported <a href="#patterns">
+     *              string matching patterns</a>.
      * @function assertAlert
      * @param {String} pattern - Text pattern.
      */
