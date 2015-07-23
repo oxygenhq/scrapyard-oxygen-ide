@@ -233,6 +233,7 @@ module.exports = function(execMethod) {
      *              <ul>
      *              <li><code>label=STRING</code> - Matches option based on the visible text.</li>
      *              <li><code>value=STRING</code> - Matches option based on its value.</li>
+     *              <li><code>index=STRING</code> - Matches option based on its index.</li>
      *              </ul>
      * @function select
      * @param {String} selectLocator - An element locator identifying a drop-down menu.
