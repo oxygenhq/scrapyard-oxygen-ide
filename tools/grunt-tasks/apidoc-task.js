@@ -18,6 +18,7 @@ var MD = '---\n' +
 
 var DESC_MAIN = '<div class="desc-module">{0}</div>';
 
+var INDEX_HEADER = '<h3 class="methods">Methods</h3>';
 var INDEX = '<div class="index">' +
             '<div id="index-col-1" class="index-col">{0}</div>' +
             '<div id="index-col-2" class="index-col">{1}</div>' +
@@ -196,6 +197,7 @@ module.exports = function(grunt) {
                 i++;
             }
             
+            fs.appendFileSync(outFile, INDEX_HEADER);
             fs.appendFileSync(outFile, INDEX.format(links1, links2, links3));
             
             for (var method of module.methods) {
