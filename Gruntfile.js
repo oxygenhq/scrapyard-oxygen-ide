@@ -24,7 +24,13 @@ module.exports = function(grunt) {
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
         // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
-        defaultTasks.push('chmod');
+        defaultTasks.push('chmod:main');
+        defaultTasks.push('chmod:linux');
+    } else if (process.platform === 'darwin') {
+        defaultTasks.push('sync:osx');
+        // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
+        defaultTasks.push('chmod:main');
+        defaultTasks.push('chmod:osx');
     } else if (process.platform === 'win32') {
         defaultTasks.push('sync:windows');
     }
@@ -38,6 +44,8 @@ module.exports = function(grunt) {
     }
 
     const OUTDIR = 'build';
+    const RESOURCES = process.platform === 'darwin' ? 
+                        '/Oxygen.app/Contents/Resources' : '/resources';
     
     var dependencies = [];
     for(var dep in pkg.dependencies) {
@@ -67,27 +75,22 @@ module.exports = function(grunt) {
                     { 
                         expand: true, 
                         cwd: 'src', src: ['**'], 
-                        dest: OUTDIR + '/resources/app' 
+                        dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
                         expand: true, 
                         cwd: 'node_modules', src: dependencies, 
-                        dest: OUTDIR + '/resources/app/node_modules' 
+                        dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
                         expand: true, 
                         src: ['package.json', 'LICENSE'], 
-                        dest: OUTDIR + '/resources/app' 
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'selenium', src: ['*.jar'], 
-                        dest: OUTDIR + '/selenium'
+                        dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll'], 
-                        dest: OUTDIR + '/resources/app/node_modules/oxygen' 
+                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
                     },
                 ], 
                 verbose: true
@@ -97,17 +100,47 @@ module.exports = function(grunt) {
                     { 
                         expand: true, 
                         cwd: 'resources', src: ['app.png'], 
-                        dest: OUTDIR + '/resources/app'
+                        dest: OUTDIR + RESOURCES + '/app'
                     },
                     { 
                         expand: true, 
-                        cwd: 'selenium', src: ['chromedriver'], 
+                        cwd: 'selenium', src: ['*.jar'], 
+                        dest: OUTDIR + '/selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'selenium/lin', src: ['chromedriver'], 
                         dest: OUTDIR + '/selenium'
                     },
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
-                        dest: OUTDIR + '/resources/app/node_modules/oxygen' 
+                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
+                    }
+                ], 
+                verbose: true
+            },
+            osx: {
+                files: [
+                    { 
+                        expand: true, 
+                        cwd: 'resources', src: ['app.icns'], 
+                        dest: OUTDIR + RESOURCES
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'selenium', src: ['*.jar'], 
+                        dest: OUTDIR + RESOURCES + '/../selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'selenium/osx', src: ['chromedriver'], 
+                        dest: OUTDIR + RESOURCES + '/../selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
+                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
                     }
                 ], 
                 verbose: true
@@ -116,27 +149,52 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        cwd: 'selenium', src: ['*.exe'], 
+                        cwd: 'src', src: ['**'], 
+                        dest: OUTDIR + RESOURCES + '/app' 
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'selenium', src: ['*.jar'], 
+                        dest: OUTDIR + '/selenium'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'selenium/win', src: ['*.exe'], 
                         dest: OUTDIR + '/selenium'
                     },
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.pdb'], 
-                        dest: OUTDIR + '/resources/app/node_modules/oxygen' 
+                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
                     }
                 ], 
                 verbose: true
             }
         },
         chmod: {
-            options: {
-                mode: '775'
+            main: {
+                options: {
+                    mode: '775'
+                },
+                'xdg-open': {
+                    src: [OUTDIR + RESOURCES + '/app/node_modules/opn/xdg-open' ]
+                }
             },
-            'xdg-open': {
-                src: [OUTDIR + '/resources/app/node_modules/opn/xdg-open' ]
+            linux: {
+                options: {
+                    mode: '775'
+                },
+                chromedriver: {
+                    src: [OUTDIR + '/selenium/chromedriver' ]
+                }
             },
-            chromedriver: {
-                src: [OUTDIR + '/selenium/chromedriver' ]
+            osx: {
+                options: {
+                    mode: '775'
+                },
+                chromedriver: {
+                    src: [OUTDIR + RESOURCES + '/../selenium/chromedriver' ]
+                }
             }
         },
         compress: {

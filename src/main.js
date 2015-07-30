@@ -41,12 +41,12 @@ app.on('ready', function() {
         submenu: [
             {
                 label: '&New',
-                accelerator: 'Ctrl+N',
+                accelerator: 'CommandOrControl+N',
                 click: function() { mainWindow.send('file-new'); }
             },
             {
                 label: '&Open',
-                accelerator: 'Ctrl+O',
+                accelerator: 'CommandOrControl+O',
                 click: function() { mainWindow.send('file-open'); }
             },
             {
@@ -54,13 +54,13 @@ app.on('ready', function() {
             },
             {
                 label: '&Save',
-                accelerator: 'Ctrl+S',
+                accelerator: 'CommandOrControl+S',
                 enabled: false,
                 click: function() { mainWindow.send('file-save'); }
             },
             {
                 label: 'Save As',
-                accelerator: 'Ctrl+Shift+S',
+                accelerator: 'CommandOrControl+Shift+S',
                 enabled: true,
                 click: function() { mainWindow.send('file-save-as'); }
             },
@@ -69,7 +69,7 @@ app.on('ready', function() {
             },
             {
                 label: '&Close',
-                accelerator: 'Alt+F4',
+                accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Alt+F4',
                 click: function() { mainWindow.close(); }
             },
         ]
@@ -79,13 +79,13 @@ app.on('ready', function() {
         submenu: [
             {
                 label: '&Undo',
-                accelerator: 'Ctrl+Z',
+                accelerator: 'CommandOrControl+Z',
                 enabled: false,
                 click: function() { mainWindow.send('edit-undo'); }
             },
             {
                 label: '&Redo',
-                accelerator: 'Ctrl+Y',
+                accelerator: 'CommandOrControl+Y',
                 enabled: false,
                 click: function() { mainWindow.send('edit-redo'); }
             },
@@ -94,19 +94,19 @@ app.on('ready', function() {
             },
             {
                 label: 'Cu&t',
-                accelerator: 'Ctrl+X',
+                accelerator: 'CommandOrControl+X',
                 enabled: false,
                 click: function() { mainWindow.send('edit-cut'); }
             },
             {
                 label: '&Copy',
-                accelerator: 'Ctrl+C',
+                accelerator: 'CommandOrControl+C',
                 enabled: false,
                 click: function() { mainWindow.send('edit-copy'); }
             },
             {
                 label: '&Paste',
-                accelerator: 'Ctrl+V',
+                accelerator: 'CommandOrControl+V',
                 click: function() { mainWindow.send('edit-paste'); }
             },
         ]
@@ -116,12 +116,12 @@ app.on('ready', function() {
         submenu: [
             {
                 label: '&Find',
-                accelerator: 'Ctrl+F',
+                accelerator: 'CommandOrControl+F',
                 click: function() { mainWindow.send('search-find'); }
             },
             {
                 label: '&Replace',
-                accelerator: 'Ctrl+H',
+                accelerator: 'CommandOrControl+H',
                 click: function() { mainWindow.send('search-replace'); }
             }
         ]
@@ -131,7 +131,7 @@ app.on('ready', function() {
         submenu: [
             {
                 label: '&Event Log',
-                accelerator: 'Ctrl+Shift+L',
+                accelerator: 'CommandOrControl+Shift+L',
                 type: 'checkbox',
                 checked: true,
                 click: function() { mainWindow.send('view-event-log'); }
