@@ -24,13 +24,11 @@ module.exports = function(grunt) {
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
         // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
-        defaultTasks.push('chmod:main');
-        defaultTasks.push('chmod:linux');
+        defaultTasks.push('chmod');
     } else if (process.platform === 'darwin') {
         defaultTasks.push('sync:osx');
         // temporary fix before Grunt v0.5 https://github.com/gruntjs/grunt/issues/615
-        defaultTasks.push('chmod:main');
-        defaultTasks.push('chmod:osx');
+        defaultTasks.push('chmod');
     } else if (process.platform === 'win32') {
         defaultTasks.push('sync:windows');
     }
@@ -172,29 +170,16 @@ module.exports = function(grunt) {
             }
         },
         chmod: {
-            main: {
-                options: {
-                    mode: '775'
-                },
-                'xdg-open': {
-                    src: [OUTDIR + RESOURCES + '/app/node_modules/opn/xdg-open' ]
-                }
+            options: {
+                mode: '775'
+            }, 
+            'xdg-open': {
+                src: [OUTDIR + RESOURCES + '/app/node_modules/opn/xdg-open' ]
             },
-            linux: {
-                options: {
-                    mode: '775'
-                },
-                chromedriver: {
-                    src: [OUTDIR + '/selenium/chromedriver' ]
-                }
-            },
-            osx: {
-                options: {
-                    mode: '775'
-                },
-                chromedriver: {
-                    src: [OUTDIR + RESOURCES + '/../selenium/chromedriver' ]
-                }
+            chromedriver: {
+                    src: [process.platform === 'linux' ? 
+                            OUTDIR + '/selenium/chromedriver' :
+                            OUTDIR + RESOURCES + '/../selenium/chromedriver']                    
             }
         },
         compress: {
