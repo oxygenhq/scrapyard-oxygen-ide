@@ -7,3 +7,5 @@ build/*
 npm-debug.log
 dist/*
 apidocs/*
+*/.DS_Store
+.DS_Store
