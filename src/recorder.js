@@ -108,7 +108,7 @@ var path = require('path');
                 if (op.value.toFixed) { // don't enclose in quotes if number
                     args += ", " + op.value; 
                 } else {
-                    args += ", '" + op.value + "'"; 
+                    args += ", '" + op.value.replace(/'/g, "\\'") + "'"; 
                 }
             }
         }
