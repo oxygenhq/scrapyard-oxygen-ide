@@ -174,10 +174,29 @@ function getText(element) {
 
     text = normalizeNewlines(text);
     text = normalizeSpaces(text);
-
+    text = applyTextTransformation(element, text);
+    
     return text.trim();
 }
 
+/*
+ * Applies text-transformation style on the given text. This is needed for link locators since 
+ * Selenium's By.LinkText locates elements by the exact text it displays.
+ */
+function applyTextTransformation(element, text) {
+    var txtTransform = window.getComputedStyle(element, null).getPropertyValue("text-transform");
+    var txtTransformLower = txtTransform.toLowerCase();
+    if (txtTransformLower === 'uppercase') {
+        text = text.toUpperCase();
+    } else if (txtTransformLower === 'lowercase') {
+        text = text.toLowerCase();
+    } else if (txtTransformLower === 'capitalize') {
+        // FIXME: doesn't work. https://github.com/SeleniumHQ/selenium/issues/884
+        text = text.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+    }
+    return text;
+}
+ 
 function getTextContent(element, preformatted) {
     if (element.style && (element.style.visibility == 'hidden' || element.style.display == 'none')) return '';
     if (element.nodeType == 3 /*Node.TEXT_NODE*/) {
