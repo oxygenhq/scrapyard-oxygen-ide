@@ -39,6 +39,8 @@ module.exports = function(grunt) {
         grunt.registerTask('dist', ['default', 'compress:linux']);
     } else if (process.platform === 'win32') {
         grunt.registerTask('dist', ['default', 'installer-win']);
+    } else if (process.platform === 'darwin') {
+        grunt.registerTask('dist', ['default', 'compress:osx']);
     }
 
     const OUTDIR = 'build';
@@ -203,6 +205,29 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: OUTDIR + '/resources/app/recorder', src: ['CARoot.pem'], 
                         dest: 'oxygen-' + pkg.version + '-linux-x64'
+                    }
+                ]
+            },
+            osx: {
+                options: {
+                    archive: 'dist/oxygen-' + pkg.version + '-osx-x64.zip',
+                    level: 9
+                },
+                files: [
+                    { 
+                        expand: true, 
+                        cwd: OUTDIR, src: ['**'], 
+                        dest: 'oxygen-' + pkg.version + '-osx-x64'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
+                        dest: 'oxygen-' + pkg.version + '-osx-x64/server'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'src/recorder', src: ['CARoot.cer'], 
+                        dest: 'oxygen-' + pkg.version + '-osx-x64'
                     }
                 ]
             }

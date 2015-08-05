@@ -61,7 +61,10 @@ module.exports = function(grunt) {
             fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Resources/atom.icns');
             fs.unlinkSync(path.join(distPath, 'version'));
             fs.unlinkSync(path.join(distPath, 'LICENSE'));  
-            
+            // grunt-contrib-compress fails on broken links, so we remove those
+            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Frameworks/Electron Framework.framework/Frameworks');
+            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Frameworks/Electron Framework.framework/Libraries/Libraries');
+
             // rename
             fs.renameSync(cfg.dist + '/Electron.app/Contents/MacOS/' + electronExeDarwin, 
                             cfg.dist + '/Electron.app/Contents/MacOS/Oxygen');
