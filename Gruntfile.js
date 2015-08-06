@@ -141,6 +141,11 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
+                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
                     }
                 ], 
                 verbose: true
@@ -224,6 +229,11 @@ module.exports = function(grunt) {
                         cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
                         dest: 'oxygen-' + pkg.version + '-osx-x64/server'
                     },
+                    { 
+                        expand: true, 
+                        cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
+                        dest: 'oxygen-' + pkg.version + '-osx-x64/server'
+                    },                    
                     { 
                         expand: true, 
                         cwd: 'src/recorder', src: ['CARoot.cer'], 
