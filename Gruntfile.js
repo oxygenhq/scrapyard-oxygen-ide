@@ -146,7 +146,17 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    }
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
+                        dest: OUTDIR + '/Oxygen.app/Server'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
+                        dest: OUTDIR + '/Oxygen.app/Server'
+                    },  
                 ], 
                 verbose: true
             },
@@ -187,6 +197,9 @@ module.exports = function(grunt) {
                     src: [process.platform === 'linux' ? 
                             OUTDIR + '/selenium/chromedriver' :
                             OUTDIR + RESOURCES + '/../selenium/chromedriver']                    
+            },
+            'server-osx': {
+                    src: [OUTDIR + '/Oxygen.app/Server/oxygen-server']                    
             }
         },
         compress: {
@@ -223,17 +236,7 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: OUTDIR, src: ['**'], 
                         dest: 'oxygen-' + pkg.version + '-osx-x64'
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
-                        dest: 'oxygen-' + pkg.version + '-osx-x64/server'
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
-                        dest: 'oxygen-' + pkg.version + '-osx-x64/server'
-                    },                    
+                    },                  
                     { 
                         expand: true, 
                         cwd: 'src/recorder', src: ['CARoot.cer'], 
