@@ -461,5 +461,19 @@ module.exports = function(execMethod) {
      * @return {String} The alert's text.
      */
     module.getAlertText = function() { return execMethod('web', 'getAlertText', Array.prototype.slice.call(arguments)); };
+    /**
+     * @summary Executes JavaScript in the context of the currently selected frame or window.
+     * @description The return value is serialized into a JSON string. If the value is null or there
+     *              is no return value, <code>null</code> is returned. <br/>
+     *              DOM object return values are not supported. If value is a DOM object such as 
+     *              <code>document</code> or an element returned by <code>getElementById()</code>, 
+     *              null is returned instead.<br/>
+     *              If the value cannot be serialized due to its size or circular-references the 
+     *              test will fail with "Maximum call stack size exceeded" error.
+     * @function executeScript
+     * @param {String} script - The JavaScript to execute.
+     * @return {String} The return value serialized as a JSON string.
+     */
+    module.executeScript = function() { return execMethod('web', 'executeScript', Array.prototype.slice.call(arguments)); };
     return module;
 };
