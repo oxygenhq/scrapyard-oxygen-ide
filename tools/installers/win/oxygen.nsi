@@ -4,10 +4,11 @@
 !define PRODUCT_WEB_SITE "http://www.oxygenhq.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\oxygenide.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define CHROME_EXTENSION_KEY_X86 "Software\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
 !define CHROME_EXTENSION_KEY_X64 "Software\Wow6432Node\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
+!define ENHANCED_PROTECTED_MODE_KEY "Software\Microsoft\Internet Explorer\Main"
 
+!include WinVer.nsh
 !include x64.nsh
 !include EnvVarUpdate.nsh
 
@@ -89,12 +90,12 @@ SectionEnd
 Section -Post
     WriteUninstaller "$INSTDIR\uninst.exe"
     WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\oxygenide.exe"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\oxygenide.exe"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+    WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+    WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+    WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\oxygenide.exe"
+    WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+    WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+    WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
 
 ; Section descriptions
@@ -134,6 +135,11 @@ Function RegisterExtensionIE
     # register new version
     nsExec::Exec '"$R0\v4.0.30319\regasm.exe" "$INSTDIR\IEAddon.dll" /silent /codebase'
 
+    # disable Enhanced Protected Mode on Windows 8+
+    ${If} ${AtLeastWin8}
+        WriteRegStr HKCU "${ENHANCED_PROTECTED_MODE_KEY}" "Isolation" "PMIL"
+    ${EndIf}
+    
     Pop $R0
 FunctionEnd
 
@@ -224,7 +230,7 @@ Section Uninstall
     ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR\server"
 
     # remove installation reg keys
-    DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+    DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
     DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
 
     SetAutoClose true
