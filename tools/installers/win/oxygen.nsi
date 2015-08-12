@@ -7,6 +7,7 @@
 !define CHROME_EXTENSION_KEY_X86 "Software\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
 !define CHROME_EXTENSION_KEY_X64 "Software\Wow6432Node\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
 !define ENHANCED_PROTECTED_MODE_KEY "Software\Microsoft\Internet Explorer\Main"
+!define IE_ZONE_KEY "Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
 
 !include WinVer.nsh
 !include x64.nsh
@@ -140,6 +141,11 @@ Function RegisterExtensionIE
         WriteRegStr HKCU "${ENHANCED_PROTECTED_MODE_KEY}" "Isolation" "PMIL"
     ${EndIf}
     
+    # disable Protected Mode for all zones
+    WriteRegDWORD HKCU "${IE_ZONE_KEY}\1" "2500" 3
+    WriteRegDWORD HKCU "${IE_ZONE_KEY}\2" "2500" 3
+    WriteRegDWORD HKCU "${IE_ZONE_KEY}\3" "2500" 3
+    WriteRegDWORD HKCU "${IE_ZONE_KEY}\4" "2500" 3
     Pop $R0
 FunctionEnd
 
