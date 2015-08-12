@@ -8,6 +8,8 @@
 !define CHROME_EXTENSION_KEY_X64 "Software\Wow6432Node\Google\Chrome\Extensions\nddikidjcckpefjbnnnpfokienpkondf"
 !define ENHANCED_PROTECTED_MODE_KEY "Software\Microsoft\Internet Explorer\Main"
 !define IE_ZONE_KEY "Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
+!define IE_FEATURE_BFCACHE_KEY_X86 "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BFCACHE"
+!define IE_FEATURE_BFCACHE_KEY_X64 "Software\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BFCACHE"
 
 !include WinVer.nsh
 !include x64.nsh
@@ -146,6 +148,18 @@ Function RegisterExtensionIE
     WriteRegDWORD HKCU "${IE_ZONE_KEY}\2" "2500" 3
     WriteRegDWORD HKCU "${IE_ZONE_KEY}\3" "2500" 3
     WriteRegDWORD HKCU "${IE_ZONE_KEY}\4" "2500" 3
+    
+    # add FEATURE_BFCACHE key for IE 11
+    GetDllVersion "$SYSDIR\mshtml.dll" $R1 $R2
+    IntOp $R2 $R1 / 0x00010000
+    StrCpy $0 "$R2" 
+    ${If} $0 == "11"
+        SetRegView 64
+        WriteRegDWORD HKLM "${IE_FEATURE_BFCACHE_KEY_X64}" "iexplore.exe" 0
+        SetRegView 32
+        WriteRegDWORD HKLM "${IE_FEATURE_BFCACHE_KEY_X86}" "iexplore.exe" 0
+    ${EndIf}
+    
     Pop $R0
 FunctionEnd
 
