@@ -256,6 +256,8 @@ Function CheckOpenApps
     !insertmacro FindProc $oxygenFound "oxygenide.exe"
     Var /GLOBAL oxygenServerFound
     !insertmacro FindProc $oxygenServerFound "oxygen-server.exe"
+    Var /GLOBAL chromeFound
+    !insertmacro FindProc $chromeFound "chrome.exe"
     
     ${If} $ieFound == "0"
         StrCpy $0 "Internet Explorer$\n"
@@ -266,12 +268,16 @@ Function CheckOpenApps
     ${If} $oxygenServerFound == "0"
         StrCpy $2 "Oxygen Server$\n"
     ${EndIf}
+    ${If} $chromeFound == "0"
+        StrCpy $3 "Chrome$\n"
+    ${EndIf}
     
     ${If} $ieFound == 0
     ${OrIf} $oxygenFound == 0
     ${OrIf} $oxygenServerFound == 0
+    ${OrIf} $chromeFound == 0
         MessageBox MB_OK|MB_ICONSTOP "Following applications must be closed before running the setup:$\n$\n\
-             $0$1$2"
+             $0$1$2$3"
         abort
     ${EndIf}
 FunctionEnd
