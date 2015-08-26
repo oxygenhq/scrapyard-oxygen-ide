@@ -23,8 +23,8 @@
     "doctrine": "0.6.4",
     "electron-edge": "git+https://github.com/oxygenhq/electron-edge.git",
     "opn": "^3.0.2",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#2f59187be7f87a7f6eb580b2664b36d0b6a4618c",
-    "oxygen-server": "git+https://github.com/oxygenhq/oxygen-server.git#ad481e3c8e7196135b8fb8e5eabfa27f38df1aad"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#0ca7c542ec037071097551963079a3ecf4ae4bff",
+    "oxygen-server": "git+https://github.com/oxygenhq/oxygen-server.git#534ec41f6db6576ea066a676e00dbfb341a2e3d7"
   },
   "repository": {
     "type": "git",
