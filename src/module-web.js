@@ -42,7 +42,9 @@ module.exports = function(execMethod) {
      */
     module.setBaseUrl = function() { return execMethod('web', 'setBaseUrl', Array.prototype.slice.call(arguments)); };
     /**
-     * @summary Opens new transaction. The transaction will persist till a new one is opened.
+     * @summary Opens new transaction.
+     * @description The transaction will persist till a new one is opened. Transaction names must be
+     *              unique.
      * @function transaction
      * @param {String} transactionName - The transaction name.
      */
