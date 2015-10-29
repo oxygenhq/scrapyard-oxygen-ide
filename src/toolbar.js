@@ -123,7 +123,7 @@
             this.add(btnSettings);
             btnSettings.setClickHandler(this.settings);
             // record button
-            var btnRecord= this.btnRecord = new ToolbarButton('tb-camera', false, true);
+            var btnRecord= this.btnRecord = new ToolbarButton('tb-record', false, true);
             this.add(btnRecord);
             btnRecord.setClickHandler(this.record);
         };
@@ -202,12 +202,12 @@
                 this.recorder.stop();
                 this.parentElement.btnStart.enable();
                 this.recordingActive = false;
-                this.parentElement.btnRecord.deactivate('tb-camera-active');  
+                this.parentElement.btnRecord.deactivate('tb-record-active');  
             } else {
                 this.parentElement.btnStart.disable();
                 this.parentElement.btnStop.disable();
                 this.recordingActive = true;
-                this.parentElement.btnRecord.activate('tb-camera-active');
+                this.parentElement.btnRecord.activate('tb-record-active');
                 this.recorder = new Recorder();
             }
         };

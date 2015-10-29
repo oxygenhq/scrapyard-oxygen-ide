@@ -1,27 +1,28 @@
 cb-toolbar {
-    background: #e8e8e8;
+    background-image: url("../img/tb-background.png");
+    background-repeat: repeat-x;
     border-top: 1px solid #aaaaaa;
     border-bottom: 1px solid #aaaaaa;
-    height: 30px;
+    height: 43px;
     width: 100%;
     display: block;
     -webkit-user-select: none;
 }
 
 cb-toolbar select {
-    margin-top: 6px;
-    margin-left: 8px;
+    margin-top: 12px;
+    margin-left: 14px;
 }
 
 cb-toolbar .btn {
-    height:22px;
-    min-width:22px;
-    margin-top:3px;
-    margin-left:5px;
-    border: 1px solid #e8e8e8;
+    height:26px;
+    min-width:26px;
+    margin-top:8px;
+    margin-left:8px;
+    border: 1px solid transparent;
     float:left;
     background-repeat: no-repeat;
-    background-position: 3px center;
+    background-position: 2px center;
 }
 
 cb-toolbar .btn.right {
@@ -30,10 +31,10 @@ cb-toolbar .btn.right {
 }
 
 cb-toolbar .btn span {
-    padding-left: 22px;
+    padding-left: 26px;
     padding-right: 4px;
     position: relative;
-    top: 1px;
+    top: 3px;
     font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
@@ -87,27 +88,30 @@ cb-toolbar .btn.tb-settings {
     background-image: url("../img/tb-settings.png");
 }
 
-cb-toolbar .btn.tb-camera {
-    background-image: url("../img/tb-camera.png");
+cb-toolbar .btn.tb-record {
+    background-image: url("../img/tb-record.png");
 }
 
-cb-toolbar .btn.tb-camera-active {
+cb-toolbar .btn.tb-record-active {
     background-color: #b03939;
     border: 1px solid #717171;
     border-radius: 50%;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    background-color:#ececec;
 }
 
 cb-toolbar .btn:hover {
-    border: 1px solid #717171;
-    border-radius: 2px;
-    background-color:#c4c4c4;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    background-color:#ececec;
 }
 
 cb-toolbar .separator {
     height: 22px;
     width: 1px;
-    margin-top: 4px;
+    margin-top: 11px;
     margin-left: 4px;
-    border-right: 1px solid #cdcdcd;
+    border-right: 1px solid #aeaeae;
     float:left;
 }
