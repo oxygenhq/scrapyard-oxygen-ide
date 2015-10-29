@@ -52,6 +52,10 @@ cb-toolbar .btn.tb-new {
     background-image: url("../img/tb-new.png");
 }
 
+cb-toolbar .btn.tb-open {
+    background-image: url("../img/tb-open.png");
+}
+
 cb-toolbar .btn.tb-save {
     background-image: url("../img/tb-save.png");
 }

@@ -100,29 +100,7 @@ document.addEventListener('mouseup', function (e) {
 var editor = new Editor(); 
 toolbar.btnSave.setClickHandler(editor.save);
 ipc.on('file-open', function () {
-    var file = dialog.showOpenDialog(
-        currentWin, 
-        { 
-            properties: [ 'openFile', 'openFile' ],
-            filters: 
-            [
-                { name: 'JavaScript', extensions: ['js'] },
-                { name: 'All Files', extensions: ['*'] }
-            ]
-        }
-    );
-    if (file) {
-        editor.currentFilename = file[0];
-        setWindowTitle(path.basename(file[0], '.js'));
-        fs.readFile(file[0], 'utf8', function (err,data) {
-            if (err) {
-                return console.log(err);
-            }
-            // strip BOM before sending to the editor
-            editor.setContent(data.replace(/^\uFEFF/, ''));
-            toolbar.btnSave.disable();
-        });
-    }
+    editor.open();
 });
 ipc.on('file-save', function () {
     editor.save();

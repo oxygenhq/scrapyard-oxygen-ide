@@ -59,6 +59,10 @@
             var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false);
             this.add(btnNew);
             btnNew.setClickHandler(function() { editor.new(); });
+            // open button
+            var btnOpen = this.btnOpen = new ToolbarButton('tb-open', false, false);
+            this.add(btnOpen);
+            btnOpen.setClickHandler(function() { editor.open(); });
             // save button
             var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
             this.add(btnSave);
