@@ -206,12 +206,14 @@
                 this.recorder.stop();
                 this.parentElement.btnStart.enable();
                 this.recordingActive = false;
-                this.parentElement.btnRecord.deactivate('tb-record-active');  
+                this.parentElement.btnRecord.deactivate('tb-record-red');  
+                this.parentElement.btnRecord.activate('tb-record');   
             } else {
                 this.parentElement.btnStart.disable();
                 this.parentElement.btnStop.disable();
                 this.recordingActive = true;
-                this.parentElement.btnRecord.activate('tb-record-active');
+                this.parentElement.btnRecord.deactivate('tb-record');  
+                this.parentElement.btnRecord.activate('tb-record-red');  
                 this.recorder = new Recorder();
             }
         };

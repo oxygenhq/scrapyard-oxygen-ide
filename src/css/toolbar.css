@@ -96,13 +96,8 @@ cb-toolbar .btn.tb-record {
     background-image: url("../img/tb-record.png");
 }
 
-cb-toolbar .btn.tb-record-active {
-    background-color: #b03939;
-    border: 1px solid #717171;
-    border-radius: 50%;
-    border: 1px solid #c0c0c0;
-    border-radius: 3px;
-    background-color:#ececec;
+cb-toolbar .btn.tb-record-red {
+    background-image: url("../img/tb-record-red.png");
 }
 
 cb-toolbar .btn:hover {
