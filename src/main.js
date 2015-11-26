@@ -1,4 +1,5 @@
 var app = require('app');
+var globalShortcut = require('global-shortcut');
 var BrowserWindow = require('browser-window');
 var Menu = require('menu');
 var MenuItem = require('menu-item');
@@ -33,6 +34,8 @@ app.on('ready', function() {
     });
     // prevent native window title updating to that of <title> element when clicking on <a href="#">
     mainWindow.on('page-title-updated', function(e) { e.preventDefault(); });
+  
+    globalShortcut.register('CommandOrControl+Shift+I', function() { mainWindow.toggleDevTools(); });
   
     var template = [];
 
@@ -144,13 +147,6 @@ app.on('ready', function() {
             {
                 label: '&Documentation',
                 click: function() { require('opn')('http://docs.oxygenhq.org'); }
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Toggle Developer Tools',
-                click: function() { mainWindow.toggleDevTools(); }
             },
             {
                 type: 'separator'
