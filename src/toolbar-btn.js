@@ -9,11 +9,12 @@
      * Section: Construction and Destruction
      */
      
-    function ToolbarButton(imgClass, disabled, right, text) {
+    function ToolbarButton(imgClass, disabled, right, tooltip, text) {
         this.text = text;
         this.right = right;
         this.imgClass = imgClass;
         this.disabled = disabled;
+        this.tooltip = tooltip;
     }
 
     ToolbarButton.prototype.createComponent = function() {
@@ -22,6 +23,9 @@
         clazz += (this.disabled ? ' disabled' : '');
         clazz += this.right ? ' right': '';
         div.setAttribute('class', clazz);
+        if (this.tooltip !== undefined) {
+            div.setAttribute('title', this.tooltip);
+        }
         div.onclick = this.onClick;
         
         if (this.text) {

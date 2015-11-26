@@ -56,49 +56,49 @@
 
         Toolbar.prototype.initializeContent = function() {
             // new button
-            var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false);
+            var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false, 'New');
             this.add(btnNew);
             btnNew.setClickHandler(function() { editor.new(); });
             // open button
-            var btnOpen = this.btnOpen = new ToolbarButton('tb-open', false, false);
+            var btnOpen = this.btnOpen = new ToolbarButton('tb-open', false, false, 'Open');
             this.add(btnOpen);
             btnOpen.setClickHandler(function() { editor.open(); });
             // save button
-            var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false);
+            var btnSave = this.btnSave = new ToolbarButton('tb-save', true, false, 'Save');
             this.add(btnSave);
             // separator
             this.add(new ToolbarSeparator());
             // cut button
-            var btnCut = this.btnCut = new ToolbarButton('tb-cut', true, false);
+            var btnCut = this.btnCut = new ToolbarButton('tb-cut', true, false, 'Cut');
             this.add(btnCut);
             btnCut.setClickHandler(function() { remote.getCurrentWindow().send('edit-cut'); });
             // copy button
-            var btnCopy = this.btnCopy = new ToolbarButton('tb-copy', true, false);
+            var btnCopy = this.btnCopy = new ToolbarButton('tb-copy', true, false, 'Copy');
             this.add(btnCopy);
             btnCopy.setClickHandler(function() { remote.getCurrentWindow().send('edit-copy'); });
             // paste button
-            var btnPaste = this.btnPaste = new ToolbarButton('tb-paste', false, false);
+            var btnPaste = this.btnPaste = new ToolbarButton('tb-paste', false, false, 'Paste');
             this.add(btnPaste);
             btnPaste.setClickHandler(function() { remote.getCurrentWindow().send('edit-paste'); });
             // separator
             this.add(new ToolbarSeparator());
             // undo button
-            var btnUndo = this.btnUndo = new ToolbarButton('tb-undo', true, false);
+            var btnUndo = this.btnUndo = new ToolbarButton('tb-undo', true, false, 'Undo');
             this.add(btnUndo);
             btnUndo.setClickHandler(function() { editor.undo(); });
             // redo button
-            var btnRedo = this.btnRedo = new ToolbarButton('tb-redo', true, false);
+            var btnRedo = this.btnRedo = new ToolbarButton('tb-redo', true, false, 'Redo');
             this.add(btnRedo);
             btnRedo.setClickHandler(function() { editor.redo(); });
             // separator
             this.add(new ToolbarSeparator());
             // run button
-            var btnStart = new ToolbarButton('tb-start', false, false, 'Run');
+            var btnStart = new ToolbarButton('tb-start', false, false, 'Run', 'Run');
             this.btnStart = btnStart;
             this.add(btnStart);
             btnStart.setClickHandler(this.start);
             // stop button
-            var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false);
+            var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false, 'Stop');
             this.add(btnStop);
             btnStop.setClickHandler(this.stop);            
             // browser dropdown
@@ -123,7 +123,7 @@
             };
             this.appendChild(browserSel);
             // settings
-            var btnSettings = this.btnSettings = new ToolbarButton('tb-settings', false, false);
+            var btnSettings = this.btnSettings = new ToolbarButton('tb-settings', false, false, 'Test Settings');
             this.add(btnSettings);
             btnSettings.setClickHandler(this.settings);
             // record button
