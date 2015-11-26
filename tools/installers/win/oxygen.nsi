@@ -39,6 +39,8 @@
 !insertmacro MUI_PAGE_FINISH
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
+; Prevent !warning: MUI_LANGUAGE should be inserted after the MUI_[UN]PAGE_* macros (macro:MUI_LANGUAGE:8)
+!insertmacro MUI_DEFAULT MUI_PAGE_UNINSTALLER_PREFIX "" 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
 
