@@ -12,7 +12,7 @@ process.chdir(path.dirname(__dirname));
 
 var env = process.env;
 env.npm_config_disturl = 'https://atom.io/download/atom-shell';
-env.npm_config_target = '0.26.1';
+env.npm_config_target = '0.35.1';
 // build ia32 on Windows 32/64-bit and x64 on Linux
 env.npm_config_arch = (process.platform === 'win32' ? 'ia32' : 'x64');
 
