@@ -102,11 +102,11 @@
      * Loads all the required modules.
      */
     module.exports.init = function() {
-        this.load('soap');
+        /*this.load('soap');
         this.load('db');
         this.load('log');
         this.load('web');
-        this.load('assert');
+        this.load('assert');*/
         return docs;
     };
     

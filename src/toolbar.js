@@ -26,7 +26,7 @@
     var tmp = require('tmp');
     var path = require('path');
     var remote = require('remote');
-    var ScriptChild = require('./script-child');
+    var TestRunner = require('./test-runner');
     var dialog = remote.require('dialog');
                 
     var Toolbar = (function(_super) {
@@ -148,34 +148,23 @@
         /**
          * Executes user script.
          */
-        Toolbar.prototype.start = function() {       
+		Toolbar.prototype.start = function() {       
             logGeneral.clear();
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
             this.parentElement.btnStart.setText('Continue');
             editor.disable();
 
-            // inject boilerplate with the user script
+            // get script content
             var script = editor.getContent();
-            var boilerplate = fs.readFileSync(path.resolve(__dirname, 'script-boilerplate.js'))+'';
-            // TODO: should probably optimize this...
-            var boilerplateLines = boilerplate.split('\n');
-            var userScriptOffset;
-            for (var i = 0; i < boilerplateLines.length; i++) {
-                if (boilerplateLines[i].indexOf('//%%USER_SCRIPT%%') > -1) {
-                    userScriptOffset = i - 1;
-                    break;
-                }
-            }
-            boilerplate = boilerplate.replace('//%%USER_SCRIPT%%', script);
 
-            // and create a tmp file
+            // and save it in a new tmp file
             var tmpFile = tmp.fileSync();
-            fs.writeFile(tmpFile.name, boilerplate, function (err) {
+            fs.writeFile(tmpFile.name, script, function (err) {
                 if (err) throw err;
             });
 
-            toolbar.scriptChild = new ScriptChild(tmpFile.name, userScriptOffset);
+            toolbar.testRunner = new TestRunner(tmpFile.name);
         };
     
         /**
@@ -183,7 +172,7 @@
          */
         Toolbar.prototype.stop = function() {
             logGeneral.add('INFO', 'Stopping...');
-            toolbar.scriptChild.kill(); 
+            toolbar.testRunner.kill(); 
         };
         
         /**
