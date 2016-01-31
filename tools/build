@@ -7,6 +7,7 @@ process.chdir(path.dirname(__dirname));
 var gruntPath = path.join('node_modules', '.bin', 'grunt') + (process.platform === 'win32' ? '.cmd' : '');
 var args = process.argv.slice(2);
 var child = cp.exec(gruntPath + ' --gruntfile="' + path.resolve('Gruntfile.js') + '" ' + args, 
+                    { maxBuffer: 1024 * 1024 },
                     function(error, stdout, stderr) {
                         if (error) {
                             process.exit(error.code || 1);
