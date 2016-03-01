@@ -157,6 +157,14 @@ ipc.on('view-event-log', function () {
         currentWin.menu.check('Event Log', false); 
     }
 });
+ipc.on('global-settings', function () {
+    if (document.getElementById('modal-global-settings').className.indexOf('show') >= 0) {
+        return;
+    }
+    document.getElementById('chromeBinary').value = require('./settings.json').chrome.binary;
+    document.getElementById('modal-global-settings').className = 
+        document.getElementById('modal-global-settings').className + " show";
+});
 
 var paneMain = document.getElementById('left-pane');
 paneMain.appendChild(editor);
@@ -206,6 +214,11 @@ function hideSettings() {
         document.getElementById('modal-settings').className.replace(/\bshow\b/,'');
 }
 
+function hideGlobalSettings() {
+     document.getElementById('modal-global-settings').className = 
+        document.getElementById('modal-global-settings').className.replace(/\bshow\b/,'');
+}
+
 function selectParamsFile() {
     var file = selectFile(
         [
@@ -235,8 +248,23 @@ function selectConfigFile() {
     }
 }
 
+function selectChromeBinary() {
+    var file = selectFile(
+        [
+            { name: 'All Files', extensions: ['*'] }
+        ]
+    );                   
+    if (file) {
+        document.getElementById('chromeBinary').value = file;
+    }
+}
+
 function clearConfigFile() {
     document.getElementById('configFilePath').value = '';
+}
+
+function clearChromeBinary() {
+    document.getElementById('chromeBinary').value = '';
 }
 
 function selectFile(filters) {
@@ -262,6 +290,22 @@ function runtimeSettingsSave() {
     runtimeSettings.paramNextValue = nv.options[nv.selectedIndex].value;
     
     hideSettings();
+}
+
+function globalSettingsSave() {
+    var cfg = require('./settings.json')
+    cfg.chrome.binary = document.getElementById('chromeBinary').value;
+
+    fs.writeFile(path.resolve(__dirname, 'settings.json'), 
+        JSON.stringify(cfg, null, 2), 
+        function (err) {
+            if (err) {  
+                console.log(err);
+                return;
+            }
+    });
+
+    hideGlobalSettings();
 }
 
 // initialize Selenium server

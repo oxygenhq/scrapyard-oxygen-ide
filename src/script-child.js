@@ -23,7 +23,8 @@ var fork = require('child_process').fork;
                 runtimeSettings.configFilePath,
                 runtimeSettings.iterations,
                 runtimeSettings.paramNextValue,
-                selSettings.port
+                selSettings.port,
+                require('./settings.json').chrome.binary
             ],
             { execArgv: ['--debug-brk=' + dbgPort] }
         ); 

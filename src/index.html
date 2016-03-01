@@ -72,6 +72,22 @@
       </div>
     </div>
 
+    <div class="modal" id="modal-global-settings" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-header">Global Settings</div>
+        <div class="modal-body">
+            <span>Chrome binary path (leave empty if installed at default location):</span>
+            <input id="chromeBinary" type="text" class="input-path" />
+            <div class="clear" onclick="clearChromeBinary();"></div> 
+            <input type="button" value="Browse..." onclick="selectChromeBinary();" />
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="cancel" onclick="hideGlobalSettings();">Cancel</a> <a href="#" class="btn" onclick="globalSettingsSave();">Save</a>
+        </div>
+        </div>
+      </div>
+    </div>
+
     <script src="index.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

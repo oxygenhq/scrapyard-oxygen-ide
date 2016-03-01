@@ -2,8 +2,17 @@
   "selenium": {
     "basePath": "../../selenium",
     "jar": "selenium-server-standalone-2.47.1.jar",
-    "args": ["-timeout", "240", "-browserTimeout", "240", "-ensureCleanSession", 
-                "-trustAllSSLCertificates"],
+    "args": [
+      "-timeout",
+      "240",
+      "-browserTimeout",
+      "240",
+      "-ensureCleanSession",
+      "-trustAllSSLCertificates"
+    ],
     "port": 44444
+  },
+  "chrome": {
+    "binary": ""
   }
 }

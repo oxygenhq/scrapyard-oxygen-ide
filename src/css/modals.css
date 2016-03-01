@@ -118,3 +118,27 @@
 #modal-settings .clear:hover {
     opacity: 1.0;
 }
+
+/**************************************************************************************************
+ * Global Settings modal
+ *************************************************************************************************/
+ 
+#modal-global-settings .input-path {
+    width: 370px;
+}
+
+#modal-global-settings .clear {
+    width: 16px;
+    height: 16px;
+    margin-top: 6px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-image: url("../img/log-close.png");
+    position: absolute;
+    left: 380px;
+    opacity: 0.4;
+}
+
+#modal-global-settings .clear:hover {
+    opacity: 1.0;
+}

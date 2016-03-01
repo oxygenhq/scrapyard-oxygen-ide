@@ -141,6 +141,15 @@ app.on('ready', function() {
             }
         ]
     });
+        template.push({
+        label: '&Settings',
+        submenu: [
+            {
+                label: '&Global Settings',
+                click: function() { mainWindow.send('global-settings'); }
+            }
+        ]
+    });
     template.push({
         label: '&Help',
         submenu: [

@@ -23,6 +23,16 @@ try {
                             process.argv[5] : null);
     var paramNextValue = (process.argv[7] != 'undefined' && process.argv[7] !== ''  ? 
                             process.argv[7] : null);
+    var chromeBinary = (process.argv[9] != 'undefined' && process.argv[9] !== ''  ? 
+                            process.argv[9] : null);
+                            
+    // on Mac OS X user will browse for *.app file
+    // but we need full path to the executable, so we append it here
+    
+    if (process.platform === 'darwin' && chromeBinary !== null) {
+        chromeBinary += '/Contents/MacOS/Google Chrome';
+    }
+
     multiplexer(
         { 
             module: 'utils', 
@@ -32,7 +42,8 @@ try {
                 'http://127.0.0.1:' + process.argv[8] + '/wd/hub', 
                 paramFilePath, 
                 configFilePath,
-                paramNextValue
+                paramNextValue,
+                chromeBinary
             ]
         }, 
         true
