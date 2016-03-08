@@ -9,7 +9,7 @@ var remote = require('remote');
 var dialog = remote.require('dialog');
 var path = require('path');
 var cp = require('child_process');
-var cfg = require('./settings.json');
+var cfg = require('../../config/default.json');
 var pkg = require('./package.json');
 var selSettings = cfg.selenium;
 

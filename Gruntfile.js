@@ -73,7 +73,7 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        cwd: 'src', src: ['**'], 
+                        cwd: 'src', src: ['**', '!config/**'], 
                         dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
@@ -85,7 +85,13 @@ module.exports = function(grunt) {
                         expand: true, 
                         src: ['package.json', 'LICENSE'], 
                         dest: OUTDIR + RESOURCES + '/app' 
-                    }/*,
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'src', src: ['config/**'], 
+                        dest: OUTDIR
+                    },
+                    /*,
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll'], 
@@ -161,11 +167,6 @@ module.exports = function(grunt) {
             },
             windows: {
                 files: [
-                    { 
-                        expand: true, 
-                        cwd: 'src', src: ['**'], 
-                        dest: OUTDIR + RESOURCES + '/app' 
-                    },
                     { 
                         expand: true, 
                         cwd: 'selenium', src: ['*.jar'], 
