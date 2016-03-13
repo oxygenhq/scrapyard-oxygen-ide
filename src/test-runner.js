@@ -37,49 +37,48 @@
 		args.push('--web@initDriver=true');
 
 		var oxRunner = self.oxRunner = new require('oxygen').Runner();
-		// hook to various Oxygen events
-		oxRunner.on('initialized', function() {
-			try {
-			self.oxRunner.run(testsuite);
-			}
-			catch (e) {console.error(e);}
-		});
-		oxRunner.on('test-ended', function(tr) {
-			//saveTestResults(tr);
-			oxRunner.dispose();
-			// update UI elements
-			toolbar.btnStop.disable();
-            toolbar.btnStart.enable();
-            toolbar.btnStart.setText('Run');
-            toolbar.btnStart.setClickHandler(toolbar.start);
-            toolbar.btnStop.disable();
-            editor.clearBpHighlight();
-            editor.enable();
-			// TODO handle errors
-			//logGeneral.add('ERROR', 'Script terminated abruptly. Possibly due to a syntax error?');
-		});
-		oxRunner.on('test-error', function(e) {
-			//console.error(e);
-			if (e.line)
-				logGeneral.add('ERROR', e.message + ' at line ' + e.line);
-			else
-				logGeneral.add('ERROR', e.message);
-		});
 		oxRunner.on('breakpoint', function(breakpoint, testcase) {
 			if (breakpoint.body.sourceLine == 1)
 			{
 				oxRunner.debugContinue();
 				return;
 			}
-			console.dir(breakpoint);
 			editor.setBpHighlight(breakpoint.body.sourceLine);
 			toolbar.btnStart.enable();
 		});
-		oxRunner.on('disposed', function() {
+		oxRunner.on('test-error', function(err) {
+			var message = err.message;
+			if (err.line)
+				message += 'at line ' + err.line;
+			logGeneral.add('ERROR', message);
 		});
 		// initialize Oxygen
+		logGeneral.add('INFO', 'Initializing...');
 		try {
-		oxRunner.init(args, dbgPort);
+			oxRunner.init(args, dbgPort)
+			.then(function() {
+				logGeneral.add('INFO', 'Test started...');
+				return oxRunner.run(testsuite);
+			})
+			.then(function(tr) {
+				logGeneral.add('INFO', 'Test ended');
+				// update UI elements
+				toolbar.btnStop.disable();
+				toolbar.btnStart.enable();
+				toolbar.btnStart.setText('Run');
+				toolbar.btnStart.setClickHandler(toolbar.start);
+				toolbar.btnStop.disable();
+				editor.clearBpHighlight();
+				editor.enable();
+				return oxRunner.dispose();
+			})
+			.catch(function(e) {
+				if (e.line)
+					logGeneral.add('ERROR', e.message + ' at line ' + e.line);
+				else
+					logGeneral.add('ERROR', e.message);
+				logGeneral.add('Test failed!');
+			});
 		}
 		catch (e) {console.error(e);}
 
@@ -97,7 +96,20 @@
         });*/
 		
     }
-    
+    /**
+     * Set breakpoint.
+     */
+    TestRunner.prototype.setBreakpoint = function(line) {
+        this.oxRunner.kill();
+        logGeneral.add('INFO', 'Script terminated.');
+    };
+	/**
+     * Terminates script execution.
+     */
+    TestRunner.prototype.clearBreakpoint = function(line) {
+        this.oxRunner.kill();
+        logGeneral.add('INFO', 'Script terminated.');
+    };
     /**
      * Terminates script execution.
      */

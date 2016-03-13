@@ -171,8 +171,12 @@
          * Terminates currently executing script.
          */
         Toolbar.prototype.stop = function() {
+			this.parentElement.btnStop.disable();
             logGeneral.add('INFO', 'Stopping...');
             toolbar.testRunner.kill(); 
+			this.parentElement.btnStart.enable();
+            this.parentElement.btnStart.setText('Run');
+            editor.enable();
         };
         
         /**
