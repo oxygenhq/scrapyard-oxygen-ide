@@ -174,6 +174,7 @@
 			this.parentElement.btnStop.disable();
             logGeneral.add('INFO', 'Stopping...');
             toolbar.testRunner.kill(); 
+            this.parentElement.btnStart.setClickHandler(toolbar.start);
 			this.parentElement.btnStart.enable();
             this.parentElement.btnStart.setText('Run');
             editor.enable();
