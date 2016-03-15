@@ -140,7 +140,7 @@ Recorder.prototype.attach = function() {
             window.addEventListener(
                 "message", 
                 function(e) {
-                    if (e.data && e.data.indexOf('__frameLocators') === 0) {
+                    if (e.data && typeof e.data === "string" && e.data.indexOf('__frameLocators') === 0) {
                         window.__frameLocators = JSON.parse(e.data.substring('__frameLocators'.length));
                     }
                 }, 
