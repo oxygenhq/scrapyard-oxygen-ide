@@ -189,14 +189,14 @@
 
                 if (bps.length < row || bps.length === 0 || bps[row] != 'ace_breakpoint') {
                     e.editor.session.setBreakpoint(row);
-                    /*if (toolbar.testRunner) {
-                        toolbar.testRunner.setBreakpoint(row+1);
-                    } */ 
+                    if (toolbar.testRunner) {
+                        toolbar.testRunner.setBreakpoint(row);
+                    }
                 } else {
                     e.editor.session.clearBreakpoint(row);
-                    /*if (toolbar.testRunner) {
-                        toolbar.testRunner.clearBreakpoint(row+1);
-                    }*/
+                    if (toolbar.testRunner) {
+                        toolbar.testRunner.clearBreakpoint(row);
+                    }
                 }
 
                 e.stop();

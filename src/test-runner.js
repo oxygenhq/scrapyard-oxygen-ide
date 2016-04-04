@@ -94,16 +94,14 @@
      * Set breakpoint.
      */
     TestRunner.prototype.setBreakpoint = function(line) {
-        //this.oxRunner.kill();
-        console.log("testRunner.setBreakpoint done: " + line);
+        this.oxRunner.setBreakpoint(line);
     };
     
 	/**
      * Clear breakpoint.
      */
     TestRunner.prototype.clearBreakpoint = function(line) {
-       // this.oxRunner.kill();
-        console.log("testRunner.clearBreakpoint done: " + line);
+        this.oxRunner.clearBreakpoint(line);
     };
     
     /**
