@@ -11,7 +11,6 @@
         this.scriptFilename = scriptFilename;
         
 		// retrieve test settings from the UI
-        //__dirname
         var browserName = toolbar.browser;
         var paramFilePath = runtimeSettings.paramsFilePath;
         var poFilePath = runtimeSettings.configFilePath;
@@ -26,8 +25,6 @@
 		// mockup test suite object from js fileCreatedDate
 		var oxutil = require('oxygen').util;
 		var testsuite = oxutil.generateTestSuiteForSingleTestCase(oxutil.generateTestCaseFromJSFile(scriptFilename, paramFilePath, paramMode));
-		var bps = editor.getBreakpoints();
-		testsuite.testcases[0].breakpoints = bps;
 		testsuite.testcases[0].iterationCount = numOfIterations;
 		
 		// prepare module parameters
@@ -38,18 +35,13 @@
 
 		var oxRunner = self.oxRunner = new require('oxygen').Runner();
 		oxRunner.on('breakpoint', function(breakpoint, testcase) {
-			if (breakpoint.body.sourceLine == 1)
-			{
-				oxRunner.debugContinue();
-				return;
-			}
-			editor.setBpHighlight(breakpoint.body.sourceLine);
+			editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
 			toolbar.btnStart.enable();
 		});
 		oxRunner.on('test-error', function(err) {
 			var message = err.message;
 			if (err.line)
-				message += 'at line ' + err.line;
+				message += ' at line ' + err.line;
 			logGeneral.add('ERROR', message);
 		});
 		// initialize Oxygen
@@ -58,6 +50,8 @@
 			oxRunner.init(args, dbgPort)
 			.then(function() {
 				logGeneral.add('INFO', 'Test started...');
+                // assign current breakpoints
+                testsuite.testcases[0].breakpoints = editor.getBreakpoints();
 				return oxRunner.run(testsuite);
 			})
 			.then(function(tr) {
@@ -94,22 +88,24 @@
                 logGeneral.add(m.level, m.msg);
             }
         });*/
-		
     }
+    
     /**
      * Set breakpoint.
      */
     TestRunner.prototype.setBreakpoint = function(line) {
-        this.oxRunner.kill();
-        logGeneral.add('INFO', 'Script terminated.');
+        //this.oxRunner.kill();
+        console.log("testRunner.setBreakpoint done: " + line);
     };
+    
 	/**
-     * Terminates script execution.
+     * Clear breakpoint.
      */
     TestRunner.prototype.clearBreakpoint = function(line) {
-        this.oxRunner.kill();
-        logGeneral.add('INFO', 'Script terminated.');
+       // this.oxRunner.kill();
+        console.log("testRunner.clearBreakpoint done: " + line);
     };
+    
     /**
      * Terminates script execution.
      */
@@ -117,5 +113,4 @@
         this.oxRunner.kill();
         logGeneral.add('INFO', 'Script terminated.');
     };
-    
 }).call(this);
