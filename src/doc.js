@@ -5,7 +5,7 @@
     var fs = require('fs');
     var path = require('path');
     var doctrine = require('doctrine');
-
+    var modPath = path.resolve(__dirname, 'node_modules/oxygen/ox_modules');
     var exports = module.exports = {};
 
     var docs = {};
@@ -14,7 +14,7 @@
      * Loads up JSDoc comments from a module-*.js file and stores them in a JSON (Doctrine) form.
      */
     module.exports.load = function(moduleName) {
-        var file = path.resolve(__dirname, 'module-' + moduleName + '.js');
+        var file = path.join(modPath, moduleName);
         fs.readFile(file, 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);        // FIXME: proper error handling
@@ -94,7 +94,8 @@
                 comments.push(commentParsed);
             }
 
-            docs[moduleName] = {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
+            var name = moduleName.substring('module-'.length, moduleName.length - '.js'.length);
+            docs[name] = {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
         });
     };
 
@@ -102,11 +103,12 @@
      * Loads all the required modules.
      */
     module.exports.init = function() {
-        /*this.load('soap');
-        this.load('db');
-        this.load('log');
-        this.load('web');
-        this.load('assert');*/
+        var modules = fs.readdirSync(modPath)
+        for (var m of modules) {
+            if (m.startsWith('module-') && m.endsWith('.js')) {
+                this.load(m);
+            }
+        }
         return docs;
     };
     
