@@ -38,12 +38,19 @@
 			editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
 			toolbar.btnStart.enable();
 		});
+        oxRunner.on('line-pointer', function(line) {
+            editor.setCmdHighlight(line);
+		});
 		oxRunner.on('test-error', function(err) {
 			var message = err.message;
 			if (err.line)
 				message += ' at line ' + err.line;
 			logGeneral.add('ERROR', message);
 		});
+        oxRunner.on('ui-log-add', function(level, msg) {
+			logGeneral.add(level, msg);
+		});
+
 		// initialize Oxygen
 		logGeneral.add('INFO', 'Initializing...');
 		try {
@@ -80,14 +87,6 @@
             toolbar.btnStart.disable();
             oxRunner.debugContinue();
         });
-              
-        /*child.on('message', function(m) {
-            if (m.event === 'line-update') {
-                editor.setCmdHighlight(m.line - userScriptOffset - 1);
-            } else if (m.event === 'log-add') {
-                logGeneral.add(m.level, m.msg);
-            }
-        });*/
     }
     
     /**
