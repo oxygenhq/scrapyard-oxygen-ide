@@ -103,7 +103,7 @@
      * Loads all the required modules.
      */
     module.exports.init = function() {
-        var modules = fs.readdirSync(modPath)
+        var modules = fs.readdirSync(modPath);
         for (var m of modules) {
             if (m.startsWith('module-') && m.endsWith('.js')) {
                 this.load(m);
