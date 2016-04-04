@@ -38,9 +38,6 @@
 			editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
 			toolbar.btnStart.enable();
 		});
-        oxRunner.on('line-pointer', function(line) {
-            editor.setCmdHighlight(line);
-		});
 		oxRunner.on('test-error', function(err) {
 			var message = err.message;
 			if (err.line)
