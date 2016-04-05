@@ -47,6 +47,9 @@
         oxRunner.on('ui-log-add', function(level, msg) {
 			logGeneral.add(level, msg);
 		});
+        oxRunner.on('line-update', function(line) {
+            editor.setCmdHighlight(line);
+		});
 
 		// initialize Oxygen
 		logGeneral.add('INFO', 'Initializing...');
