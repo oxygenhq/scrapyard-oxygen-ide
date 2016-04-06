@@ -19,6 +19,7 @@ module.exports = function(grunt) {
         defaultTasks.push('msbuild:ieaddon');
     }
     defaultTasks.push('rebrand');
+    defaultTasks.push('prune-modules');
     defaultTasks.push('sync:main');
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
@@ -45,15 +46,6 @@ module.exports = function(grunt) {
     const OUTDIR = 'build';
     const RESOURCES = process.platform === 'darwin' ? 
                         '/Oxygen.app/Contents/Resources' : '/resources';
-    
-    var dependencies = [];
-    for(var dep in pkg.dependencies) {
-        // don't drag sources into dist. oxygen backend will be copied separately.
-       /* if (dep.indexOf('oxygen') === 0) {
-            continue;
-        }*/
-        dependencies.push(dep + '/**');
-    }
 
     grunt.initConfig({
         'download-electron': {
@@ -65,6 +57,8 @@ module.exports = function(grunt) {
             name: pkg.name,
             version: pkg.version,
             dist: OUTDIR,
+        },
+        'prune-modules': {
         },
         clean: 
             [OUTDIR],
@@ -78,7 +72,7 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules', src: dependencies, 
+                        cwd: 'node_modules', src: ['**', '.bin/oxygen-server*'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
