@@ -22,7 +22,6 @@ module.exports = function(grunt) {
             });
 
             fs.unlinkSync(path.join(distPath, 'version'));
-            fs.unlinkSync(path.join(distPath, 'pdf.dll'));
 
             // re-brand icon & version
             var child = cp.spawnSync(rceditPath, 

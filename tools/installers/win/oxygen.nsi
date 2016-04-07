@@ -58,7 +58,8 @@ Section "Common Files (Required)" SEC01
     
     SetOverwrite ifnewer
     SetOutPath "$INSTDIR"
-    File /r /x chromedriver /x CARoot.* /x pdf.dll "${BASEDIR}\build\*"
+    ; Exclude Release folder for fibers and electron-edge
+    File /r /x chromedriver /x CARoot.* /x pdf.dll /x Release "${BASEDIR}\build\*"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
 
