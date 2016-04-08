@@ -35,6 +35,7 @@
 
 		var oxRunner = self.oxRunner = new require('oxygen').Runner();
 		oxRunner.on('breakpoint', function(breakpoint, testcase) {
+            currentWin.show();
 			editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
 			toolbar.btnStart.enable();
 		});
