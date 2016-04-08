@@ -177,6 +177,7 @@
             this.parentElement.btnStart.setClickHandler(toolbar.start);
 			this.parentElement.btnStart.enable();
             this.parentElement.btnStart.setText('Run');
+            editor.clearBpHighlight();
             editor.enable();
         };
         
