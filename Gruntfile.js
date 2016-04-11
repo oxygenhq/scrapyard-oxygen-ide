@@ -32,6 +32,7 @@ module.exports = function(grunt) {
     } else if (process.platform === 'win32') {
         defaultTasks.push('sync:windows');
     }
+    defaultTasks.push('config-patch');
 
     grunt.registerTask('default', defaultTasks);
     
@@ -57,6 +58,9 @@ module.exports = function(grunt) {
             name: pkg.name,
             version: pkg.version,
             dist: OUTDIR,
+        },
+        'config-patch': {
+            dist: OUTDIR
         },
         'prune-modules': {
         },
