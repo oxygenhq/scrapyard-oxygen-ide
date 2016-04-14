@@ -51,6 +51,9 @@
         oxRunner.on('line-update', function(line) {
             editor.setCmdHighlight(line);
 		});
+        oxRunner.on('iteration-start', function(i) {
+            logGeneral.add('INFO', 'Starting iteration #' + i);
+		});
 
 		// initialize Oxygen
 		logGeneral.add('INFO', 'Initializing...');
