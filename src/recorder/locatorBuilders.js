@@ -282,7 +282,7 @@ LocatorBuilders.add('link', function(e) {
     if (e.nodeName == 'A') {
         var text = e.textContent;
         if (!text.match(/^\s*$/)) {
-            text = applyTextTransformation(e, text)
+            text = applyTextTransformation(e, text);
             return "link=" + text.replace(/\xA0/g, " ").replace(/^\s*(.*?)\s*$/, "$1");
         }
     }

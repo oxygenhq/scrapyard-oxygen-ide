@@ -94,10 +94,13 @@
         /*
          * Section: Global helpers
          */
-         
         Object.defineProperty(global, '__timeNow', {
             get: function(){
-                return (new Date()).toLocaleTimeString();
+                var date = new Date();
+                var h = date.getHours();
+                var m = date.getMinutes();
+                var s = date.getSeconds();
+                return (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
             }
         });
 

@@ -23,7 +23,7 @@ table[is=cb-logger-gen] td {
 }
 
 table[is=cb-logger-gen] td.date {
-    min-width: 85px;
+    min-width: 70px;
 }
 
 table[is=cb-logger-gen] td.level {

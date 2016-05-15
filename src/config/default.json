@@ -1,0 +1,23 @@
+{
+  "selenium": {
+    "basePath": "../../selenium",
+    "jar": "selenium-server-standalone-2.53.0.jar",
+    "args": [
+      "-timeout",
+      "240",
+      "-browserTimeout",
+      "240",
+      "-ensureCleanSession",
+      "-trustAllSSLCertificates"
+    ],
+    "port": 44444
+  },
+  "chrome": {
+    "binary": ""
+  },
+  "useFiber": false,
+  "logger": {
+    "log": "log.txt",
+    "loglevel": "error"
+  }
+}

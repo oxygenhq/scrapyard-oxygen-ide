@@ -9,9 +9,12 @@ var remote = require('remote');
 var dialog = remote.require('dialog');
 var path = require('path');
 var cp = require('child_process');
-var cfg = require('./settings.json');
+var cfg = require('../../config/default.json');
 var pkg = require('./package.json');
 var selSettings = cfg.selenium;
+
+// tell electron-edge that we are running from within the IDE
+process.env.ELECTRON = true;
 
 // retrieve current BrowserWindow object
 var currentWin = remote.getCurrentWindow();

@@ -58,16 +58,12 @@ Section "Common Files (Required)" SEC01
     
     SetOverwrite ifnewer
     SetOutPath "$INSTDIR"
-    File /r /x chromedriver /x CARoot.* /x pdf.dll "${BASEDIR}\build\*"
+    ; Exclude Release folder for fibers and electron-edge
+    File /r /x chromedriver /x CARoot.* /x pdf.dll /x Release "${BASEDIR}\build\*"
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
 
-    SetOutPath "$INSTDIR\server"
-    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\*.dll"
-    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\*.config"
-    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\Oxygen.pdb"
-    File "${BASEDIR}\node_modules\oxygen-server\bin\Release\oxygen-server.*"
-    ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\server"
+    ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\resources\app\node_modules\.bin"
 
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
@@ -249,7 +245,7 @@ Section Uninstall
     RMDir /r /REBOOTOK "$INSTDIR"
     
     # remove from PATH
-    ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR\server"
+    ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR\resources\app\node_modules\.bin"
 
     # remove installation reg keys
     DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
@@ -282,8 +278,6 @@ Function CheckOpenApps
     !insertmacro FindProc $ieFound "iexplore.exe"
     Var /GLOBAL oxygenFound
     !insertmacro FindProc $oxygenFound "oxygenide.exe"
-    Var /GLOBAL oxygenServerFound
-    !insertmacro FindProc $oxygenServerFound "oxygen-server.exe"
     Var /GLOBAL chromeFound
     !insertmacro FindProc $chromeFound "chrome.exe"
     
@@ -293,19 +287,15 @@ Function CheckOpenApps
     ${If} $oxygenFound == "0"
         StrCpy $1 "Oxygen IDE$\n"
     ${EndIf} 
-    ${If} $oxygenServerFound == "0"
-        StrCpy $2 "Oxygen Server$\n"
-    ${EndIf}
     ${If} $chromeFound == "0"
-        StrCpy $3 "Chrome$\n"
+        StrCpy $2 "Chrome$\n"
     ${EndIf}
     
     ${If} $ieFound == 0
     ${OrIf} $oxygenFound == 0
-    ${OrIf} $oxygenServerFound == 0
     ${OrIf} $chromeFound == 0
         MessageBox MB_OK|MB_ICONSTOP "Following applications must be closed before running the setup:$\n$\n\
-             $0$1$2$3"
+             $0$1$2"
         abort
     ${EndIf}
 FunctionEnd

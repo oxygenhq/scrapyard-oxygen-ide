@@ -18,8 +18,8 @@ module.exports = function(grunt) {
     if (process.platform === 'win32') {
         defaultTasks.push('msbuild:ieaddon');
     }
-    defaultTasks.push('msbuild:oxygensrv');
     defaultTasks.push('rebrand');
+    defaultTasks.push('prune-modules');
     defaultTasks.push('sync:main');
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
@@ -32,6 +32,7 @@ module.exports = function(grunt) {
     } else if (process.platform === 'win32') {
         defaultTasks.push('sync:windows');
     }
+    defaultTasks.push('config-patch');
 
     grunt.registerTask('default', defaultTasks);
     
@@ -46,19 +47,10 @@ module.exports = function(grunt) {
     const OUTDIR = 'build';
     const RESOURCES = process.platform === 'darwin' ? 
                         '/Oxygen.app/Contents/Resources' : '/resources';
-    
-    var dependencies = [];
-    for(var dep in pkg.dependencies) {
-        // don't drag sources into dist. oxygen backend will be copied separately.
-        if (dep.indexOf('oxygen') === 0) {
-            continue;
-        }
-        dependencies.push(dep + '/**');
-    }
 
     grunt.initConfig({
         'download-electron': {
-            version: '0.35.1',
+            version: '0.35.6',
             outputDir: OUTDIR,
             rebuild: false
         },
@@ -67,6 +59,11 @@ module.exports = function(grunt) {
             version: pkg.version,
             dist: OUTDIR,
         },
+        'config-patch': {
+            dist: OUTDIR
+        },
+        'prune-modules': {
+        },
         clean: 
             [OUTDIR],
         sync: {
@@ -74,12 +71,12 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        cwd: 'src', src: ['**'], 
+                        cwd: 'src', src: ['**', '!config/**'], 
                         dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules', src: dependencies, 
+                        cwd: 'node_modules', src: ['**', '.bin/oxygen-server*'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
@@ -89,9 +86,15 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
+                        cwd: 'src', src: ['config/**'], 
+                        dest: OUTDIR
+                    },
+                    /*,
+                    { 
+                        expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    },
+                    },*/
                 ], 
                 verbose: true
             },
@@ -111,12 +114,12 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'selenium/lin', src: ['chromedriver'], 
                         dest: OUTDIR + '/selenium'
-                    },
+                    }/*,
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    }
+                    }*/
                 ], 
                 verbose: true
             },
@@ -164,11 +167,6 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        cwd: 'src', src: ['**'], 
-                        dest: OUTDIR + RESOURCES + '/app' 
-                    },
-                    { 
-                        expand: true, 
                         cwd: 'selenium', src: ['*.jar'], 
                         dest: OUTDIR + '/selenium'
                     },
@@ -176,12 +174,12 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'selenium/win', src: ['*.exe'], 
                         dest: OUTDIR + '/selenium'
-                    },
+                    }/*,
                     { 
                         expand: true, 
                         cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.pdb'], 
                         dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    }
+                    }*/
                 ], 
                 verbose: true
             }
@@ -197,9 +195,6 @@ module.exports = function(grunt) {
                     src: [process.platform === 'linux' ? 
                             OUTDIR + '/selenium/chromedriver' :
                             OUTDIR + RESOURCES + '/../selenium/chromedriver']                    
-            },
-            'server-osx': {
-                    src: [OUTDIR + '/Oxygen.app/Server/oxygen-server']                    
             }
         },
         compress: {
@@ -213,11 +208,6 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: OUTDIR, src: ['**'], 
                         dest: 'oxygen-' + pkg.version + '-linux-x64'
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
-                        dest: 'oxygen-' + pkg.version + '-linux-x64/server'
                     },
                     { 
                         expand: true, 
@@ -262,38 +252,11 @@ module.exports = function(grunt) {
                 }
         },
         msbuild: {
-           /* no need to build separately since oxygen-server builds it anyway
-            oxygen: {
-                src: ['node_modules/oxygen/Oxygen.csproj'],
-                options: {
-                    projectConfiguration: 'Debug',
-                    targets: ['Clean', 'Rebuild'],
-                    version: 12.0,
-                    maxCpuCount: 4,
-                    buildParameters: {
-                        WarningLevel: 2
-                    },
-                    verbosity: 'minimal'
-                }
-            },*/
             ieaddon: {
                 src: ['browser-extensions/ie/IEAddon.csproj'],
                 options: {
                     projectConfiguration: 'Release',
                     targets: ['Clean', 'Rebuild'],
-                    version: 12.0,
-                    maxCpuCount: 4,
-                    buildParameters: {
-                        WarningLevel: 2
-                    },
-                    verbosity: 'minimal'
-                }
-            },
-            oxygensrv: {
-                src: ['node_modules/oxygen-server/OxygenServer.csproj'],
-                options: {
-                    projectConfiguration: 'Release',
-                    targets: ['Rebuild'],
                     version: 12.0,
                     maxCpuCount: 4,
                     buildParameters: {
