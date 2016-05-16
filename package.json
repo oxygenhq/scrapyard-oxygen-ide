@@ -22,9 +22,7 @@
     "tmp": "0.0.25",
     "doctrine": "0.6.4",
     "opn": "^3.0.2",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen.git#4617a8686f6759181664eb7e9eb353f61808d064",
-    "oxygen-server": "git+https://github.com/oxygenhq/oxygen-server.git#9f928b6985f78b1d82abd0b03849fffabccd701b"
-    "oxygen": "file:../oxygen-node"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#d5ef7a628694abd36ae8f9241b08f361312d65c4"
   },
   "repository": {
     "type": "git",
