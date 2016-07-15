@@ -141,7 +141,7 @@ app.on('ready', function() {
             }
         ]
     });
-        template.push({
+    /*template.push({
         label: '&Settings',
         submenu: [
             {
@@ -149,7 +149,7 @@ app.on('ready', function() {
                 click: function() { mainWindow.send('global-settings'); }
             }
         ]
-    });
+    });*/
     template.push({
         label: '&Help',
         submenu: [

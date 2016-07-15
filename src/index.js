@@ -164,7 +164,7 @@ ipc.on('global-settings', function () {
     if (document.getElementById('modal-global-settings').className.indexOf('show') >= 0) {
         return;
     }
-    document.getElementById('chromeBinary').value = require('./settings.json').chrome.binary;
+    document.getElementById('chromeBinary').value = require('../../config/default.json').chrome.binary;
     document.getElementById('modal-global-settings').className = 
         document.getElementById('modal-global-settings').className + " show";
 });
@@ -298,10 +298,9 @@ function runtimeSettingsSave() {
 }
 
 function globalSettingsSave() {
-    var cfg = require('./settings.json')
+    var cfg = require('../../config/default.json')
     cfg.chrome.binary = document.getElementById('chromeBinary').value;
-
-    fs.writeFile(path.resolve(__dirname, 'settings.json'), 
+    fs.writeFile(path.resolve(__dirname, '../../config/default.json'), 
         JSON.stringify(cfg, null, 2), 
         function (err) {
             if (err) {  
