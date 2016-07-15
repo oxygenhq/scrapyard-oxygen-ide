@@ -23,7 +23,7 @@ app.on('ready', function() {
         options.icon = __dirname + '/app.png';
     }
     mainWindow = new BrowserWindow(options);
-    mainWindow.loadUrl('file://' + __dirname + '/index.html');
+    mainWindow.loadURL('file://' + __dirname + '/index.html');
     mainWindow.focus();
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
