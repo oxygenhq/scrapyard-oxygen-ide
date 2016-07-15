@@ -48,6 +48,7 @@
 
         Toolbar.prototype.attachedCallback = function() {
             this.attached = true;
+            this.populateBrowsers();
         };
 
         Toolbar.prototype.detachedCallback = function() {
@@ -100,28 +101,23 @@
             // stop button
             var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false, 'Stop');
             this.add(btnStop);
-            btnStop.setClickHandler(this.stop);            
-            // browser dropdown
-            var browserSel = document.createElement("select");
-            browserSel.setAttribute('style', 'float:left;');
-            var browsers = [];
-            browsers.push(['Chrome', 'chrome']);
-            if (process.platform === 'win32') {
-                browsers.push(['Internet Explorer', 'ie']);
-            }
-            browsers.push(['Firefox', 'firefox']);
-            for (var browser of browsers) {
-                var opt = document.createElement("option"); 
-                opt.text = browser[0];
-                opt.value = browser[1];
-                browserSel.options.add(opt);
-            }
-            this.browser = browserSel.value;
+            btnStop.setClickHandler(this.stop);    
+
+            // browser/device dropdown
+            var devSel = document.createElement("select");
+            devSel.setAttribute('style', 'float:left;');
+            devSel.setAttribute('id', 'devSelect');
             var self = this;
-            browserSel.onchange = function(e) {
-                self.browser = e.currentTarget.value;
+            devSel.onchange = function(e) {
+                toolbar.targetDevice = e.currentTarget.value;
             };
-            this.appendChild(browserSel);
+            this.appendChild(devSel);
+
+            // web/mobile mode button
+            var btnMode = this.btnMode = new ToolbarButton('tb-mode-web', false, false);
+            this.add(btnMode);
+            btnMode.setClickHandler(this.mode);
+            
             // settings
             var btnSettings = this.btnSettings = new ToolbarButton('tb-settings', false, false, 'Test Settings');
             this.add(btnSettings);
@@ -212,6 +208,60 @@
                 this.parentElement.btnRecord.activate('tb-record-red');  
                 this.recorder = new Recorder();
             }
+        };
+       
+        /**
+         * Toggles between web & mobile modes
+         */
+        Toolbar.prototype.mode = function() {
+            if (this.modeMob || this.modeMob === undefined) {
+                this.modeMob = false;
+                this.parentElement.btnMode.deactivate('tb-mode-web');  
+                this.parentElement.btnMode.activate('tb-mode-mob');   
+                toolbar.populateMobileDevices();
+            } else {
+                this.modeMob = true;
+                this.parentElement.btnMode.deactivate('tb-mode-mob');  
+                this.parentElement.btnMode.activate('tb-mode-web');  
+                toolbar.populateBrowsers();
+            }
+        };
+        
+        Toolbar.prototype.populateBrowsers = function() {
+            var devSel = document.getElementById('devSelect');
+            devSel.options.length = 0;
+
+            var browsers = [];
+            browsers.push(['Chrome', 'chrome']);
+            if (process.platform === 'win32') {
+                browsers.push(['Internet Explorer', 'ie']);
+            }
+            // Selenium's firefox driver doesn't work with latest firefox versions.
+            // Need to migrate to Marionette driver.
+            //browsers.push(['Firefox', 'firefox']); 
+            for (var browser of browsers) {
+                var opt = document.createElement("option"); 
+                opt.text = browser[0];
+                opt.value = browser[1];
+                devSel.options.add(opt);
+            }
+            toolbar.targetDevice = devSel.value;
+        };
+
+        Toolbar.prototype.populateMobileDevices = function() {         
+            var devSel = document.getElementById('devSelect');
+            devSel.options.length = 0;
+            
+            var devices = [];
+            devices.push(['device_label', 'device_id']);
+            
+            for (var device of devices) {
+                var opt = document.createElement("option"); 
+                opt.text = device[0];
+                opt.value = device[1];
+                devSel.options.add(opt);
+            }
+            toolbar.targetDevice = devSel.value;
         };
         
         return Toolbar;

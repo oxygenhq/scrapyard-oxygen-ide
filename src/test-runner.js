@@ -11,7 +11,7 @@
         this.scriptFilename = scriptFilename;
         
 		// retrieve test settings from the UI
-        var browserName = toolbar.browser;
+        var browserName = toolbar.targetDevice;
         var paramFilePath = runtimeSettings.paramsFilePath;
         var poFilePath = runtimeSettings.configFilePath;
         var numOfIterations = runtimeSettings.iterations;
