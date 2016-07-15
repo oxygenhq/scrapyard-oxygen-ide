@@ -210,7 +210,7 @@ document.getElementById('log-header-selenium').addEventListener("change", functi
 });
 
 // runtime settings modal dialog 
-runtimeSettings = { iterations: 1 };
+runtimeSettings = { iterations: 1, reinitBrowser: false };
 
 function hideSettings() {
      document.getElementById('modal-settings').className = 
@@ -288,6 +288,8 @@ function runtimeSettingsSave() {
     if (iterations !== '') {
         runtimeSettings.iterations = iterations;
     }
+    
+    runtimeSettings.reinitBrowser = document.getElementById('reinitbrowser').checked;
     
     var nv = document.getElementById("paramNextValue");
     runtimeSettings.paramNextValue = nv.options[nv.selectedIndex].value;

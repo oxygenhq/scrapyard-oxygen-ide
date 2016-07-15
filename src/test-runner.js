@@ -26,12 +26,14 @@
 		var oxutil = require('oxygen').util;
 		var testsuite = oxutil.generateTestSuiteForSingleTestCase(oxutil.generateTestCaseFromJSFile(scriptFilename, paramFilePath, paramMode));
 		testsuite.testcases[0].iterationCount = numOfIterations;
+        testsuite.testcases[0].ReopenBrowser = runtimeSettings.reinitBrowser;
 		
 		// prepare module parameters
 		var args = [];
 		args.push('--web@seleniumUrl=http://localhost:' + seleniumPort + '/wd/hub');
 		args.push('--web@browserName=' + browserName);
 		args.push('--web@initDriver=true');
+        args.push('--web@reopenBrowser=' + (runtimeSettings.reinitBrowser || false));	
 
 		var oxRunner = self.oxRunner = new require('oxygen').Runner();
 		oxRunner.on('breakpoint', function(breakpoint, testcase) {

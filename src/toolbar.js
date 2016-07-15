@@ -189,6 +189,7 @@
             document.getElementById('paramsFilePath').value = runtimeSettings.paramsFilePath || '';
             document.getElementById('paramNextValue').value = runtimeSettings.paramNextValue || 'random';
             document.getElementById('configFilePath').value = runtimeSettings.configFilePath || '';
+            document.getElementById('reinitbrowser').checked = runtimeSettings.reinitBrowser || false;
             document.getElementById('modal-settings').className = 
                 document.getElementById('modal-settings').className + " show";
         };
