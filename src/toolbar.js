@@ -48,7 +48,7 @@
 
         Toolbar.prototype.attachedCallback = function() {
             this.attached = true;
-            this.populateBrowsers();
+            this.modeWeb();
         };
 
         Toolbar.prototype.detachedCallback = function() {
@@ -56,6 +56,25 @@
         };
 
         Toolbar.prototype.initializeContent = function() {
+            // web mode button
+            var btnModeWeb = this.btnModeWeb = new ToolbarButton('tb-mode-web', false, false);
+            this.add(btnModeWeb);
+            btnModeWeb.setClickHandler(this.modeWeb);
+            // mobile mode button
+            var btnModeMob = this.btnModeMob = new ToolbarButton('tb-mode-mob', false, false);
+            this.add(btnModeMob);
+            btnModeMob.setClickHandler(this.modeMob);
+            // browser/device dropdown
+            var devSel = document.createElement("select");
+            devSel.setAttribute('style', 'float:left;');
+            devSel.setAttribute('id', 'devSelect');
+            var self = this;
+            devSel.onchange = function(e) {
+                toolbar.targetDevice = e.currentTarget.value;
+            };
+            this.appendChild(devSel);
+            // separator
+            this.add(new ToolbarSeparator());
             // new button
             var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false, 'New');
             this.add(btnNew);
@@ -102,22 +121,8 @@
             var btnStop = this.btnStop = new ToolbarButton('tb-stop', true, false, 'Stop');
             this.add(btnStop);
             btnStop.setClickHandler(this.stop);    
-
-            // browser/device dropdown
-            var devSel = document.createElement("select");
-            devSel.setAttribute('style', 'float:left;');
-            devSel.setAttribute('id', 'devSelect');
-            var self = this;
-            devSel.onchange = function(e) {
-                toolbar.targetDevice = e.currentTarget.value;
-            };
-            this.appendChild(devSel);
-
-            // web/mobile mode button
-            var btnMode = this.btnMode = new ToolbarButton('tb-mode-web', false, false);
-            this.add(btnMode);
-            btnMode.setClickHandler(this.mode);
-            
+            // separator
+            this.add(new ToolbarSeparator());
             // settings
             var btnSettings = this.btnSettings = new ToolbarButton('tb-settings', false, false, 'Test Settings');
             this.add(btnSettings);
@@ -213,18 +218,18 @@
         /**
          * Toggles between web & mobile modes
          */
-        Toolbar.prototype.mode = function() {
-            if (this.modeMob || this.modeMob === undefined) {
-                this.modeMob = false;
-                this.parentElement.btnMode.deactivate('tb-mode-web');  
-                this.parentElement.btnMode.activate('tb-mode-mob');   
-                toolbar.populateMobileDevices();
-            } else {
-                this.modeMob = true;
-                this.parentElement.btnMode.deactivate('tb-mode-mob');  
-                this.parentElement.btnMode.activate('tb-mode-web');  
-                toolbar.populateBrowsers();
-            }
+        Toolbar.prototype.modeWeb = function() {
+            toolbar.modeMob = false;
+            toolbar.btnModeMob.deactivate('selected');  
+            toolbar.btnModeWeb.activate('selected');   
+            toolbar.populateBrowsers();
+        };
+        
+        Toolbar.prototype.modeMob = function() {
+            toolbar.modeMob = true;
+            toolbar.btnModeWeb.deactivate('selected');  
+            toolbar.btnModeMob.activate('selected');   
+            toolbar.populateMobileDevices();
         };
         
         Toolbar.prototype.populateBrowsers = function() {
