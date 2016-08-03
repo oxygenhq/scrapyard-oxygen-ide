@@ -28,6 +28,9 @@
     var remote = require('remote');
     var TestRunner = require('./test-runner');
     var dialog = remote.require('dialog');
+	var Promise = require('bluebird');
+	var adb = require('adbkit');
+	var adbClient = null;
                 
     var Toolbar = (function(_super) {
         __extends(Toolbar, _super);
@@ -56,25 +59,7 @@
         };
 
         Toolbar.prototype.initializeContent = function() {
-            // web mode button
-            var btnModeWeb = this.btnModeWeb = new ToolbarButton('tb-mode-web', false, false);
-            this.add(btnModeWeb);
-            btnModeWeb.setClickHandler(this.modeWeb);
-            // mobile mode button
-            var btnModeMob = this.btnModeMob = new ToolbarButton('tb-mode-mob', false, false);
-            this.add(btnModeMob);
-            btnModeMob.setClickHandler(this.modeMob);
-            // browser/device dropdown
-            var devSel = document.createElement("select");
-            devSel.setAttribute('style', 'float:left;');
-            devSel.setAttribute('id', 'devSelect');
-            var self = this;
-            devSel.onchange = function(e) {
-                toolbar.targetDevice = e.currentTarget.value;
-            };
-            this.appendChild(devSel);
-            // separator
-            this.add(new ToolbarSeparator());
+            
             // new button
             var btnNew = this.btnNew = new ToolbarButton('tb-new', false, false, 'New');
             this.add(btnNew);
@@ -110,6 +95,25 @@
             var btnRedo = this.btnRedo = new ToolbarButton('tb-redo', true, false, 'Redo');
             this.add(btnRedo);
             btnRedo.setClickHandler(function() { editor.redo(); });
+            // separator
+            this.add(new ToolbarSeparator());
+			// web mode button
+            var btnModeWeb = this.btnModeWeb = new ToolbarButton('tb-mode-web', false, false);
+            this.add(btnModeWeb);
+            btnModeWeb.setClickHandler(this.modeWeb);
+            // mobile mode button
+            var btnModeMob = this.btnModeMob = new ToolbarButton('tb-mode-mob', false, false);
+            this.add(btnModeMob);
+            btnModeMob.setClickHandler(this.modeMob);
+            // browser/device dropdown
+            var devSel = document.createElement("select");
+            devSel.setAttribute('style', 'float:left;');
+            devSel.setAttribute('id', 'devSelect');
+            var self = this;
+            devSel.onchange = function(e) {
+                toolbar.targetDevice = e.currentTarget.value;
+            };
+            this.appendChild(devSel);
             // separator
             this.add(new ToolbarSeparator());
             // run button
@@ -257,16 +261,37 @@
             var devSel = document.getElementById('devSelect');
             devSel.options.length = 0;
             
-            var devices = [];
-            devices.push(['device_label', 'device_id']);
-            
-            for (var device of devices) {
-                var opt = document.createElement("option"); 
-                opt.text = device[0];
-                opt.value = device[1];
-                devSel.options.add(opt);
-            }
-            toolbar.targetDevice = devSel.value;
+            var deviceList = [];
+			if (!adbClient)
+				adbClient = adb.createClient();
+
+			adbClient.listDevices()
+			  .then(function(devices) {
+				return Promise.filter(devices, function(device) {
+					deviceList.push([device.id, device.id]);
+				})
+			  })
+			  .then(function() {
+					if (deviceList.length == 0)
+					{
+						var opt = document.createElement("option"); 
+						opt.text = 'No devices';
+						devSel.options.add(opt);
+					}
+					else {
+						for (var device of deviceList) {
+							var opt = document.createElement("option"); 
+							opt.text = device[0];
+							opt.value = device[1];
+							devSel.options.add(opt);
+						}
+						toolbar.targetDevice = devSel.value;
+					}
+					
+			  })
+			  .catch(function(err) {
+				console.error('Something went wrong:', err.stack)
+			  });            
         };
         
         return Toolbar;
