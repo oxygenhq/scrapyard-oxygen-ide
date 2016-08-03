@@ -1646,7 +1646,7 @@ var FilteredList = function(array, filterText, mutateData) {
         this.filterText = str;
         matches = this.filterCompletions(matches, this.filterText);
         matches = matches.sort(function(a, b) {
-            return b.exactMatch - a.exactMatch || b.score - a.score;
+            return ((a.caption < b.caption) ? -1 : ((a.caption > b.caption) ? 1 : 0));
         });
         var prev = null;
         matches = matches.filter(function(item){

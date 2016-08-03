@@ -4,6 +4,13 @@
  *  NOTE: ext-language-tools.js needs to be patched to support autocomplete on dots '.'
  *        var ID_REGEX = /[a-zA-Z_0-9\$\-\u00A2-\uFFFF]/; 
  *        should be var ID_REGEX = /[a-zA-Z_0-9\.\$\-\u00A2-\uFFFF]/
+ *        
+ *        ext-language_tools.js also needs its sorting condition in this.setFilter changed to allow 
+ *        proper alphabetical sorting:
+ *
+ *          matches = matches.sort(function(a, b) {
+ *             return ((a.caption < b.caption) ? -1 : ((a.caption > b.caption) ? 1 : 0));
+ *          });
  */ 
 
 (function() {
