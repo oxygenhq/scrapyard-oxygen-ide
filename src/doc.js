@@ -20,7 +20,7 @@
                 return console.log(err);        // FIXME: proper error handling
             }
          
-            var regex = /(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/)|(\/\/.*)/g;
+            var regex = /(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/)/g;
 
             var commentRaw;
             var comments = [];
