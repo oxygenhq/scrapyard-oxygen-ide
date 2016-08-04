@@ -12,6 +12,7 @@
         
 		// retrieve test settings from the UI
         var browserName = toolbar.targetDevice;
+		var modeMobile = toolbar.modeMob;
         var paramFilePath = runtimeSettings.paramsFilePath;
         var poFilePath = runtimeSettings.configFilePath;
         var numOfIterations = runtimeSettings.iterations;
@@ -30,10 +31,16 @@
 		
 		// prepare module parameters
 		var args = [];
-		args.push('--web@seleniumUrl=http://localhost:' + seleniumPort + '/wd/hub');
-		args.push('--web@browserName=' + browserName);
-		args.push('--web@initDriver=true');
-        args.push('--web@reopenBrowser=' + (runtimeSettings.reinitBrowser || false));	
+		if (modeMobile) {
+			args.push('--mob@deviceName=' + browserName);
+			args.push('--mob@deviceOS=' + 'Android');
+		}
+		else {
+			args.push('--web@seleniumUrl=http://localhost:' + seleniumPort + '/wd/hub');
+			args.push('--web@browserName=' + browserName);
+			args.push('--web@initDriver=true');
+			args.push('--web@reopenBrowser=' + (runtimeSettings.reinitBrowser || false));		
+		}		
 
 		var oxRunner = self.oxRunner = new require('oxygen').Runner();
 		oxRunner.on('breakpoint', function(breakpoint, testcase) {
@@ -60,7 +67,8 @@
 		// initialize Oxygen
 		logGeneral.add('INFO', 'Initializing...');
 		try {
-			oxRunner.init(args, dbgPort)
+			var modeStr = modeMobile ? 'mob' : 'web';
+			oxRunner.init(args, modeStr, dbgPort)
 			.then(function() {
 				logGeneral.add('INFO', 'Test started...');
                 // assign current breakpoints

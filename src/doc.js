@@ -93,9 +93,14 @@
                 
                 comments.push(commentParsed);
             }
-
-            var name = moduleName.substring('module-'.length, moduleName.length - '.js'.length);
-            docs[name] = {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
+			var regexMatchModuleName = /^module-(\w+?)-\w+?\.js$/;
+			var result = moduleName.match(regexMatchModuleName);
+			if (result && result.length == 2)
+			{
+				var name = result[1];
+				docs[name] = {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
+			}
+			
         });
     };
 
