@@ -274,19 +274,26 @@
 			  .then(function() {
 					if (deviceList.length == 0)
 					{
+						console.log('device list is emptry');
 						var opt = document.createElement("option"); 
-						opt.text = 'No devices';
+						opt.text = '- No devices -';
+						opt.value = '';
+						opt.disabled = 'disabled';
 						devSel.options.add(opt);
 					}
 					else {
+						var selectOpt = document.createElement("option"); 
+							selectOpt.text = '- Select Device -';
+							selectOpt.value = '';
+						devSel.options.add(selectOpt);
 						for (var device of deviceList) {
 							var opt = document.createElement("option"); 
 							opt.text = device[0];
 							opt.value = device[1];
 							devSel.options.add(opt);
 						}
-						toolbar.targetDevice = devSel.value;
 					}
+					toolbar.targetDevice = devSel.value;
 					
 			  })
 			  .catch(function(err) {
