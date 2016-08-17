@@ -3,6 +3,7 @@
  */
  
 (function() {
+    setConfigDirPath();
     module.exports = TestRunner;
     function TestRunner(scriptFilename) {
         const portMin = 1024;
@@ -103,6 +104,10 @@
         });
     }
     
+    function setConfigDirPath() {
+        var path = require('path');
+        process.env.NODE_CONFIG_DIR = path.join( __dirname, '/node_modules/oxygen/config');
+    }
     /**
      * Set breakpoint.
      */

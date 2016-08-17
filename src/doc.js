@@ -90,8 +90,8 @@
                     }
                     return params;
                 };
-                
-                comments.push(commentParsed);
+                if (typeof commentParsed.getMethod() !== 'undefined')
+					comments.push(commentParsed);
             }
             
             var name = moduleName.substring('module-'.length, moduleName.length - '.js'.length);
