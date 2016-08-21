@@ -313,11 +313,11 @@ function globalSettingsSave() {
 }
 
 // initialize Selenium server
-var selArgs = ['-jar', selSettings.jar].concat(selSettings.args);
+var selArgs = [selSettings.jar].concat(selSettings.args);
 var chromedriver = (process.platform === 'win32' ? 'chromedriver.exe' : 'chromedriver');
-selArgs.push('-Dwebdriver.chrome.driver=' + chromedriver);
+selArgs.unshift('-Dwebdriver.chrome.driver=' + chromedriver);
 if (process.platform === 'win32') {
-    selArgs.push('-Dwebdriver.ie.driver=IEDriverServer_x86.exe');
+    selArgs.unshift('-Dwebdriver.ie.driver=IEDriverServer_x86.exe');
 }
 if (selSettings.port) {
     selArgs.push('-port');
@@ -325,6 +325,7 @@ if (selSettings.port) {
 } else {
     selSettings.port = 4444; // set default port if not specified
 }
+selArgs.unshift('-jar');
 
 var selProc = cp.spawn('java', selArgs, { cwd: path.resolve(__dirname, selSettings.basePath) });
 
