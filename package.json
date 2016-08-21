@@ -22,6 +22,7 @@
     "tmp": "0.0.25",
     "doctrine": "0.6.4",
     "opn": "^3.0.2",
+    "adbkit": "^2.5.1",
     "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#c784a6503de4f8c6cb36e2117075ba14a8926d68"
   },
   "repository": {
