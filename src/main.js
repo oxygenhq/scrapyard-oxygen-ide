@@ -1,8 +1,4 @@
-var app = require('app');
-var globalShortcut = require('global-shortcut');
-var BrowserWindow = require('browser-window');
-var Menu = require('menu');
-var MenuItem = require('menu-item');
+const {app, globalShortcut, BrowserWindow, Menu, MenuItem} = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.

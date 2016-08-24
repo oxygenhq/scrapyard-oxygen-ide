@@ -32,7 +32,7 @@
     
     var Range, langTools; // need to be global in order to prevent GC
     
-    var remote = require('remote');
+    var remote = require('electron').remote;
     require('./ace/ace');
     require('./ace/ext-language_tools');
 

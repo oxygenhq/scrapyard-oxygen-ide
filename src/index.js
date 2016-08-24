@@ -5,8 +5,7 @@ var LoggerSelenium = require('./logger-selenium');
 var doc = require('./doc');
 var ipc = require("electron").ipcRenderer;
 var fs = require('fs');
-var remote = require('remote');
-var dialog = remote.require('dialog');
+var remote = require('electron').remote;
 var path = require('path');
 var cp = require('child_process');
 var cfg = require('../../config/default.json');
@@ -271,7 +270,7 @@ function clearChromeBinary() {
 }
 
 function selectFile(filters) {
-    return dialog.showOpenDialog(
+    return remote.dialog.showOpenDialog(
         currentWin, 
         { 
             properties: [ 'openFile', 'openFile' ],

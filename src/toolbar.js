@@ -25,9 +25,9 @@
     var fs = require('fs');
     var tmp = require('tmp');
     var path = require('path');
-    var remote = require('remote');
+    var remote = require('electron').remote;
     var TestRunner = require('./test-runner');
-    var dialog = remote.require('dialog');
+    var dialog = remote.dialog;
 	var Promise = require('bluebird');
 	var adb = require('adbkit');
 	var adbClient = null;
