@@ -283,12 +283,18 @@ Function CheckOpenApps
     
     ${If} $ieFound == "0"
         StrCpy $0 "Internet Explorer$\n"
+    ${Else}
+        StrCpy $0 ""
     ${EndIf}
     ${If} $oxygenFound == "0"
         StrCpy $1 "Oxygen IDE$\n"
+    ${Else}
+        StrCpy $1 ""
     ${EndIf} 
     ${If} $chromeFound == "0"
         StrCpy $2 "Chrome$\n"
+    ${Else}
+        StrCpy $2 ""
     ${EndIf}
     
     ${If} $ieFound == 0
