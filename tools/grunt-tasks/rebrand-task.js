@@ -1,5 +1,4 @@
 var fs = require('fs');
-var rimraf = require('rimraf');
 var cp = require('child_process');
 var path = require('path');
 var os = require('os');
@@ -15,12 +14,7 @@ module.exports = function(grunt) {
             var rceditPath = path.resolve(__dirname, '..', 'utils', 'rcedit.exe');
 
             // remove unnecessary folders/files
-            rimraf.sync(cfg.dist + '/resources/default_app', function(err) {
-                if (err) {
-                     grunt.fail.fatal(err);
-                }
-            });
-
+            fs.unlinkSync(cfg.dist + '/resources/default_app.asar');
             fs.unlinkSync(path.join(distPath, 'version'));
 
             // re-brand icon & version
@@ -39,12 +33,7 @@ module.exports = function(grunt) {
                             cfg.dist + '/' + cfg.name + '.exe');
         } else if (os.platform() === 'linux') {
             // remove unnecessary folders/files
-            rimraf.sync(cfg.dist + '/resources/default_app', function(err) {
-                if (err) {
-                     grunt.fail.fatal(err);
-                }
-            });
-
+            fs.unlinkSync(cfg.dist + '/resources/default_app.asar');
             fs.unlinkSync(path.join(distPath, 'version'));
 
             // rename
@@ -52,12 +41,7 @@ module.exports = function(grunt) {
                             cfg.dist + '/' + cfg.name);
         } else if (os.platform() === 'darwin') {
             // remove unnecessary folders/files
-            rimraf.sync(cfg.dist + '/Electron.app/Contents/Resources/default_app', function(err) {
-                if (err) {
-                     grunt.fail.fatal(err);
-                }
-            });
-
+            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Resources/default_app.asar');
             fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Resources/atom.icns');
             fs.unlinkSync(path.join(distPath, 'version'));
             fs.unlinkSync(path.join(distPath, 'LICENSE'));  
