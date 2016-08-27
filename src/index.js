@@ -311,6 +311,13 @@ function globalSettingsSave() {
     hideGlobalSettings();
 }
 
+// kill any hanging selenium process (sometimes it doesn't die properly when exiting the IDE)
+// for now only on Windows.
+// TODO: we need to remove Selenium completely.
+if (process.platform === 'win32') {
+    cp.execSync('wmic process where commandline="java -jar -Dwebdriver.ie.driver=IEDriverServer_x86.exe -Dwebdriver.chrome.driver=chromedriver.exe selenium-server-standalone-3.0.0-beta2.jar -timeout 240 -browserTimeout 240 -port 44444" Call Terminate', {stdio: 'pipe'});
+}
+ 
 // initialize Selenium server
 var selArgs = [selSettings.jar].concat(selSettings.args);
 var chromedriver = (process.platform === 'win32' ? 'chromedriver.exe' : 'chromedriver');
