@@ -63,7 +63,7 @@ Section "Common Files (Required)" SEC01
     File "${BASEDIR}\browser-extensions\ie\bin\Release\IEAddon.dll"
     File "${BASEDIR}\src\recorder\CARoot.cer"
 
-    ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\resources\app\node_modules\.bin"
+    ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\oxygen-server"
 
     CreateDirectory "$SMPROGRAMS\Oxygen"
     CreateShortCut "$SMPROGRAMS\Oxygen\Oxygen.lnk" "$INSTDIR\oxygenide.exe"
@@ -245,7 +245,7 @@ Section Uninstall
     RMDir /r /REBOOTOK "$INSTDIR"
     
     # remove from PATH
-    ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR\resources\app\node_modules\.bin"
+    ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR\oxygen-server"
 
     # remove installation reg keys
     DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
