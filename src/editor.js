@@ -346,7 +346,7 @@
          * Open script.
          */
         Editor.prototype.open = function() {
-            var file = dialog.showOpenDialog(
+            var file = remote.dialog.showOpenDialog(
                 currentWin, 
                 { 
                     properties: [ 'openFile', 'openFile' ],
@@ -391,7 +391,7 @@
          * Save the script as a new file.
          */
         Editor.prototype.saveAs = function() {
-            var fileName = dialog.showSaveDialog(
+            var fileName = remote.dialog.showSaveDialog(
                 remote.getCurrentWindow(),
                 { filters: 
                     [
