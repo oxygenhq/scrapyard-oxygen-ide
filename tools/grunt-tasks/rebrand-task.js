@@ -33,7 +33,6 @@ module.exports = function(grunt) {
                             cfg.dist + '/' + cfg.name + '.exe');
         } else if (os.platform() === 'linux') {
             // remove unnecessary folders/files
-            fs.unlinkSync(cfg.dist + '/resources/default_app.asar');
             fs.unlinkSync(path.join(distPath, 'version'));
 
             // rename
@@ -41,13 +40,8 @@ module.exports = function(grunt) {
                             cfg.dist + '/' + cfg.name);
         } else if (os.platform() === 'darwin') {
             // remove unnecessary folders/files
-            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Resources/default_app.asar');
-            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Resources/atom.icns');
             fs.unlinkSync(path.join(distPath, 'version'));
             fs.unlinkSync(path.join(distPath, 'LICENSE'));  
-            // grunt-contrib-compress fails on broken links, so we remove those
-            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Frameworks/Electron Framework.framework/Frameworks');
-            fs.unlinkSync(cfg.dist + '/Electron.app/Contents/Frameworks/Electron Framework.framework/Libraries/Libraries');
 
             // rename
             fs.renameSync(cfg.dist + '/Electron.app/Contents/MacOS/' + electronExeDarwin, 
