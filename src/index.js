@@ -334,7 +334,9 @@ if (selSettings.port) {
 selArgs.unshift('-jar');
 
 var selProc = cp.spawn('java', selArgs, { cwd: path.resolve(__dirname, selSettings.basePath) });
-
+selProc.on('error', function(err) {
+    logGeneral.add('ERROR', 'Unable to find Java. Make sure Java is installed and has been added to the PATH environment variable.');
+});
 selProc.stderr.on('data', function (data) {
     logSelenium.add(data.toString().replace(/(?:\r\n|\r|\n)/g, '<br />'));
 });        
