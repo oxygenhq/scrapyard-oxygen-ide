@@ -26,82 +26,89 @@
         var self = this;
 		// mockup test suite object from js fileCreatedDate
 		var oxutil = require('oxygen').util;
-		var testsuite = oxutil.generateTestSuiteForSingleTestCase(oxutil.generateTestCaseFromJSFile(scriptFilename, paramFilePath, paramMode));
-		testsuite.testcases[0].iterationCount = numOfIterations;
-        testsuite.testcases[0].ReopenBrowser = runtimeSettings.reinitBrowser;
-		
-		// prepare module parameters
-		var args = [];
-		if (modeMobile) {
-			args.push('--mob@deviceName=' + browserName);
-			args.push('--mob@deviceOS=' + 'Android');
-		}
-		else {
-			args.push('--web@seleniumUrl=http://localhost:' + seleniumPort + '/wd/hub');
-			args.push('--web@browserName=' + browserName);
-			args.push('--web@initDriver=true');
-			args.push('--web@reopenBrowser=' + (runtimeSettings.reinitBrowser || false));		
-		}		
+		oxutil.generateTestCaseFromJSFile(scriptFilename, paramFilePath, paramMode)
+		 .then(function(tc) {
+			var testsuite = oxutil.generateTestSuiteForSingleTestCase(tc);
+			testsuite.testcases[0].iterationCount = numOfIterations;
+			testsuite.testcases[0].ReopenBrowser = runtimeSettings.reinitBrowser;
+			
+			// prepare module parameters
+			var args = [];
+			if (modeMobile) {
+				args.push('--mob@deviceName=' + browserName);
+				args.push('--mob@deviceOS=' + 'Android');
+			}
+			else {
+				args.push('--web@seleniumUrl=http://localhost:' + seleniumPort + '/wd/hub');
+				args.push('--web@browserName=' + browserName);
+				args.push('--web@initDriver=true');
+				args.push('--web@reopenBrowser=' + (runtimeSettings.reinitBrowser || false));		
+			}		
 
-		var oxRunner = self.oxRunner = new require('oxygen').Runner();
-		oxRunner.on('breakpoint', function(breakpoint, testcase) {
-            currentWin.show();
-			editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
-			toolbar.btnStart.enable();
-		});
-		oxRunner.on('test-error', function(err) {
-			var message = err.message;
-			if (err.line)
-				message += ' at line ' + err.line;
-			logGeneral.add('ERROR', message);
-		});
-        oxRunner.on('ui-log-add', function(level, msg) {
-			logGeneral.add(level, msg);
-		});
-        oxRunner.on('line-update', function(line) {
-            editor.setCmdHighlight(line);
-		});
-        oxRunner.on('iteration-start', function(i) {
-            logGeneral.add('INFO', 'Starting iteration #' + i);
-		});
-
-		// initialize Oxygen
-		logGeneral.add('INFO', 'Initializing...');
-		try {
-			var modeStr = modeMobile ? 'mob' : 'web';
-			oxRunner.init(args, modeStr, dbgPort)
-			.then(function() {
-				logGeneral.add('INFO', 'Test started...');
-                // assign current breakpoints
-                testsuite.testcases[0].breakpoints = editor.getBreakpoints();
-				return oxRunner.run(testsuite);
-			})
-			.then(function(tr) {
-				logGeneral.add('INFO', 'Test ended');
-				// update UI elements
-				toolbar.btnStop.disable();
+			var oxRunner = self.oxRunner = new require('oxygen').Runner();
+			oxRunner.on('breakpoint', function(breakpoint, testcase) {
+				currentWin.show();
+				editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
 				toolbar.btnStart.enable();
-				toolbar.btnStart.setText('Run');
-				toolbar.btnStart.setClickHandler(toolbar.start);
-				toolbar.btnStop.disable();
-				editor.clearBpHighlight();
-				editor.enable();
-				return oxRunner.dispose();
-			})
-			.catch(function(e) {
-				if (e.line)
-					logGeneral.add('ERROR', e.message + ' at line ' + e.line);
-				else
-					logGeneral.add('ERROR', e.message);
-				logGeneral.add('Test failed!');
 			});
-		}
-		catch (e) {console.error(e);}
+			oxRunner.on('test-error', function(err) {
+				var message = err.message;
+				if (err.line)
+					message += ' at line ' + err.line;
+				logGeneral.add('ERROR', message);
+			});
+			oxRunner.on('ui-log-add', function(level, msg) {
+				logGeneral.add(level, msg);
+			});
+			oxRunner.on('line-update', function(line) {
+				editor.setCmdHighlight(line);
+			});
+			oxRunner.on('iteration-start', function(i) {
+				logGeneral.add('INFO', 'Starting iteration #' + i);
+			});
 
-        toolbar.btnStart.setClickHandler(function() {
-            toolbar.btnStart.disable();
-            oxRunner.debugContinue();
-        });
+			// initialize Oxygen
+			logGeneral.add('INFO', 'Initializing...');
+			try {
+				var modeStr = modeMobile ? 'mob' : 'web';
+				oxRunner.init(args, modeStr, dbgPort)
+				.then(function() {
+					logGeneral.add('INFO', 'Test started...');
+					// assign current breakpoints
+					testsuite.testcases[0].breakpoints = editor.getBreakpoints();
+					return oxRunner.run(testsuite);
+				})
+				.then(function(tr) {
+					logGeneral.add('INFO', 'Test ended');
+					// update UI elements
+					toolbar.btnStop.disable();
+					toolbar.btnStart.enable();
+					toolbar.btnStart.setText('Run');
+					toolbar.btnStart.setClickHandler(toolbar.start);
+					toolbar.btnStop.disable();
+					editor.clearBpHighlight();
+					editor.enable();
+					return oxRunner.dispose();
+				})
+				.catch(function(e) {
+					if (e.line)
+						logGeneral.add('ERROR', e.message + ' at line ' + e.line);
+					else
+						logGeneral.add('ERROR', e.message);
+					logGeneral.add('Test failed!');
+				});
+			}
+			catch (e) {console.error(e);}
+
+			toolbar.btnStart.setClickHandler(function() {
+				toolbar.btnStart.disable();
+				oxRunner.debugContinue();
+			});
+		 })
+		 .catch(function(err) {
+			logGeneral.add('ERROR', err.message);
+			logGeneral.add('Error executing test!');
+		 });
     }
     
     function setConfigDirPath() {
