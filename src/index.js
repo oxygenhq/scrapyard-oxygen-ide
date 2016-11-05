@@ -224,6 +224,8 @@ function hideGlobalSettings() {
 function selectParamsFile() {
     var file = selectFile(
         [
+            { name: 'XLSX', extensions: ['XLSX'] },
+            { name: 'XLS', extensions: ['xls'] },
             { name: 'CSV', extensions: ['csv'] },
             { name: 'All Files', extensions: ['*'] }
         ]
