@@ -192,7 +192,7 @@
         Toolbar.prototype.settings = function() {
             document.getElementById('iterations').value = runtimeSettings.iterations || '1';
             document.getElementById('paramsFilePath').value = runtimeSettings.paramsFilePath || '';
-            document.getElementById('paramNextValue').value = runtimeSettings.paramNextValue || 'random';
+            document.getElementById('paramNextValue').value = runtimeSettings.paramNextValue || 'sequential';
             document.getElementById('configFilePath').value = runtimeSettings.configFilePath || '';
             document.getElementById('reinitbrowser').checked = runtimeSettings.reinitBrowser || false;
             document.getElementById('modal-settings').className = 

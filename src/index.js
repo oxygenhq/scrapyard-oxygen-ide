@@ -209,7 +209,7 @@ document.getElementById('log-header-selenium').addEventListener("change", functi
 });
 
 // runtime settings modal dialog 
-runtimeSettings = { iterations: 1, reinitBrowser: false };
+runtimeSettings = { iterations: 1, reinitBrowser: true };
 
 function hideSettings() {
      document.getElementById('modal-settings').className = 
@@ -224,7 +224,7 @@ function hideGlobalSettings() {
 function selectParamsFile() {
     var file = selectFile(
         [
-            { name: 'XLSX', extensions: ['XLSX'] },
+            { name: 'XLSX', extensions: ['xlsx'] },
             { name: 'XLS', extensions: ['xls'] },
             { name: 'CSV', extensions: ['csv'] },
             { name: 'All Files', extensions: ['*'] }
