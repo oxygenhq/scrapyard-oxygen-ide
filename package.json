@@ -8,7 +8,7 @@
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",
     "grunt-contrib-copy": "~0.8.0",
-    "grunt-download-electron": "~2.1.0",
+    "grunt-download-electron": "git+https://github.com/oxygenhq/grunt-download-electron.git",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-compress": "~0.13.0",
     "grunt-sync": "~0.2.3",
@@ -23,7 +23,7 @@
     "doctrine": "0.6.4",
     "opn": "^3.0.2",
     "adbkit": "^2.5.1",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#59b7ec69d837ac7b6ebcefcc5996b17bfbfb63b5"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#b36484b6dc37a57130418541ed92caf41fb73811"
   },
   "repository": {
     "type": "git",
