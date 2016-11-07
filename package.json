@@ -23,7 +23,7 @@
     "doctrine": "0.6.4",
     "opn": "^3.0.2",
     "adbkit": "^2.5.1",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#8731becca0540e6384c0c38212477dfcfc6265a3"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#59b7ec69d837ac7b6ebcefcc5996b17bfbfb63b5"
   },
   "repository": {
     "type": "git",
