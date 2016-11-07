@@ -209,7 +209,7 @@ document.getElementById('log-header-selenium').addEventListener("change", functi
 });
 
 // runtime settings modal dialog 
-runtimeSettings = { iterations: 1, reinitBrowser: true };
+runtimeSettings = { iterations: 1, reinitBrowser: false };
 
 function hideSettings() {
      document.getElementById('modal-settings').className = 
