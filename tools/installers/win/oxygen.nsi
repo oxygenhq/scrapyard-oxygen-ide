@@ -1,3 +1,5 @@
+SetCompressor /SOLID lzma
+
 !define BASEDIR "..\..\.."
 !define PRODUCT_NAME "Oxygen"
 !define PRODUCT_PUBLISHER "CloudBeat, Inc."
