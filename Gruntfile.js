@@ -47,11 +47,16 @@ module.exports = function(grunt) {
     const OUTDIR = 'build';
     const RESOURCES = process.platform === 'darwin' ? 
                         '/Oxygen.app/Contents/Resources' : '/resources';
+                        
+    var arch = grunt.option('arch') || 'x64';
+    if (arch !== 'x64' && arch !== 'ia32') {
+        grunt.fail.fatal('Invalid architecture specified. Allowed architectures: x64 and ia32');
+    }
 
     grunt.initConfig({
         'download-electron': {
             version: '1.0.2',
-            arch: 'x64',
+            arch: arch,
             outputDir: OUTDIR,
             rebuild: false
         },

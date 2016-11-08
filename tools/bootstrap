@@ -3,8 +3,16 @@
 var path = require('path');
 var cp = require('child_process');
 
-if (process.arch === 'ia32') {
-    console.error('Building on ia32 is not supported.');
+if (process.platform !== 'win32' && process.arch === 'ia32') {
+    console.error('Building on ia32 linux and darwin is not supported.');
+    process.exit(1);
+}
+
+var arch = process.argv.length == 3 && process.argv[2].indexOf('--arch=') === 0 ? 
+            process.argv[2].substring('--arch='.length) : 'x64';
+
+if (arch !== 'x64' && arch !== 'ia32') {
+    console.error('\033[31mInvalid architecture specified. Allowed architectures: x64 and ia32\033[0m');
     process.exit(1);
 }
 
@@ -13,8 +21,8 @@ process.chdir(path.dirname(__dirname));
 var env = process.env;
 env.npm_config_disturl = 'https://atom.io/download/electron';
 env.npm_config_target = '1.0.2';
-env.npm_config_arch = 'x64';
-env.npm_config_target_arch = 'x64';
+env.npm_config_arch = arch;
+env.npm_config_target_arch = arch;
 
 var child = cp.exec('npm3 install --msvs_version=2013', 
                     {
