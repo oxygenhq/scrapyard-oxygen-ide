@@ -16,7 +16,8 @@
     "grunt-contrib-jshint": "1.0.0",
     "rimraf": "2.3.3",
     "grunt-msbuild": "0.3.7",
-    "grunt-chmod": "1.1.1"
+    "grunt-chmod": "1.1.1",
+    "modclean": "1.2.7"
   },
   "dependencies": {
     "tmp": "0.0.30",

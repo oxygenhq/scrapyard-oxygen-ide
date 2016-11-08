@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         defaultTasks.push('msbuild:ieaddon');
     }
     defaultTasks.push('rebrand');
-
+    defaultTasks.push('module-cleanup');
     defaultTasks.push('sync:main');
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
