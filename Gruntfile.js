@@ -99,7 +99,14 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules', src: ['.bin/oxygen-server*'].concat(prodDeps), 
+                        cwd: 'node_modules', src: prodDeps.concat(['.bin/oxygen-server*',
+                                                                    '!fibers/build/**',
+                                                                    '!electron-edge/tools/**',
+                                                                    '!electron-edge/build/**',
+                                                                    '!electron-edge/stress/**',
+                                                                    '!electron-edge/performance/**',
+                                                                    '!electron-edge/src/**',
+                                                                    '!oxygen/dotnet/**']),
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
