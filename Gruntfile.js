@@ -1,4 +1,6 @@
 var pkg = require('./package.json');
+var cp = require('child_process');
+var path = require('path');
 
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-download-electron');
@@ -19,7 +21,7 @@ module.exports = function(grunt) {
         defaultTasks.push('msbuild:ieaddon');
     }
     defaultTasks.push('rebrand');
-    defaultTasks.push('prune-modules');
+
     defaultTasks.push('sync:main');
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
@@ -52,6 +54,23 @@ module.exports = function(grunt) {
     if (arch !== 'x64' && arch !== 'ia32') {
         grunt.fail.fatal('Invalid architecture specified. Allowed architectures: x64 and ia32');
     }
+    
+    // get production dependencies
+    var prodDeps = [];
+    try {
+        var out = cp.execSync('npm3 ls --prod=true --parseable');
+        var prodDepsUnfiltered = out.toString().split(/\r?\n/);
+        var si = __dirname.length + 1 + 'node_modules'.length + 1;
+        for (var i = 0; i < prodDepsUnfiltered.length; i++) {
+            var dep = prodDepsUnfiltered[i].substring(si);
+            if (dep === '' || dep.indexOf(path.sep) > 0) {
+                continue;
+            }
+            prodDeps.push(dep + '/**');
+        }
+    } catch (e) {
+        grunt.fail.fatal('Unable to get production dependencies list', e);
+    }
 
     grunt.initConfig({
         'download-electron': {
@@ -68,8 +87,6 @@ module.exports = function(grunt) {
         'config-patch': {
             dist: OUTDIR
         },
-        'prune-modules': {
-        },
         clean: 
             [OUTDIR],
         sync: {
@@ -82,7 +99,7 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules', src: ['**', '.bin/oxygen-server*'], 
+                        cwd: 'node_modules', src: ['.bin/oxygen-server*'].concat(prodDeps), 
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
@@ -95,12 +112,6 @@ module.exports = function(grunt) {
                         cwd: 'src', src: ['config/**'], 
                         dest: OUTDIR
                     }
-                    /*,
-                    { 
-                        expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Release', src: ['*.dll'], 
-                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    },*/
                 ], 
                 verbose: true
             },
@@ -120,12 +131,7 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'selenium/lin', src: ['chromedriver'], 
                         dest: OUTDIR + '/selenium'
-                    }/*,
-                    { 
-                        expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
-                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    }*/
+                    }
                 ], 
                 verbose: true
             },
@@ -186,12 +192,6 @@ module.exports = function(grunt) {
                         cwd: 'oxygen-server/win', src: ['node.exe', 'oxygen-server.cmd'], 
                         dest: OUTDIR + '/oxygen-server'
                     }
-                    /*,
-                    { 
-                        expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.pdb'], 
-                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    }*/
                 ], 
                 verbose: true
             }
