@@ -9,7 +9,8 @@ module.exports = function(grunt) {
             var nsiPath = path.resolve(__dirname, '..', 'installers', 'win', 'oxygen.nsi');
 
             var child = cp.execFileSync('makensis', 
-                                        [ '/DPRODUCT_VERSION='+ cfg.version, 
+                                        [ '/DPRODUCT_VERSION=' + cfg.version, 
+                                          '/DPRODUCT_ARCH=' + cfg.arch,
                                           '/WX', nsiPath],
                                         { stdio : 'inherit'});
         }

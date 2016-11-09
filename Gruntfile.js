@@ -287,6 +287,7 @@ module.exports = function(grunt) {
         },
         'installer-win': {
           version: pkg.version,
+          arch: arch
         }
     });
 };
