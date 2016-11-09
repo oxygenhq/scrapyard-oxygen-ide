@@ -41,7 +41,7 @@ try {
 
 var gruntPath = path.join('node_modules', '.bin', 'grunt') + (process.platform === 'win32' ? '.cmd' : '');
 var args = process.argv.slice(2);
-var child = cp.exec(gruntPath + ' --gruntfile="' + path.resolve('Gruntfile.js') + '" ' + args, 
+var child = cp.exec(gruntPath + ' --gruntfile="' + path.resolve('Gruntfile.js') + '" ' + args.join(' '),
                     { maxBuffer: 1024 * 1024 },
                     function(error, stdout, stderr) {
                         if (error) {
