@@ -15,7 +15,9 @@
     },
     "useFiber": false,
     "logger": {
-        "log": "%LOCALAPPDATA%\\Oxygen IDE\\log.txt",
-        "loglevel": "error"
+		"file": {
+			"level": "error",
+			"path": "%LOCALAPPDATA%\\Oxygen IDE\\log.txt"
+		}
     }
 }

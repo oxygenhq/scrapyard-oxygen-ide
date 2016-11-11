@@ -27,7 +27,7 @@ function updateLogPath(cfgPath, path) {
         grunt.fail.fatal(e);
     }
     
-    data.logger.log = path;
+    data.logger.file.path = path;
     
     try {
         fs.writeFileSync(cfgPath, JSON.stringify(data, null, 4));
