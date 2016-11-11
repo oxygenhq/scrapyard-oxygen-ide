@@ -32,17 +32,23 @@
 			testsuite.testcases[0].iterationCount = numOfIterations;
 			testsuite.testcases[0].ReopenBrowser = runtimeSettings.reinitBrowser;
 			
+			// prepare launch options
+			var options = {};
+			options.debugPort = dbgPort;
+			options.allowRequire = true;	// allow using require by default
 			// prepare module parameters
-			var args = [];
+			var caps = {};
 			if (modeMobile) {
-				args.push('--mob@deviceName=' + browserName);
-				args.push('--mob@deviceOS=' + 'Android');
+				options.mode = 'mob';
+				caps.deviceName = browserName;
+				caps.deviceOS = 'Android';
 			}
 			else {
-				args.push('--web@seleniumUrl=http://localhost:' + seleniumPort + '/wd/hub');
-				args.push('--web@browserName=' + browserName);
-				args.push('--web@initDriver=true');
-				args.push('--web@reopenBrowser=' + (runtimeSettings.reinitBrowser || false));		
+				options.mode = 'web';
+				options.seleniumUrl= 'http://localhost:' + seleniumPort + '/wd/hub';
+				options.browserName = browserName;
+				options.initDriver = true;
+				options.reopenBrowser = (runtimeSettings.reinitBrowser || false);		
 			}		
 
 			var oxRunner = self.oxRunner = new require('oxygen').Runner();
@@ -52,9 +58,19 @@
 				toolbar.btnStart.enable();
 			});
 			oxRunner.on('test-error', function(err) {
-				var message = err.message;
-				if (err.line)
+				var message = null;
+				if (err.type && err.message) {
+					message = err.type + ' - ' + err.message;
+				}
+				else if (err.type) {
+					message = err.type;
+				}
+				else if (err.message) {
+					message = err.message;
+				}
+				if (err.line) {
 					message += ' at line ' + err.line;
+				}
 				logGeneral.add('ERROR', message);
 			});
 			oxRunner.on('ui-log-add', function(level, msg) {
@@ -70,13 +86,12 @@
 			// initialize Oxygen
 			logGeneral.add('INFO', 'Initializing...');
 			try {
-				var modeStr = modeMobile ? 'mob' : 'web';
-				oxRunner.init(args, modeStr, dbgPort)
+				oxRunner.init(options)
 				.then(function() {
 					logGeneral.add('INFO', 'Test started...');
 					// assign current breakpoints
 					testsuite.testcases[0].breakpoints = editor.getBreakpoints();
-					return oxRunner.run(testsuite);
+					return oxRunner.run(testsuite, null, caps);
 				})
 				.then(function(tr) {
 					logGeneral.add('INFO', 'Test ended');
