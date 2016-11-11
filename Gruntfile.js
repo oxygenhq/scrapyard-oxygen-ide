@@ -106,7 +106,11 @@ module.exports = function(grunt) {
                                                                     '!electron-edge/stress/**',
                                                                     '!electron-edge/performance/**',
                                                                     '!electron-edge/src/**',
-                                                                    '!oxygen/dotnet/**']),
+                                                                    '!oxygen/dotnet/**',
+                                                                    '!xlsx/node_modules/codepage/misc/**',
+                                                                    '!xlsx/node_modules/codepage/ctest/**',
+                                                                    '!xlsx/node_modules/codepage/dotnet/**',
+                                                                    '!xlsx/node_modules/codepage/*.csv']),
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
