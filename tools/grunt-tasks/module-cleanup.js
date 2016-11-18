@@ -7,7 +7,11 @@ module.exports = function(grunt) {
 
         var mc = new modclean.ModClean({
             cwd: path.join(process.cwd(), 'node_modules'),
-            patterns: [modclean.patterns.safe, 'doc', 'docs', 'documentation', '*.html', '*.htm', '*.png'],
+            patterns: [modclean.patterns.safe, 
+                        'doc', 'docs', 'documentation', 
+                        'coverage', 
+                        'browser', 
+                        '*.html', '*.htm', '*.png', '*.min.js', '*.map'],
             test: false
         }, function(err, results) {
             if (err) {
