@@ -51,7 +51,7 @@
             <div class="hr">Test Parameters</div>
             <span>Choose parameter file:</span>
             <input id="paramsFilePath" type="text" class="input-path" readonly />
-            <div class="clear" onclick="clearParamsFile();"></div> 
+            <div class="clear" onclick="clearInputField('paramsFilePath');"></div> 
             <input type="button" value="Browse..." onclick="selectParamsFile();" />
             <div style="margin-top:15px;">
                 <span>Read next value:</span>
@@ -60,11 +60,24 @@
                     <option value="random">Randomly</option>
                 </select>
             </div>
+
+            <div class="hr">Results Report</div>
+            <span>Save reports in:</span>
+            <input id="reportFolder" type="text" class="input-path" readonly />
+            <div class="clear" onclick="clearInputField('reportFolder');"></div> 
+            <input type="button" value="Browse..."  onclick="selectReportsFolder();" />
+
+            <span>Choose template:</span>
+            <input id="reportsTemplateFilePath" type="text" class="input-path" readonly />
+            <div class="clear" onclick="clearInputField('reportsTemplateFilePath');"></div> 
+            <input type="button" value="Browse..."  onclick="selectReportsTemplateFile();" />
+<!--
             <div class="hr">Page Objects</div>
             <span>Choose configuration file:</span>
             <input id="configFilePath" type="text" class="input-path" readonly />
             <div class="clear" onclick="clearConfigFile();"></div> 
             <input type="button" value="Browse..."  onclick="selectConfigFile();" />
+-->
         </div>
         <div class="modal-footer">
             <a href="#" class="cancel" onclick="hideSettings();">Cancel</a> <a href="#" class="btn" onclick="runtimeSettingsSave();">Save</a>

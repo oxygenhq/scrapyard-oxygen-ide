@@ -193,8 +193,10 @@
             document.getElementById('iterations').value = runtimeSettings.iterations || '1';
             document.getElementById('paramsFilePath').value = runtimeSettings.paramsFilePath || '';
             document.getElementById('paramNextValue').value = runtimeSettings.paramNextValue || 'sequential';
-            document.getElementById('configFilePath').value = runtimeSettings.configFilePath || '';
+            //document.getElementById('configFilePath').value = runtimeSettings.configFilePath || '';
             document.getElementById('reinitbrowser').checked = runtimeSettings.reinitBrowser || false;
+            document.getElementById('reportFolder').value = runtimeSettings.reportFolder || '';
+            document.getElementById('reportsTemplateFilePath').value = runtimeSettings.reportsTemplateFilePath || '';
             document.getElementById('modal-settings').className = 
                 document.getElementById('modal-settings').className + " show";
         };

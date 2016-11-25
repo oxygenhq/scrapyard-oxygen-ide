@@ -94,6 +94,17 @@
 					return oxRunner.run(testsuite, null, caps);
 				})
 				.then(function(tr) {
+                    if (runtimeSettings.reportFolder != undefined) {
+                        logGeneral.add('INFO', 'Generating report...');
+                        var	ReporterClass = require('oxygen').ReporterXLSX;
+                        var reporterOpt = {
+                            template: runtimeSettings.reportsTemplateFilePath,
+                            targetFolder: runtimeSettings.reportFolder
+                        };
+                        var reporter = new ReporterClass(tr, reporterOpt);
+                        reporter.generate();
+                    }
+
 					logGeneral.add('INFO', 'Test ended');
 					// update UI elements
 					toolbar.btnStop.disable();

@@ -235,9 +235,11 @@ function selectParamsFile() {
     }
 }
 
-function clearParamsFile() {
-    
-    document.getElementById('paramsFilePath').value = '';
+function selectReportsFolder() {
+    var file = selectFolder();                 
+    if (file) {
+        document.getElementById('reportFolder').value = file;
+    }
 }
 
 function selectConfigFile() {
@@ -263,12 +265,20 @@ function selectChromeBinary() {
     }
 }
 
-function clearConfigFile() {
-    document.getElementById('configFilePath').value = '';
+function selectReportsTemplateFile() {
+    var file = selectFile(
+        [
+            { name: 'JSON', extensions: ['json'] },
+            { name: 'All Files', extensions: ['*'] }
+        ]
+    );                   
+    if (file) {
+        document.getElementById('reportsTemplateFilePath').value = file;
+    }
 }
 
-function clearChromeBinary() {
-    document.getElementById('chromeBinary').value = '';
+function clearInputField(id) {
+    document.getElementById(id).value = '';
 }
 
 function selectFile(filters) {
@@ -281,10 +291,21 @@ function selectFile(filters) {
     );
 }
 
+function selectFolder() {
+    return remote.dialog.showOpenDialog(
+        currentWin, 
+        { 
+            properties: [ 'openDirectory', 'openDirectory' ]
+        }
+    );
+}
+
 function runtimeSettingsSave() {
     runtimeSettings.paramsFilePath = document.getElementById('paramsFilePath').value;
-    runtimeSettings.configFilePath = document.getElementById('configFilePath').value;
-    
+    //runtimeSettings.configFilePath = document.getElementById('configFilePath').value;
+    runtimeSettings.reportsTemplateFilePath = document.getElementById('reportsTemplateFilePath').value;
+    runtimeSettings.reportFolder = document.getElementById('reportFolder').value;
+
     var iterations = document.getElementById('iterations').value;
     if (iterations !== '') {
         runtimeSettings.iterations = iterations;
