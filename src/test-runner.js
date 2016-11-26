@@ -48,7 +48,8 @@
 				options.seleniumUrl= 'http://localhost:' + seleniumPort + '/wd/hub';
 				options.browserName = browserName;
 				options.initDriver = true;
-				options.reopenBrowser = (runtimeSettings.reinitBrowser || false);		
+				options.reopenBrowser = (runtimeSettings.reinitBrowser || false);
+                options.screenshots = 'never'; // FIXME: this option should be exposed in reports settings
 			}		
 
 			var oxRunner = self.oxRunner = new require('oxygen').Runner();
