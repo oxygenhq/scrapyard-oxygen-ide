@@ -25,13 +25,6 @@ document.ondragover = document.ondrop = function(e) {
 };
 
 var appFullName = pkg.productName + ' v' + pkg.version;
-function setWindowTitle(title) {
-    if (title === '') {
-        currentWin.setTitle(appFullName);
-    } else {
-        currentWin.setTitle(title + ' - ' + appFullName);
-    }
-}
 
 // toolbar
 var toolbar = new Toolbar();
