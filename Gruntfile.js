@@ -94,7 +94,7 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        cwd: 'src', src: ['**', '!config/**', '!oxygen-server/**'], 
+                        cwd: 'src', src: ['**', '!config/**', '!oxygen-cli/**'], 
                         dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
@@ -200,8 +200,8 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'oxygen-server/win', src: ['node.exe', 'oxygen-server.cmd'], 
-                        dest: OUTDIR + '/oxygen-server'
+                        cwd: 'oxygen-cli/win', src: ['node.exe', 'oxygen.cmd'], 
+                        dest: OUTDIR + '/oxygen-cli'
                     }
                 ], 
                 verbose: true
