@@ -359,7 +359,6 @@
             );
             if (file) {
                 editor.currentFilename = file[0];
-                setWindowTitle(path.basename(file[0], '.js'));
                 fs.readFile(file[0], 'utf8', function (err,data) {
                     if (err) {
                         return console.log(err);
