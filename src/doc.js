@@ -13,22 +13,24 @@
     /*
      * Loads up JSDoc comments from a module-*.js file and stores them in a JSON (Doctrine) form.
      */
-    module.exports.load = function(moduleName) {
-        var file = path.join(modPath, moduleName);
-        fs.readFile(file, 'utf8', function (err,data) {
-            if (err) {
-                return console.log(err);        // FIXME: proper error handling
-            }
-         
+    module.exports.load = function(file, loadDescription) {
+        try {
+            var data = fs.readFileSync(file, 'utf8');
+            
             var regex = /(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/)/g;
 
             var commentRaw;
             var comments = [];
             var commentParsed;
+            var description;
             
-            commentRaw = regex.exec(data);
-            commentParsed = doctrine.parse(commentRaw[0], { unwrap: true });
-            var description = commentParsed.description;
+            if (loadDescription) {
+                commentRaw = regex.exec(data);
+                commentParsed = doctrine.parse(commentRaw[0], { unwrap: true });
+                description = commentParsed.description;
+            } else {
+                description = '';
+            }
             
             while ((commentRaw = regex.exec(data)) !== null) {
                 commentParsed = doctrine.parse(commentRaw[0], { unwrap: true });
@@ -94,9 +96,10 @@
 					comments.push(commentParsed);
             }
             
-            var name = moduleName.substring('module-'.length, moduleName.length - '.js'.length);
-            docs[name] = {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
-        });
+            return {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
+        } catch (exc) {       
+            console.log("Unable to load/parse " + file);
+        }
     };
 
     /*
@@ -105,9 +108,42 @@
     module.exports.init = function() {
         var modules = fs.readdirSync(modPath);
         for (var m of modules) {
-            if (m.startsWith('module-') && m.endsWith('.js')) {
-                this.load(m);
+            if (!m.startsWith('module-')) {
+                continue;
             }
+
+            var name = m.substring('module-'.length, m.length - '.js'.length);
+
+            if (fs.lstatSync(path.join(modPath, m)).isFile() && m.endsWith('.js')) {
+                var modDir = path.join(modPath, 'module-' + name);
+                
+                if (fs.existsSync(modDir)) {
+                    
+                    
+                    console.log(path.join(modPath, m));
+                    var modDoc = this.load(path.join(modPath, m), true);
+                    
+                    
+                                        console.log(modDoc);
+                    
+                    // load commands
+                    var cmdsDir = path.join(modDir, 'commands');
+                    var cmds = fs.readdirSync(cmdsDir);
+                    for (var cmd of cmds) {
+                        var cmdfile = path.join(cmdsDir, cmd);
+                        if (fs.lstatSync(cmdfile).isFile() && cmd.endsWith('.js')) {
+                            modDoc.methods = modDoc.methods.concat(this.load(cmdfile, false).methods);
+                        }
+                    }
+                    docs[name] = modDoc;
+                } else {
+                    docs[name] = this.load(path.join(modPath, m), true);
+                    
+                    
+                                    console.log(path.join(modPath, m));
+                                                 console.log(docs[name]);
+                }
+            } 
         }
         return docs;
     };
