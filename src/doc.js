@@ -111,21 +111,11 @@
             if (!m.startsWith('module-')) {
                 continue;
             }
-
             var name = m.substring('module-'.length, m.length - '.js'.length);
-
             if (fs.lstatSync(path.join(modPath, m)).isFile() && m.endsWith('.js')) {
                 var modDir = path.join(modPath, 'module-' + name);
-                
                 if (fs.existsSync(modDir)) {
-                    
-                    
-                    console.log(path.join(modPath, m));
                     var modDoc = this.load(path.join(modPath, m), true);
-                    
-                    
-                                        console.log(modDoc);
-                    
                     // load commands
                     var cmdsDir = path.join(modDir, 'commands');
                     var cmds = fs.readdirSync(cmdsDir);
@@ -138,10 +128,6 @@
                     docs[name] = modDoc;
                 } else {
                     docs[name] = this.load(path.join(modPath, m), true);
-                    
-                    
-                                    console.log(path.join(modPath, m));
-                                                 console.log(docs[name]);
                 }
             } 
         }
