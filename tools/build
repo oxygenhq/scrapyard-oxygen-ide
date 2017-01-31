@@ -24,7 +24,7 @@ process.chdir(path.dirname(__dirname));
 
 var env = process.env;
 env.npm_config_disturl = 'https://atom.io/download/electron';
-env.npm_config_target = '1.0.2';
+env.npm_config_target = '1.4.15';
 env.npm_config_arch = arch;
 env.npm_config_target_arch = arch;
 
