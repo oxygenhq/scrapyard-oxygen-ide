@@ -118,11 +118,12 @@
 					return oxRunner.dispose();
 				})
 				.catch(function(e) {
-					if (e.line)
+					if (e.line) {
 						logGeneral.add('ERROR', e.message + ' at line ' + e.line);
-					else
-						logGeneral.add('ERROR', e.message);
-					logGeneral.add('Test failed!');
+                    } else {
+						logGeneral.add('ERROR', e.message + '. ' + (e.stack || ""));
+                    }
+					logGeneral.add('ERROR', 'Test failed!');
 				});
 			}
 			catch (e) {console.error(e);}
