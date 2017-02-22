@@ -11,6 +11,8 @@ module.exports = function(grunt) {
                         'doc', 'docs', 'documentation', 
                         'coverage', 
                         'browser', 
+                        'authors.txt',
+                        'gruntfile.js',
                         '*.html', '*.htm', '*.png', '*.min.js', '*.map'],
             test: false
         }, function(err, results) {
