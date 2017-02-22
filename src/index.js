@@ -170,7 +170,7 @@ ipc.on('about', function () {
     alert(appFullName + '\n\n' +
             'Oxygen: ' + oxygenVer + '\n' +
             'Electron: ' + process.versions.electron + '\n' +
-            'Chromium: ' + process.versions.chrome
+            'Node: ' + process.versions.node
             ); 
 });
 
