@@ -276,7 +276,7 @@
 			  .then(function() {
 					if (deviceList.length == 0)
 					{
-						console.log('device list is emptry');
+						logGeneral.add('INFO', 'Device list is empty...');
 						var opt = document.createElement("option"); 
 						opt.text = '- No devices -';
 						opt.value = '';
