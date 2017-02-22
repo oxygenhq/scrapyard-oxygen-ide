@@ -73,7 +73,7 @@ Recorder.prototype.reattachWindowMethods = function() {
             self.openCalled = false;
             result.addEventListener('DOMContentLoaded', function() {
                 var winLocator = this.document.title === '' ? '' : 'title=' + this.document.title;
-                self.record('waitForPopUp', winLocator, 30000);
+                self.record('waitForWindow', winLocator, 30000);
             }, false);
             return result;
         }
