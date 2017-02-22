@@ -58,7 +58,7 @@ module.exports = function(grunt) {
     // get production dependencies
     var prodDeps = [];
     try {
-        var out = cp.execSync('npm3 ls --prod=true --parseable');
+        var out = cp.execSync('npm ls --prod=true --parseable');
         var prodDepsUnfiltered = out.toString().split(/\r?\n/);
         var si = __dirname.length + 1 + 'node_modules'.length + 1;
         for (var i = 0; i < prodDepsUnfiltered.length; i++) {

@@ -29,7 +29,7 @@ env.npm_config_arch = arch;
 env.npm_config_target_arch = arch;
 
 try {
-    cp.execSync('npm3 install --msvs_version=2013', 
+    cp.execSync('npm install --msvs_version=2013', 
                 {
                     env: env,
                     stdio: ['inherit', 'inherit', 'inherit']
