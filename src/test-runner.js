@@ -95,7 +95,7 @@
 					return oxRunner.run(testsuite, null, caps);
 				})
 				.then(function(tr) {
-                    if (runtimeSettings.reportFolder != undefined) {
+                    if (runtimeSettings.reportFolder != undefined && runtimeSettings.reportFolder !== '') {
                         logGeneral.add('INFO', 'Generating report...');
                         var	ReporterClass = require('oxygen').ReporterXLSX;
                         var reporterOpt = {
