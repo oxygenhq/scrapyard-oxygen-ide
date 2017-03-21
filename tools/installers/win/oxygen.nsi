@@ -1,4 +1,5 @@
 SetCompressor /SOLID lzma
+SetCompressorDictSize 16
 
 !define BASEDIR "..\..\.."
 !define PRODUCT_NAME "Oxygen"
