@@ -108,11 +108,7 @@ module.exports = function(grunt) {
                                                                     '!electron-edge/src/**',
                                                                     '!oxygen/dotnet/**',
                                                                     '!*/node_modules/rx/ts/**',
-                                                                    '!*/node_modules/nan/**',
-                                                                    '!*/node_modules/codepage/misc/**',
-                                                                    '!*/node_modules/codepage/ctest/**',
-                                                                    '!*/node_modules/codepage/dotnet/**',
-                                                                    '!*/node_modules/codepage/*.csv']),
+                                                                    '!*/node_modules/nan/**']),
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
