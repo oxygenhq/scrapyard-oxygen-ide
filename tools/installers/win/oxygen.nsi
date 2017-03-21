@@ -308,3 +308,5 @@ Function CheckOpenApps
         abort
     ${EndIf}
 FunctionEnd
+
+BrandingText "CloudBeat Ltd."
