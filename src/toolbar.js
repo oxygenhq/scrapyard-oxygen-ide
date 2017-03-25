@@ -28,9 +28,9 @@
     var remote = require('electron').remote;
     var TestRunner = require('./test-runner');
     var dialog = remote.dialog;
-	var Promise = require('bluebird');
-	var adb = require('adbkit');
-	var adbClient = null;
+    var Promise = require('bluebird');
+    var adb = require('adbkit');
+    var adbClient = null;
                 
     var Toolbar = (function(_super) {
         __extends(Toolbar, _super);
@@ -97,7 +97,7 @@
             btnRedo.setClickHandler(function() { editor.redo(); });
             // separator
             this.add(new ToolbarSeparator());
-			// web mode button
+            // web mode button
             var btnModeWeb = this.btnModeWeb = new ToolbarButton('tb-mode-web', false, false);
             this.add(btnModeWeb);
             btnModeWeb.setClickHandler(this.modeWeb);
@@ -153,7 +153,7 @@
         /**
          * Executes user script.
          */
-		Toolbar.prototype.start = function() {       
+        Toolbar.prototype.start = function() {       
             logGeneral.clear();
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
@@ -176,11 +176,11 @@
          * Terminates currently executing script.
          */
         Toolbar.prototype.stop = function() {
-			this.parentElement.btnStop.disable();
+            this.parentElement.btnStop.disable();
             logGeneral.add('INFO', 'Stopping...');
             toolbar.testRunner.kill(); 
             this.parentElement.btnStart.setClickHandler(toolbar.start);
-			this.parentElement.btnStart.enable();
+            this.parentElement.btnStart.enable();
             this.parentElement.btnStart.setText('Run');
             editor.clearBpHighlight();
             editor.enable();
@@ -264,43 +264,43 @@
             devSel.options.length = 0;
             
             var deviceList = [];
-			if (!adbClient)
-				adbClient = adb.createClient();
+            if (!adbClient)
+                adbClient = adb.createClient();
 
-			adbClient.listDevices()
-			  .then(function(devices) {
-				return Promise.filter(devices, function(device) {
-					deviceList.push([device.id, device.id]);
-				})
-			  })
-			  .then(function() {
-					if (deviceList.length == 0)
-					{
-						logGeneral.add('INFO', 'Device list is empty...');
-						var opt = document.createElement("option"); 
-						opt.text = '- No devices -';
-						opt.value = '';
-						opt.disabled = 'disabled';
-						devSel.options.add(opt);
-					}
-					else {
-						var selectOpt = document.createElement("option"); 
-							selectOpt.text = '- Select Device -';
-							selectOpt.value = '';
-						devSel.options.add(selectOpt);
-						for (var device of deviceList) {
-							var opt = document.createElement("option"); 
-							opt.text = device[0];
-							opt.value = device[1];
-							devSel.options.add(opt);
-						}
-					}
-					toolbar.targetDevice = devSel.value;
-					
-			  })
-			  .catch(function(err) {
-				console.error('Something went wrong:', err.stack)
-			  });            
+            adbClient.listDevices()
+              .then(function(devices) {
+                return Promise.filter(devices, function(device) {
+                    deviceList.push([device.id, device.id]);
+                })
+              })
+              .then(function() {
+                    if (deviceList.length == 0)
+                    {
+                        logGeneral.add('INFO', 'Device list is empty...');
+                        var opt = document.createElement("option"); 
+                        opt.text = '- No devices -';
+                        opt.value = '';
+                        opt.disabled = 'disabled';
+                        devSel.options.add(opt);
+                    }
+                    else {
+                        var selectOpt = document.createElement("option"); 
+                            selectOpt.text = '- Select Device -';
+                            selectOpt.value = '';
+                        devSel.options.add(selectOpt);
+                        for (var device of deviceList) {
+                            var opt = document.createElement("option"); 
+                            opt.text = device[0];
+                            opt.value = device[1];
+                            devSel.options.add(opt);
+                        }
+                    }
+                    toolbar.targetDevice = devSel.value;
+                    
+              })
+              .catch(function(err) {
+                console.error('Something went wrong:', err.stack)
+              });            
         };
         
         return Toolbar;

@@ -93,7 +93,7 @@
                     return params;
                 };
                 if (typeof commentParsed.getMethod() !== 'undefined')
-					comments.push(commentParsed);
+                    comments.push(commentParsed);
             }
             
             return {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};

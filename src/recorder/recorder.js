@@ -466,7 +466,7 @@ Recorder.addEventHandler('clickLocator', 'click', function (ev) {
         if (clickable) {
             this.record("click", this.findLocators(target), '');
         } else {
-			// if we get here it means that the event has generated a new dynamic content
+            // if we get here it means that the event has generated a new dynamic content
             this.callIfMeaningfulEvent(function () {
                 this.record("click", this.findLocators(target), '');
             });
@@ -532,7 +532,7 @@ Recorder.prototype.callIfMeaningfulEvent = function (handler) {
         console.log("clear event");
         self.delayedRecorder = null;
         self.domModifiedTimeout = null;
-    }, 500);	// timeout increased from 50ms to 500ms due as some DOM changes take longer to catch then 50ms (ex. DudaMobile)
+    }, 500);    // timeout increased from 50ms to 500ms due as some DOM changes take longer to catch then 50ms (ex. DudaMobile)
 };
 
 new Recorder();
