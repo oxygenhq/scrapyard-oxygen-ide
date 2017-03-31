@@ -13,7 +13,7 @@
     "grunt-contrib-compress": "1.3.0",
     "grunt-sync": "0.6.2",
     "grunt-contrib-watch": "1.0.0",
-    "grunt-contrib-jshint": "1.0.0",
+    "grunt-eslint": "19.0.0",
     "grunt-msbuild": "0.3.7",
     "grunt-chmod": "1.1.1",
     "modclean": "1.2.7"

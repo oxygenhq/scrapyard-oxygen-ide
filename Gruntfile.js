@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-msbuild');
     grunt.loadNpmTasks('grunt-chmod');
 
@@ -259,18 +259,14 @@ module.exports = function(grunt) {
         watch: {
             scripts: {
                 files: ['src/**'],
-                tasks: ['jshint', 'sync:main', 'sync:linux']
+                tasks: ['eslint', 'sync:main', 'sync:linux']
             },
         },
-        jshint: {
-            files: ['Gruntfile.js', 'src/*.js', 'src/recorder/*.js', 
-                    '!src/recorder/wgxpath.install.js', '!src/jquery.min.js'],
-                options: {
-                    esnext: true,
-                    curly: false,
-                    loopfunc: true,
-                    shadow: true
-                }
+        eslint: {
+            target: ['Gruntfile.js', 'src/**/*.js', '!src/ace/**'],
+            options: {
+                configFile: 'tools/.eslintrc.json'
+            },
         },
         msbuild: {
             ieaddon: {
