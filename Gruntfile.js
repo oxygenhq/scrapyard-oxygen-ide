@@ -48,8 +48,7 @@ module.exports = function(grunt) {
     }
 
     const OUTDIR = 'build';
-    const RESOURCES = process.platform === 'darwin' ? 
-                        '/Oxygen.app/Contents/Resources' : '/resources';
+    const RESOURCES = process.platform === 'darwin' ? '/Oxygen.app/Contents/Resources' : '/resources';
                         
     var arch = grunt.option('arch') || 'x64';
     if (arch !== 'x64' && arch !== 'ia32') {
@@ -164,24 +163,9 @@ module.exports = function(grunt) {
                     },
                     { 
                         expand: true, 
-                        cwd: 'node_modules/oxygen/bin/Release', src: ['Oxygen.dll.mdb'], 
-                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
-                        dest: OUTDIR + RESOURCES + '/app/node_modules/oxygen' 
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'node_modules/oxygen-server/bin/Release', src: ['**'], 
-                        dest: OUTDIR + '/Oxygen.app/Server'
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'Resources', src: ['Microsoft.VisualBasic.dll'], 
-                        dest: OUTDIR + '/Oxygen.app/Server'
-                    },  
+                        cwd: 'src/config', src: ['default.json'], 
+                        dest: OUTDIR + RESOURCES + '/../config'
+                    }
                 ], 
                 verbose: true
             },
