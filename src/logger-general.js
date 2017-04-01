@@ -87,7 +87,7 @@
             if (activate) {
                 this.className = this.className.replace(/\bhidden\b/,'');
             } else {
-                this.className += " hidden";
+                this.className += ' hidden';
             }
         };
 

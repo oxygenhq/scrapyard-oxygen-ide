@@ -15,7 +15,7 @@ var path = require('path');
     const RECORDER_DIR = 'recorder/';
     
     var scripts = ['tools.js', 'htmlutils.js', 'selenium-browserbot.js',
-                    'locatorBuilders.js', 'recorder.js', 'wgxpath.install.js'];
+                   'locatorBuilders.js', 'recorder.js', 'wgxpath.install.js'];
  
     /*
      * Section: Construction and Destruction
@@ -29,7 +29,7 @@ var path = require('path');
         }
 
         this.httpSrv = http.createServer(onRequest);
-        this.httpSrv.listen(PORT_HTTP, "localhost", function(){ });
+        this.httpSrv.listen(PORT_HTTP, 'localhost', function(){ });
         
         var options = {
             key: fs.readFileSync(path.resolve(__dirname, RECORDER_DIR + 'cloudbeat-key.pem')),
@@ -38,7 +38,7 @@ var path = require('path');
             rejectUnauthorized: false
         };
         this.httpsSrv = https.createServer(options, onRequest);
-        this.httpsSrv.listen(PORT_HTTPS, "localhost", function(){ });
+        this.httpsSrv.listen(PORT_HTTPS, 'localhost', function(){ });
         
         var self = this;
         function onRequest(request, response) {
@@ -106,7 +106,7 @@ var path = require('path');
                 args += ', `' + op.value + '`';
             } else {
                 if (op.value.toFixed) { // don't enclose in quotes if number
-                    args += ", " + op.value; 
+                    args += ', ' + op.value; 
                 } else {
                     args += ", '" + op.value.replace(/'/g, "\\'") + "'"; 
                 }

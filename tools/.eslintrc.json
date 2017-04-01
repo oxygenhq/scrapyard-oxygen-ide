@@ -15,6 +15,13 @@
     },
     "globals": {
         "currentWin": true,
-        "docs": true
+        "docs": true,
+        "logSelenium": true,
+        "logGeneral": true,
+        "selSettings": true,
+        "runtimeSettings": true,
+        "editor": true,
+        "ace": true,
+        "fs": true
     }
 }

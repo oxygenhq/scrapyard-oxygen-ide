@@ -1,15 +1,15 @@
-if (typeof(console) === "undefined") {
+if (typeof(console) === 'undefined') {
     console = { log: function (logMsg) { } };
 }
 
-if (typeof(String.prototype.startsWith) === "undefined")
+if (typeof(String.prototype.startsWith) === 'undefined')
 {
     String.prototype.startsWith = function (str) {
         return this.indexOf(str) === 0;
     };
 }
 
-if(typeof(String.prototype.trim) === "undefined")
+if(typeof(String.prototype.trim) === 'undefined')
 {
     String.prototype.trim = function() 
     {

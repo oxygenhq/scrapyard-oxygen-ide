@@ -24,10 +24,8 @@
     var Recorder = require('./recorder');
     var fs = require('fs');
     var tmp = require('tmp');
-    var path = require('path');
     var remote = require('electron').remote;
     var TestRunner = require('./test-runner');
-    var dialog = remote.dialog;
     var Promise = require('bluebird');
     var adb = require('adbkit');
     var adbClient = null;
@@ -106,10 +104,9 @@
             this.add(btnModeMob);
             btnModeMob.setClickHandler(this.modeMob);
             // browser/device dropdown
-            var devSel = document.createElement("select");
+            var devSel = document.createElement('select');
             devSel.setAttribute('style', 'float:left;');
             devSel.setAttribute('id', 'devSelect');
-            var self = this;
             devSel.onchange = function(e) {
                 toolbar.targetDevice = e.currentTarget.value;
             };
@@ -198,7 +195,7 @@
             document.getElementById('reportFolder').value = runtimeSettings.reportFolder || '';
             document.getElementById('reportsTemplateFilePath').value = runtimeSettings.reportsTemplateFilePath || '';
             document.getElementById('modal-settings').className = 
-                document.getElementById('modal-settings').className + " show";
+                document.getElementById('modal-settings').className + ' show';
         };
         
         /**
@@ -251,7 +248,7 @@
             // Need to migrate to Marionette driver.
             //browsers.push(['Firefox', 'firefox']); 
             for (var browser of browsers) {
-                var opt = document.createElement("option"); 
+                var opt = document.createElement('option'); 
                 opt.text = browser[0];
                 opt.value = browser[1];
                 devSel.options.add(opt);
@@ -268,39 +265,37 @@
                 adbClient = adb.createClient();
 
             adbClient.listDevices()
-              .then(function(devices) {
-                return Promise.filter(devices, function(device) {
-                    deviceList.push([device.id, device.id]);
+                .then(function(devices) {
+                    return Promise.filter(devices, function(device) {
+                        deviceList.push([device.id, device.id]);
+                    });
                 })
-              })
-              .then(function() {
+                .then(function() {
                     if (deviceList.length == 0)
                     {
                         logGeneral.add('INFO', 'Device list is empty...');
-                        var opt = document.createElement("option"); 
+                        var opt = document.createElement('option'); 
                         opt.text = '- No devices -';
                         opt.value = '';
                         opt.disabled = 'disabled';
                         devSel.options.add(opt);
-                    }
-                    else {
-                        var selectOpt = document.createElement("option"); 
-                            selectOpt.text = '- Select Device -';
-                            selectOpt.value = '';
+                    } else {
+                        var selectOpt = document.createElement('option'); 
+                        selectOpt.text = '- Select Device -';
+                        selectOpt.value = '';
                         devSel.options.add(selectOpt);
                         for (var device of deviceList) {
-                            var opt = document.createElement("option"); 
+                            var opt = document.createElement('option'); 
                             opt.text = device[0];
                             opt.value = device[1];
                             devSel.options.add(opt);
                         }
                     }
                     toolbar.targetDevice = devSel.value;
-                    
-              })
-              .catch(function(err) {
-                console.error('Something went wrong:', err.stack)
-              });            
+                })
+                .catch(function(err) {
+                    console.error('Something went wrong:', err.stack);
+                });            
         };
         
         return Toolbar;

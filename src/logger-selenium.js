@@ -36,8 +36,8 @@
         LoggerSelenium.prototype.attached = false;
 
         LoggerSelenium.prototype.createdCallback = function() {
-            this.className += " hidden";
-            var div = this.div = document.createElement("div");
+            this.className += ' hidden';
+            var div = this.div = document.createElement('div');
             this.appendChild(div);
             this.attached = false;
         };
@@ -98,7 +98,7 @@
             if (activate) {
                 this.className = this.className.replace(/\bhidden\b/,'');
             } else {
-                this.className += " hidden";
+                this.className += ' hidden';
             }
         };
 

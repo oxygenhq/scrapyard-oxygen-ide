@@ -3,7 +3,7 @@ var Editor = require('./editor');
 var LoggerGeneral = require('./logger-general');
 var LoggerSelenium = require('./logger-selenium');
 var doc = require('./doc');
-var ipc = require("electron").ipcRenderer;
+var ipc = require('electron').ipcRenderer;
 var fs = require('fs');
 var remote = require('electron').remote;
 var path = require('path');
@@ -125,10 +125,10 @@ ipc.on('edit-paste', function () {
     document.execCommand('paste'); 
 });
 ipc.on('search-find', function () {
-    editor.editor.execCommand("find");
+    editor.editor.execCommand('find');
 });
 ipc.on('search-replace', function () {
-    editor.editor.execCommand("replace");
+    editor.editor.execCommand('replace');
 });
 var mainPaneBottom;
 ipc.on('view-event-log', function () {
@@ -158,7 +158,7 @@ ipc.on('global-settings', function () {
     }
     document.getElementById('chromeBinary').value = require('../../config/default.json').chrome.binary;
     document.getElementById('modal-global-settings').className = 
-        document.getElementById('modal-global-settings').className + " show";
+        document.getElementById('modal-global-settings').className + ' show';
 });
 
 var paneMain = document.getElementById('left-pane');
@@ -184,6 +184,7 @@ document.body.appendChild(apiDoc);
 var docs = doc.init();
 
 // general logger
+/*global logGeneral*/
 var logGeneral = new LoggerGeneral();
 document.getElementById('log-scrollable').appendChild(logGeneral);
 
@@ -191,7 +192,7 @@ document.getElementById('log-scrollable').appendChild(logGeneral);
 var logSelenium = new LoggerSelenium();
 document.getElementById('log-scrollable').appendChild(logSelenium);
 
-document.getElementById('log-header-selenium').addEventListener("change", function() {
+document.getElementById('log-header-selenium').addEventListener('change', function() {
     if (this.value == 'general') {
         logGeneral.activate(true);
         logSelenium.activate(false);
@@ -205,12 +206,12 @@ document.getElementById('log-header-selenium').addEventListener("change", functi
 runtimeSettings = { iterations: 1, reinitBrowser: false };
 
 function hideSettings() {
-     document.getElementById('modal-settings').className = 
+    document.getElementById('modal-settings').className = 
         document.getElementById('modal-settings').className.replace(/\bshow\b/,'');
 }
 
 function hideGlobalSettings() {
-     document.getElementById('modal-global-settings').className = 
+    document.getElementById('modal-global-settings').className = 
         document.getElementById('modal-global-settings').className.replace(/\bshow\b/,'');
 }
 
@@ -306,14 +307,14 @@ function runtimeSettingsSave() {
     
     runtimeSettings.reinitBrowser = document.getElementById('reinitbrowser').checked;
     
-    var nv = document.getElementById("paramNextValue");
+    var nv = document.getElementById('paramNextValue');
     runtimeSettings.paramNextValue = nv.options[nv.selectedIndex].value;
     
     hideSettings();
 }
 
 function globalSettingsSave() {
-    var cfg = require('../../config/default.json')
+    var cfg = require('../../config/default.json');
     cfg.chrome.binary = document.getElementById('chromeBinary').value;
     fs.writeFile(path.resolve(__dirname, '../../config/default.json'), 
         JSON.stringify(cfg, null, 2), 
@@ -322,7 +323,7 @@ function globalSettingsSave() {
                 console.log(err);
                 return;
             }
-    });
+        });
 
     hideGlobalSettings();
 }

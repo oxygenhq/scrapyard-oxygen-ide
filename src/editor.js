@@ -77,7 +77,7 @@
                     toogleUndoRedo(um);
                 }
             });
-            editor.selection.on("changeSelection", function() {
+            editor.selection.on('changeSelection', function() {
                 toogleCutCopy(!editor.selection.isEmpty());
             });
             
@@ -88,7 +88,6 @@
                 enableLiveAutocompletion: true
             });
 
-            var self = this;
             var completer = {
                 getCompletions: function (editor, session, pos, prefix, callback) {
                     if (prefix.length === 0)
@@ -295,12 +294,10 @@
             var bps = [];
             this.editor.session.getBreakpoints().forEach(
                 function (value, i) {
-            
                     if (value === 'ace_breakpoint') {
                         bps.push(i+1);
                     }
-                    
-            });
+                });
             return bps;
         };
     
@@ -391,11 +388,7 @@
         Editor.prototype.saveAs = function() {
             var fileName = remote.dialog.showSaveDialog(
                 remote.getCurrentWindow(),
-                { filters: 
-                    [
-                        { name: 'JavaScript', extensions: ['js'] }
-                    ]
-                }
+                { filters: [{ name: 'JavaScript', extensions: ['js'] }] }
             );
             if (fileName) {
                 editor.currentFilename = fileName;

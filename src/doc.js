@@ -6,7 +6,7 @@
     var path = require('path');
     var doctrine = require('doctrine');
     var modPath = path.resolve(__dirname, 'node_modules/oxygen/ox_modules');
-    var exports = module.exports = {};
+    module.exports = {};
 
     var docs = {};
     
@@ -98,7 +98,7 @@
             
             return {description: description.replace(/(\r\n|\n)/gm,''), methods: comments};
         } catch (exc) {       
-            console.log("Unable to load/parse " + file);
+            console.log('Unable to load/parse ' + file);
         }
     };
 

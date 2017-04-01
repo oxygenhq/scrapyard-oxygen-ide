@@ -20,6 +20,7 @@ module.exports = function(grunt) {
     if (process.platform === 'win32') {
         defaultTasks.push('msbuild:ieaddon');
     }
+    //defaultTasks.push('eslint');
     defaultTasks.push('rebrand');
     defaultTasks.push('module-cleanup');
     defaultTasks.push('sync:main');
@@ -100,15 +101,15 @@ module.exports = function(grunt) {
                     { 
                         expand: true, 
                         cwd: 'node_modules', src: prodDeps.concat(['.bin/oxygen-server*',
-                                                                    '!fibers/src/**',
-                                                                    '!electron-edge/tools/**',
-                                                                    '!electron-edge/build/**',
-                                                                    '!electron-edge/stress/**',
-                                                                    '!electron-edge/performance/**',
-                                                                    '!electron-edge/src/**',
-                                                                    '!oxygen/dotnet/**',
-                                                                    '!*/node_modules/rx/ts/**',
-                                                                    '!*/node_modules/nan/**']),
+                                                                   '!fibers/src/**',
+                                                                   '!electron-edge/tools/**',
+                                                                   '!electron-edge/build/**',
+                                                                   '!electron-edge/stress/**',
+                                                                   '!electron-edge/performance/**',
+                                                                   '!electron-edge/src/**',
+                                                                   '!oxygen/dotnet/**',
+                                                                   '!*/node_modules/rx/ts/**',
+                                                                   '!*/node_modules/nan/**']),
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
                     },
                     { 
@@ -213,9 +214,9 @@ module.exports = function(grunt) {
                 src: [OUTDIR + RESOURCES + '/app/node_modules/opn/xdg-open' ]
             },
             chromedriver: {
-                    src: [process.platform === 'linux' ? 
-                            OUTDIR + '/selenium/chromedriver' :
-                            OUTDIR + RESOURCES + '/../selenium/chromedriver']                    
+                src: [process.platform === 'linux' ? 
+                        OUTDIR + '/selenium/chromedriver' :
+                        OUTDIR + RESOURCES + '/../selenium/chromedriver']
             }
         },
         compress: {
@@ -263,7 +264,7 @@ module.exports = function(grunt) {
             },
         },
         eslint: {
-            target: ['Gruntfile.js', 'src/**/*.js', '!src/ace/**'],
+            target: ['Gruntfile.js', 'src/**/*.js', '!src/ace/**', '!src/recorder/**'],
             options: {
                 configFile: 'tools/.eslintrc.json'
             },
@@ -284,8 +285,8 @@ module.exports = function(grunt) {
             }
         },
         'installer-win': {
-          version: pkg.version,
-          arch: arch
+            version: pkg.version,
+            arch: arch
         }
     });
 };
