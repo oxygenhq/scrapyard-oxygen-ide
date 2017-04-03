@@ -1,7 +1,7 @@
 {
   "name" : "oxygenide",
   "productName" : "Oxygen IDE",
-  "version" : "0.17.0",
+  "version" : "0.17.1",
   "description": "Web automation framework.",
   "main" : "main.js",
   "devDependencies": {
