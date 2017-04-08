@@ -2,12 +2,7 @@
     "selenium": {
         "basePath": "../../selenium",
         "jar": "selenium-server-standalone-3.0.1.jar",
-        "args": [
-            "-timeout",
-            "240",
-            "-browserTimeout",
-            "240"
-        ],
+        "args": [],
         "port": 44444
     },
     "chrome": {

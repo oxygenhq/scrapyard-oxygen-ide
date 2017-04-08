@@ -332,7 +332,7 @@ function globalSettingsSave() {
 // for now only on Windows.
 // TODO: we need to remove Selenium completely.
 if (process.platform === 'win32') {
-    cp.execSync('wmic process where commandline="java -jar -Dwebdriver.ie.driver=IEDriverServer_x86.exe -Dwebdriver.chrome.driver=chromedriver.exe selenium-server-standalone-3.0.1.jar -timeout 240 -browserTimeout 240 -port 44444" Call Terminate', {stdio: 'pipe'});
+    cp.execSync('wmic process where commandline="java -jar -Dwebdriver.ie.driver=IEDriverServer_x86.exe -Dwebdriver.chrome.driver=chromedriver.exe selenium-server-standalone-3.0.1.jar -port 44444" Call Terminate', {stdio: 'pipe'});
 }
  
 // initialize Selenium server
