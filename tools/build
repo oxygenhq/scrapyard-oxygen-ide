@@ -32,21 +32,16 @@ try {
     cp.execSync('npm install --msvs_version=2013', 
                 {
                     env: env,
-                    stdio: ['inherit', 'inherit', 'inherit']
+                    stdio: ['inherit', 'inherit', 'inherit'],
+                    maxBuffer: 10 * 1024 * 1024
                 });
+    cp.execSync('grunt ' + process.argv.slice(2).join(' '),
+                {
+                    env: env,
+                    stdio: ['inherit', 'inherit', 'inherit'],
+                    maxBuffer: 10 * 1024 * 1024
+                });   
 } catch (e) {
     printErr(e);
     return;
 }
-
-var gruntPath = path.join('node_modules', '.bin', 'grunt') + (process.platform === 'win32' ? '.cmd' : '');
-var args = process.argv.slice(2);
-var child = cp.exec(gruntPath + ' --gruntfile="' + path.resolve('Gruntfile.js') + '" ' + args.join(' '),
-                    { maxBuffer: 10 * 1024 * 1024 },
-                    function(error, stdout, stderr) {
-                        if (error) {
-                            process.exit(error.code || 1);
-                        }
-                    });
-child.stderr.pipe(process.stderr);
-child.stdout.pipe(process.stdout);

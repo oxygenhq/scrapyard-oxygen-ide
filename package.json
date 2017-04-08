@@ -5,8 +5,7 @@
   "description": "Web automation framework.",
   "main" : "main.js",
   "devDependencies": {
-    "grunt": "0.4.5",
-    "grunt-cli": "0.1.13",
+    "grunt": "1.0.1",
     "grunt-contrib-copy": "1.0.0",
     "grunt-download-electron": "git+https://github.com/oxygenhq/grunt-download-electron.git",
     "grunt-contrib-clean": "1.0.0",
@@ -14,7 +13,7 @@
     "grunt-sync": "0.6.2",
     "grunt-contrib-watch": "1.0.0",
     "grunt-eslint": "19.0.0",
-    "grunt-msbuild": "0.3.7",
+    "grunt-msbuild": "0.4.0",
     "grunt-chmod": "1.1.1",
     "modclean": "1.2.7"
   },
@@ -23,7 +22,7 @@
     "doctrine": "1.5.0",
     "opn": "4.0.2",
     "adbkit": "2.6.1",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#1b20d71b804d4158e97796ddaa4f2b811d755ccc"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#49f193daa928656e9d0aca7cf4c0d8f9a4c7fe7c"
   },
   "repository": {
     "type": "git",
