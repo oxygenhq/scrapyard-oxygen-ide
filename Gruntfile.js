@@ -121,8 +121,7 @@ module.exports = function(grunt) {
                         cwd: 'src', src: ['config/**'], 
                         dest: OUTDIR
                     }
-                ], 
-                verbose: true
+                ]
             },
             linux: {
                 files: [
@@ -141,8 +140,7 @@ module.exports = function(grunt) {
                         cwd: 'selenium/lin', src: ['chromedriver'], 
                         dest: OUTDIR + '/selenium'
                     }
-                ], 
-                verbose: true
+                ]
             },
             osx: {
                 files: [
@@ -166,8 +164,7 @@ module.exports = function(grunt) {
                         cwd: 'src/config', src: ['default.json'], 
                         dest: OUTDIR + RESOURCES + '/../config'
                     }
-                ], 
-                verbose: true
+                ]
             },
             windows: {
                 files: [
@@ -186,8 +183,7 @@ module.exports = function(grunt) {
                         cwd: 'oxygen-cli/win', src: ['node.exe', 'oxygen.cmd', 'selenium.cmd'], 
                         dest: OUTDIR + '/oxygen-cli'
                     }
-                ], 
-                verbose: true
+                ]
             }
         },
         chmod: {
