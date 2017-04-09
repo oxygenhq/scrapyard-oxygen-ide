@@ -23,6 +23,7 @@ module.exports = function(grunt) {
     //defaultTasks.push('eslint');
     defaultTasks.push('rebrand');
     defaultTasks.push('module-cleanup');
+    // NOTE: sync:main config is automatically updated by modclean task
     defaultTasks.push('sync:main');
     if (process.platform === 'linux') {
         defaultTasks.push('sync:linux');
@@ -106,6 +107,8 @@ module.exports = function(grunt) {
                                                                    '!electron-edge/stress/**',
                                                                    '!electron-edge/performance/**',
                                                                    '!electron-edge/src/**',
+                                                                   '!electron-edge/lib/bootstrap/**',
+                                                                   '!edge-cs/**',
                                                                    '!oxygen/dotnet/**',
                                                                    '!*/node_modules/rx/ts/**',
                                                                    '!*/node_modules/nan/**']),
