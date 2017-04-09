@@ -4,26 +4,26 @@ var path = require('path');
 var os = require('os');
 
 module.exports = function(grunt) {
-    grunt.registerTask('rebrand', 'description', function() {
+    grunt.registerTask('rebrand', 'Cleans up, rebrands, and prepares Oxygen for distribution', function() {
         var cfg = grunt.config.get('rebrand');
         var distPath = path.resolve(__dirname, '..', '..', cfg.dist);
         const electronExe = 'electron';
         const electronExeDarwin = 'Electron';
 
         if (os.platform() === 'win32') {
-            var rceditPath = path.resolve(__dirname, '..', 'utils', 'rcedit.exe');
-
             // remove unnecessary folders/files
             fs.unlinkSync(cfg.dist + '/resources/default_app.asar');
             fs.unlinkSync(path.join(distPath, 'version'));
 
             // re-brand icon & version
-            var child = cp.spawnSync(rceditPath, 
+            var child = cp.spawnSync(path.resolve(__dirname, 'rcedit.exe'), 
                                     [ path.join(distPath, electronExe + '.exe'), 
                                       '--set-icon', 'resources/app.ico',
                                       '--set-file-version', cfg.version,
-                                      '--set-product-version', cfg.version                                              
-                                    ]);         
+                                      '--set-product-version', cfg.version,
+                                      '--set-version-string', 'LegalCopyright', 'Copyright (C) 2015-2017 CloudBeat Ltd.',
+                                      '--set-version-string', 'ProductName', 'Oxygen IDE',
+                                      '--set-version-string', 'FileDescription', 'Oxygen IDE']);         
             if (child.error) {
                 grunt.fail.fatal(child.error);
             }
@@ -73,4 +73,3 @@ module.exports = function(grunt) {
         }
     });
 };
-
