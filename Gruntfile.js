@@ -185,6 +185,11 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'oxygen-cli/win', src: ['node.exe', 'oxygen.cmd', 'selenium.cmd'], 
                         dest: OUTDIR + '/oxygen-cli'
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'src/recorder', src: ['CARoot.cer'], 
+                        dest: OUTDIR
                     }
                 ]
             }
