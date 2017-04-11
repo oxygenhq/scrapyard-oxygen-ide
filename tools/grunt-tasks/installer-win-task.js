@@ -61,7 +61,7 @@ module.exports = function(grunt) {
                               '-spdb',
                               '-b', 'build',
                               '-b', ieAddonRoot,
-                              '-o', 'dist\\oxygen-ide-' + version + '-win-' + cfg.arch + '.msi',
+                              '-o', 'dist\\oxygen-' + version + '-win-' + cfg.arch + '.msi',
                               wixRoot + 'config.wixobj',
                               wixRoot + 'files.wixobj',
                               wixRoot + 'ie_addon.wixobj'],
