@@ -190,6 +190,11 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'src/recorder', src: ['CARoot.cer'], 
                         dest: OUTDIR
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'browser-extensions/ie/bin/Release', src: ['IEAddon.dll'], 
+                        dest: OUTDIR
                     }
                 ]
             }

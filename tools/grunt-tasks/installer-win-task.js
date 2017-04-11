@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                             { stdio : 'inherit'});
                             
             cp.execFileSync('candle', 
-                            [ '-arch', arch,
+                            [ '-arch', 'x86',
                               '-ext', 'WixFirewallExtension',
                               '-o', wixRoot + 'ie_addon.wixobj',
                               wixRoot + 'ie_addon.wxs'],
