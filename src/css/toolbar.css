@@ -88,6 +88,10 @@ cb-toolbar .btn.tb-stop {
     background-image: url("../img/tb-stop.png");
 }
 
+cb-toolbar .btn.tb-step {
+    background-image: url("../img/tb-step.png");
+}
+
 cb-toolbar .btn.tb-settings {
     background-image: url("../img/tb-settings.png");
 }
