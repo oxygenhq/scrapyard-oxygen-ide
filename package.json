@@ -1,7 +1,7 @@
 {
   "name" : "oxygenide",
   "productName" : "Oxygen IDE",
-  "version" : "0.19.1",
+  "version" : "0.20.0",
   "description": "Web automation framework.",
   "main" : "main.js",
   "devDependencies": {
@@ -21,7 +21,7 @@
     "doctrine": "1.5.0",
     "opn": "4.0.2",
     "adbkit": "2.6.1",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#b235289b3a8165974659fb2c40a8f79b2368960a"
+    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#e6eabf79d67c204a526dcc89bb918e3c8da44bd5"
   },
   "repository": {
     "type": "git",
