@@ -18,7 +18,6 @@
     "modclean": "1.2.7"
   },
   "dependencies": {
-    "tmp": "0.0.30",
     "doctrine": "1.5.0",
     "opn": "4.0.2",
     "adbkit": "2.6.1",

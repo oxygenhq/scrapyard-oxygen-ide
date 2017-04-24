@@ -372,13 +372,14 @@
         Editor.prototype.save = function() {
             if (editor.currentFilename) {
                 fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
-                    if(!err) {
+                    if (!err) {
                         toolbar.btnSave.disable();
                         remote.getCurrentWindow().menu.enable('Save', false);
                     }
-                }); 
+                });
+                return true;
             } else {
-                editor.saveAs();
+                return editor.saveAs();
             }
         };
         
@@ -393,11 +394,14 @@
             if (fileName) {
                 editor.currentFilename = fileName;
                 fs.writeFile(fileName, editor.getContent(), function(err) {
-                    if(!err) {
+                    if (!err) {
                         toolbar.btnSave.disable();
                         remote.getCurrentWindow().menu.enable('Save', false);
                     }
-                }); 
+                });
+                return true;
+            } else {
+                return false;
             }
         };
         

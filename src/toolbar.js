@@ -23,7 +23,6 @@
     var ToolbarSeparator = require('./toolbar-separator');
     var Recorder = require('./recorder');
     var fs = require('fs');
-    var tmp = require('tmp');
     var remote = require('electron').remote;
     var TestRunner = require('./test-runner');
     var Promise = require('bluebird');
@@ -150,23 +149,16 @@
         /**
          * Executes user script.
          */
-        Toolbar.prototype.start = function() {       
+        Toolbar.prototype.start = function() {
+            if (!editor.save()) {
+                return;
+            }
             logGeneral.clear();
             this.parentElement.btnStart.disable();
             this.parentElement.btnStop.enable();
             this.parentElement.btnStart.setText('Continue');
             editor.disable();
-
-            // get script content
-            var script = editor.getContent();
-
-            // and save it in a new tmp file
-            var tmpFile = tmp.fileSync();
-            fs.writeFile(tmpFile.name, script, function (err) {
-                if (err) throw err;
-            });
-
-            toolbar.testRunner = new TestRunner(tmpFile.name);
+            toolbar.testRunner = new TestRunner(editor.currentFilename);
         };
     
         /**
