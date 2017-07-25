@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "doctrine": "1.5.0",
-    "opn": "4.0.2",
-    "adbkit": "2.6.1",
-    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#83ed01c04c9ed6eff0ab60ffd239ff626b429039"
+    "opn": "5.1.0",
+    "adbkit": "2.10.0",
+    "oxygen": "git+https://github.com/oxygenhq/oxygen-node.git#6c60475013a7c7bc1dc408a481024b20d9029743"
   },
   "repository": {
     "type": "git",
