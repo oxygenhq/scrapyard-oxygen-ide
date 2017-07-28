@@ -15,7 +15,8 @@
     "grunt-eslint": "19.0.0",
     "grunt-msbuild": "0.4.0",
     "grunt-chmod": "1.1.1",
-    "modclean": "1.2.7"
+    "modclean": "1.2.7",
+    "electron-rebuild": "1.5.11"
   },
   "dependencies": {
     "doctrine": "1.5.0",

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const ELECTRON_VER = '1.4.15';
+
 var path = require('path');
 var cp = require('child_process');
 
@@ -22,22 +24,23 @@ if (arch !== 'x64' && arch !== 'ia32') {
 
 process.chdir(path.dirname(__dirname));
 
-var env = process.env;
-env.npm_config_disturl = 'https://atom.io/download/electron';
-env.npm_config_target = '1.4.15';
-env.npm_config_arch = arch;
-env.npm_config_target_arch = arch;
-
 try {
     cp.execSync('npm install --msvs_version=2013', 
                 {
-                    env: env,
+                    env: process.env,
+                    stdio: ['inherit', 'inherit', 'inherit'],
+                    maxBuffer: 10 * 1024 * 1024
+                });
+    cp.execFileSync(path.join(__dirname, '..', 'node_modules', '.bin', 'electron-rebuild' + (process.platform === 'win32' ? '.cmd' : '')),
+                ['-v', ELECTRON_VER, '-t', 'prod'], 
+                {
+                    env: process.env,
                     stdio: ['inherit', 'inherit', 'inherit'],
                     maxBuffer: 10 * 1024 * 1024
                 });
     cp.execSync('grunt ' + process.argv.slice(2).join(' '),
                 {
-                    env: env,
+                    env: process.env,
                     stdio: ['inherit', 'inherit', 'inherit'],
                     maxBuffer: 10 * 1024 * 1024
                 });   
