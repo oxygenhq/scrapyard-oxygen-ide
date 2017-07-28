@@ -16,7 +16,9 @@
     "grunt-msbuild": "0.4.0",
     "grunt-chmod": "1.1.1",
     "modclean": "1.2.7",
-    "electron-rebuild": "1.5.11",
+    "electron-rebuild": "1.5.11"
+  },
+  "optionalDependencies": {
     "grunt-appdmg": "1.0.0"
   },
   "dependencies": {
