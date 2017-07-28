@@ -117,16 +117,6 @@ module.exports = function(grunt) {
                                                                    '!*/node_modules/rx/ts/**',
                                                                    '!*/node_modules/nan/**']),
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
-                    },
-                    { 
-                        expand: true, 
-                        src: ['package.json', 'LICENSE'], 
-                        dest: OUTDIR + RESOURCES + '/app' 
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'src', src: ['config/**'], 
-                        dest: OUTDIR
                     }
                 ]
             },
@@ -146,6 +136,16 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'selenium/lin', src: ['chromedriver'], 
                         dest: OUTDIR + '/selenium'
+                    },
+                    { 
+                        expand: true, 
+                        src: ['package.json', 'LICENSE'], 
+                        dest: OUTDIR + RESOURCES + '/app' 
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'src', src: ['config/**'], 
+                        dest: OUTDIR
                     }
                 ]
             },
@@ -170,7 +170,12 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'src/config', src: ['default.json'], 
                         dest: OUTDIR + RESOURCES + '/../config'
-                    }
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'src/recorder', src: ['CARoot.cer'], 
+                        dest: OUTDIR + RESOURCES + '/../..'
+                    },
                 ]
             },
             windows: {
@@ -193,6 +198,16 @@ module.exports = function(grunt) {
                     { 
                         expand: true, 
                         cwd: 'browser-extensions/ie/bin/Release', src: ['IEAddon.dll'], 
+                        dest: OUTDIR
+                    },
+                    { 
+                        expand: true, 
+                        src: ['package.json', 'LICENSE'], 
+                        dest: OUTDIR + RESOURCES + '/app' 
+                    },
+                    { 
+                        expand: true, 
+                        cwd: 'src', src: ['config/**'], 
                         dest: OUTDIR
                     }
                 ]
