@@ -95,7 +95,7 @@ module.exports = function(grunt) {
                 files: [
                     { 
                         expand: true, 
-                        cwd: 'src', src: ['**', '!config/**', '!oxygen-cli/**'], 
+                        cwd: 'src', src: ['**', '!config/**'], 
                         dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
@@ -180,11 +180,6 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'selenium/win', src: ['*.exe'], 
                         dest: OUTDIR + '/selenium'
-                    },
-                    { 
-                        expand: true, 
-                        cwd: 'oxygen-cli/win', src: ['node.exe', 'oxygen.cmd', 'selenium.cmd'], 
-                        dest: OUTDIR + '/oxygen-cli'
                     },
                     { 
                         expand: true, 
