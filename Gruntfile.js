@@ -12,7 +12,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-msbuild');
     grunt.loadNpmTasks('grunt-chmod');
-
+    grunt.loadNpmTasks('grunt-appdmg');
+    
     grunt.loadTasks('./tools/grunt-tasks');
 
     var defaultTasks = [];
@@ -45,7 +46,7 @@ module.exports = function(grunt) {
     } else if (process.platform === 'win32') {
         grunt.registerTask('dist', ['default', 'installer-win']);
     } else if (process.platform === 'darwin') {
-        grunt.registerTask('dist', ['default', 'compress:osx']);
+        grunt.registerTask('dist', ['default', 'appdmg']);
     }
 
     const OUTDIR = 'build';
@@ -225,24 +226,21 @@ module.exports = function(grunt) {
                         dest: 'oxygen-' + pkg.version + '-linux-x64'
                     }
                 ]
-            },
-            osx: {
-                options: {
-                    archive: 'dist/oxygen-' + pkg.version + '-osx-x64.zip',
-                    level: 9
-                },
-                files: [
-                    { 
-                        expand: true, 
-                        cwd: OUTDIR, src: ['**'], 
-                        dest: 'oxygen-' + pkg.version + '-osx-x64'
-                    },                  
-                    { 
-                        expand: true, 
-                        cwd: 'src/recorder', src: ['CARoot.cer'], 
-                        dest: 'oxygen-' + pkg.version + '-osx-x64'
-                    }
+            }
+        },
+        appdmg: {
+            options: {
+                title: 'Oxygen IDE ' + pkg.version,
+                icon: 'resources/app.icns',
+                background: 'resources/dmg-background.png',
+                window: { size: { width: 627, height: 440 }},
+                contents: [
+                    {x: 446, y: 210, type: 'link', path: '/Applications'},
+                    {x: 190, y: 210, type: 'file', path: path.join(OUTDIR, 'Oxygen.app')},
                 ]
+            },
+            target: {
+                dest:  'dist/oxygen-' + pkg.version + '-osx-x64.dmg'
             }
         },
         watch: {
