@@ -95,11 +95,6 @@
                     <RegistryValue Type="integer" Name="iexplore.exe" Value="0" />
                 </RegistryKey>
             </Component>
-            
-            <!-- Add oxygen-cli path to %PATH% -->
-            <Component Id="OxygenCLIPath" Guid="9462CB42-8A7F-4E64-BDF2-2AEED2E29018">
-                <Environment Id="OxygenCLIPath" Name="PATH" Action="set" Part="last" System="yes" Value="[INSTALLFOLDER]oxygen-cli" Permanent="no"/>
-            </Component>
         </Directory>
         
         <Feature Id="Common"
@@ -112,7 +107,6 @@
             <ComponentGroupRef Id="ApplicationFiles" />
             <ComponentRef Id="ApplicationShortcut" />
             <ComponentRef Id="ApplicationShortcutDesktop" />
-            <ComponentRef Id="OxygenCLIPath" />
         </Feature>
         
         <Feature Id="ChromeExt"
