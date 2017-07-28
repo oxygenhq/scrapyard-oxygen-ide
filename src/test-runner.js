@@ -21,7 +21,7 @@
   
         var self = this;
         // mockup test suite object from js fileCreatedDate
-        var oxutil = require('oxygen').util;
+        var oxutil = require('oxygen-cli').util;
         oxutil.generateTestCaseFromJSFile(scriptFilename, paramFilePath, paramMode)
             .then(function(tc) {
                 var testsuite = oxutil.generateTestSuiteForSingleTestCase(tc);
@@ -47,7 +47,7 @@
                     options.screenshots = 'never'; // FIXME: this option should be exposed in reports settings
                 }       
 
-                var oxRunner = self.oxRunner = new require('oxygen').Runner();
+                var oxRunner = self.oxRunner = new require('oxygen-cli').Runner();
                 oxRunner.on('breakpoint', function(breakpoint, testcase) {
                     currentWin.show();
                     editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
@@ -90,7 +90,7 @@
                     .then(function(tr) {
                         if (runtimeSettings.reportFolder != undefined && runtimeSettings.reportFolder !== '') {
                             logGeneral.add('INFO', 'Generating report...');
-                            var ReporterClass = require('oxygen').ReporterXLSX;
+                            var ReporterClass = require('oxygen-cli').ReporterXLSX;
                             var reporterOpt = {
                                 template: runtimeSettings.reportsTemplateFilePath,
                                 targetFolder: runtimeSettings.reportFolder
@@ -135,7 +135,7 @@
     
     function setConfigDirPath() {
         var path = require('path');
-        process.env.NODE_CONFIG_DIR = path.join( __dirname, '/node_modules/oxygen/config');
+        process.env.NODE_CONFIG_DIR = path.join( __dirname, '/node_modules/oxygen-cli/config');
     }
     /**
      * Set breakpoint.

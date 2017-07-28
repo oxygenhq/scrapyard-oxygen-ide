@@ -166,7 +166,7 @@ paneMain.appendChild(editor);
 
 // misc menu actions
 ipc.on('about', function () {
-    var oxygenVer = pkg.dependencies.oxygen.substring(pkg.dependencies.oxygen.indexOf('#') + 1);
+    var oxygenVer = pkg.dependencies['oxygen-cli'].substring(pkg.dependencies['oxygen-cli'].indexOf('#') + 1);
     alert(appFullName + '\n\n' +
             'Oxygen: ' + oxygenVer + '\n' +
             'Electron: ' + process.versions.electron + '\n' +
