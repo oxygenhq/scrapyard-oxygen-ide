@@ -253,8 +253,8 @@ module.exports = function(grunt) {
                 background: 'resources/dmg-background.png',
                 window: { size: { width: 627, height: 440 }},
                 contents: [
-                    {x: 446, y: 210, type: 'link', path: '/Applications'},
-                    {x: 190, y: 210, type: 'file', path: path.join(OUTDIR, 'Oxygen.app')},
+                    {x: 442, y: 210, type: 'link', path: '/Applications'},
+                    {x: 186, y: 210, type: 'file', path: path.join(OUTDIR, 'Oxygen.app')},
                 ]
             },
             target: {
