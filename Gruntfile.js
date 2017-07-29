@@ -117,7 +117,12 @@ module.exports = function(grunt) {
                                                                    '!*/node_modules/rx/ts/**',
                                                                    '!*/node_modules/nan/**']),
                         dest: OUTDIR + RESOURCES + '/app/node_modules' 
-                    }
+                    },
+                    { 
+                        expand: true, 
+                        src: ['package.json', 'LICENSE'], 
+                        dest: OUTDIR + RESOURCES + '/app' 
+                    },
                 ]
             },
             linux: {
@@ -136,11 +141,6 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'selenium/lin', src: ['chromedriver'], 
                         dest: OUTDIR + '/selenium'
-                    },
-                    { 
-                        expand: true, 
-                        src: ['package.json', 'LICENSE'], 
-                        dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
                         expand: true, 
@@ -199,11 +199,6 @@ module.exports = function(grunt) {
                         expand: true, 
                         cwd: 'browser-extensions/ie/bin/Release', src: ['IEAddon.dll'], 
                         dest: OUTDIR
-                    },
-                    { 
-                        expand: true, 
-                        src: ['package.json', 'LICENSE'], 
-                        dest: OUTDIR + RESOURCES + '/app' 
                     },
                     { 
                         expand: true, 
