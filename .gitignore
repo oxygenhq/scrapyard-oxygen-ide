@@ -3,6 +3,8 @@ browser-extensions/ie/bin/
 browser-extensions/ie/obj/
 browser-extensions/ie/*.csproj.user
 browser-extensions/ie/*.suo
+browser-extensions/ie/*.sln
+browser-extensions/ie/.vs
 build/*
 npm-debug.log
 dist/*
