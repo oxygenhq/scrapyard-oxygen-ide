@@ -22,9 +22,8 @@
         var self = this;
         // mockup test suite object from js fileCreatedDate
         var oxutil = require('oxygen-cli').util;
-        oxutil.generateTestCaseFromJSFile(scriptFilename, paramFilePath, paramMode)
-            .then(function(tc) {
-                var testsuite = oxutil.generateTestSuiteForSingleTestCase(tc);
+        oxutil.generateTestSuiteFromJSFile(scriptFilename, paramFilePath, paramMode)
+            .then(function(testsuite) {
                 testsuite.testcases[0].iterationCount = numOfIterations;
                 testsuite.testcases[0].ReopenBrowser = runtimeSettings.reinitBrowser;
                 

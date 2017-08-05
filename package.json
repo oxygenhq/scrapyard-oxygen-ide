@@ -25,7 +25,7 @@
     "doctrine": "1.5.0",
     "opn": "5.1.0",
     "adbkit": "2.10.0",
-    "oxygen-cli": "0.13.2"
+    "oxygen-cli": "0.14.0"
   },
   "repository": {
     "type": "git",
