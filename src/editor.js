@@ -73,7 +73,7 @@
             editor.getSession().on('change', function() {
                 var um = editor.getSession().getUndoManager();   
                 if (!um.isClean()) {
-                    toolbar.btnSave.enable();
+                    toggleSave(true);
                     toogleUndoRedo(um);
                 }
             });
@@ -361,7 +361,7 @@
                     }
                     // strip BOM before sending to the editor
                     editor.setContent(data.replace(/^\uFEFF/, ''));
-                    toolbar.btnSave.disable();
+                    toggleSave(false);
                 });
             }
         };
@@ -373,7 +373,7 @@
             if (editor.currentFilename) {
                 fs.writeFile(editor.currentFilename, editor.getContent(), function(err) {
                     if (!err) {
-                        toolbar.btnSave.disable();
+                        toggleSave(false);
                         remote.getCurrentWindow().menu.enable('Save', false);
                     }
                 });
@@ -395,7 +395,7 @@
                 editor.currentFilename = fileName;
                 fs.writeFile(fileName, editor.getContent(), function(err) {
                     if (!err) {
-                        toolbar.btnSave.disable();
+                        toggleSave(false);
                         remote.getCurrentWindow().menu.enable('Save', false);
                     }
                 });
@@ -448,6 +448,16 @@
             } else {
                 toolbar.btnRedo.disable();
             }
+        }
+
+        function toggleSave(enable) {
+            if (enable) {
+                toolbar.btnSave.enable();
+            } else {
+                toolbar.btnSave.disable();
+            }
+            var menu = remote.getCurrentWindow().menu;
+            menu.enable('Save', enable);
         }
         
         function toogleCutCopy(enable) {
