@@ -1,7 +1,12 @@
 # CHANGELOG
 
+## v0.24.0 (2017-08-06)
+* Update oxygen-cli@0.14.0
+* Add updates checker.
+* Fix save option not being enabled in the menu on content change.
+
 ## v0.23.0 (2017-07-28)
-* decoupled oxygen-cli from the IDE
-* distribute OS X build as a DMG
-* fix selenium failing to start on Linux/OS X under certain conditions.
-* require Mono v4.8 on Linux/OS X
+* Decoupled oxygen-cli from the IDE.
+* Distribute OS X build as a DMG.
+* Fix selenium failing to start on Linux/OS X under certain conditions.
+* Require Mono v4.8 on Linux/OS X.
