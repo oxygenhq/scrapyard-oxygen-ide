@@ -159,6 +159,10 @@ app.on('ready', function() {
             {
                 label: '&About',
                 click: function() { mainWindow.send('about'); }
+            },
+            {
+                label: 'Check for &Updates...',
+                click: function() { mainWindow.send('check-updates'); }
             }
         ]
     });

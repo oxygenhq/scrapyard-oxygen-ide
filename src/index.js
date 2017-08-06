@@ -174,6 +174,54 @@ ipc.on('about', function () {
             ); 
 });
 
+ipc.on('check-updates', function () {
+    checkForUpdates(true);
+});
+
+function checkForUpdates(dialogOnNotFound) {
+    new require('./updates-checker')(pkg.version, function(latest, updateAvailable, downloadUrl) {
+        if (updateAvailable) {
+            remote.dialog.showMessageBox(currentWin, 
+            { 
+                type: 'question',
+                buttons: ['Download', 'Remind Me Later'],
+                cancelId: 1,
+                title: 'Update Available',
+                message: 'An update for ' + pkg.productName + ' is available: ' + latest,
+                noLink: true,
+                //checkboxLabel: "Don't check for new versions on start"
+            },
+            function (response, dontCheck) {
+                if (response === 0) {
+                    require('opn')(downloadUrl);
+                }
+
+                // TODO: requires electron update
+                /*var cfg = require('../../config/default.json');
+                cfg['dont-check-updates-on-start'] = dontCheck;
+                fs.writeFile(path.resolve(__dirname, '../../config/default.json'), 
+                    JSON.stringify(cfg, null, 2), 
+                    function (err) {
+                        if (err) {  
+                            console.error(err);
+                        }
+                    });*/
+            });
+        } else if (dialogOnNotFound) {
+            remote.dialog.showMessageBox(currentWin, 
+            { 
+                type: 'info',
+                buttons: ['Ok'],
+                cancelId: 1,
+                title: 'No Updates Found',
+                message: 'No updates found.',
+                noLink: true
+            });
+        }
+    });
+}
+checkForUpdates(false);
+
 // apidoc div
 var apiDoc = this.el = document.createElement('div');
 apiDoc.setAttribute('id', 'apidoc');
