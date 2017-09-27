@@ -14,8 +14,14 @@ if (process.platform !== 'win32' && process.arch === 'ia32') {
     process.exit(1);
 }
 
-var arch = process.argv.length == 3 && process.argv[2].indexOf('--arch=') === 0 ? 
-            process.argv[2].substring('--arch='.length) : 'x64';
+var arch;
+if (process.argv.length == 4 && process.argv[3].indexOf('--arch=') === 0) {         // build dist --arch=
+    arch = process.argv[3].substring('--arch='.length);
+} else if (process.argv.length == 3 && process.argv[2].indexOf('--arch=') === 0) {  // build --arch=
+    arch = process.argv[2].substring('--arch='.length);
+} else {
+    arch = 'x64';
+}
 
 if (arch !== 'x64' && arch !== 'ia32') {
     printErr('Invalid architecture specified. Allowed architectures: x64 and ia32');
@@ -32,7 +38,7 @@ try {
                     maxBuffer: 10 * 1024 * 1024
                 });
     cp.execFileSync(path.join(__dirname, '..', 'node_modules', '.bin', 'electron-rebuild' + (process.platform === 'win32' ? '.cmd' : '')),
-                ['-v', ELECTRON_VER, '-t', 'prod'], 
+                ['-v', ELECTRON_VER, '-a', arch, '-t', 'prod', '-f'], 
                 {
                     env: process.env,
                     stdio: ['inherit', 'inherit', 'inherit'],
