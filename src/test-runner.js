@@ -49,7 +49,7 @@
                 var oxRunner = self.oxRunner = new require('oxygen-cli').Runner();
                 oxRunner.on('breakpoint', function(breakpoint, testcase) {
                     currentWin.show();
-                    editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset() + 1);
+                    editor.setBpHighlight(breakpoint.body.sourceLine - oxRunner.getScriptContentLineOffset + 1);
                     toolbar.btnStart.enable();
                 });
                 oxRunner.on('test-error', function(err) {
