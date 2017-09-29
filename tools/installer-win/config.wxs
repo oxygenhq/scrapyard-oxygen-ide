@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
-     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension" 
-     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
      
     <?define Vendor = "CloudBeat" ?>
     <?if $(sys.BUILDARCH) = x64 ?>
@@ -155,11 +154,6 @@
         <Icon Id="app.ico" SourceFile="..\..\resources\app.ico" />
         <Property Id="ARPPRODUCTICON" Value="app.ico" />
         <Property Id="MSIFASTINSTALL" Value="3" />
-        
-        <PropertyRef Id="NETFRAMEWORK45" />
-        <Condition Message="This application requires .NET Framework 4.5 or greater. Please install the .NET Framework then run this installer again.">
-            <![CDATA[Installed OR NETFRAMEWORK45]]>
-        </Condition>
         
         <InstallExecuteSequence>
             <Custom Action="InstallCertificates" After="InstallFiles"><![CDATA[&IEExt=3 OR &ChromeExt=3]]></Custom>
