@@ -1,5 +1,11 @@
 # CHANGELOG
 
+
+## v0.26.0 (2017-09-29)
+* Update oxygen-cli@0.18.0
+* Update ChromeDriver.
+* Fix 32-bit Windows build.
+
 ## v0.25.0 (2017-09-02)
 * Update oxygen-cli@0.16.0
 
