@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## v0.27.0 (2017-10-11)
+* Update oxygen-cli@0.19.0
 
 ## v0.26.0 (2017-09-29)
 * Update oxygen-cli@0.18.0
