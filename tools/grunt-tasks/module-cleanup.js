@@ -8,14 +8,14 @@ module.exports = function(grunt) {
 
         var mc = new modclean.ModClean({
             cwd: path.join(process.cwd(), 'node_modules'),
-            patterns: [modclean.patterns.safe, 
-                        'doc', 'docs', 'documentation', 
-                        'coverage', 
-                        'browser', 
-                        'authors.txt',
-                        'gruntfile.js',
-                        'quick-test.js', 'build.js',
-                        '*.html', '*.htm', '*.png', '*.min.js', '*.map'],
+            patterns: ['default:safe'],
+            additionalPatterns: ['doc', 'docs', 'documentation', 
+                                'coverage', 
+                                'browser', 
+                                'authors.txt',
+                                'gruntfile.js',
+                                'quick-test.js', 'build.js',
+                                '*.html', '*.htm', '*.png', '*.min.js', '*.map'],
             test: true
         }, function(err, results) {
             if (err) {

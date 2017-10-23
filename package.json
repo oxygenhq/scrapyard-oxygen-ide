@@ -15,7 +15,7 @@
     "grunt-eslint": "20.1.0",
     "grunt-msbuild": "0.4.0",
     "grunt-chmod": "1.1.1",
-    "modclean": "1.2.7",
+    "modclean": "2.1.0",
     "electron-rebuild": "1.5.11"
   },
   "optionalDependencies": {
