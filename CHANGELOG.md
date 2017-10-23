@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.28.0 (2017-10-23)
+* Update oxygen-cli@0.20.0
+
 ## v0.27.1 (2017-10-16)
 * Update oxygen-cli@0.19.5
 * Fix test recording over HTTPS in Chrome v58+.
