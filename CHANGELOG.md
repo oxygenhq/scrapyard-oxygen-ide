@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.29.0 (2017-11-15)
+* Update oxygen-cli@0.22.0
+* Update ChromeDriver@2.33
+
 ## v0.28.0 (2017-10-23)
 * Update oxygen-cli@0.20.0
 
