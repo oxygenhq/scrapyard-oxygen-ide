@@ -33,6 +33,7 @@
     var Range, langTools; // need to be global in order to prevent GC
     
     var remote = require('electron').remote;
+    var ipcRenderer = require('electron').ipcRenderer;
     require('./ace/ace');
     require('./ace/ext-language_tools');
 
@@ -336,6 +337,8 @@
         Editor.prototype.new = function() {
             editor.setContent('');
             editor.currentFilename = null;
+            // update main window title
+            ipcRenderer.send('window.title:change', null);
         };
 
         /**
@@ -355,6 +358,8 @@
             );
             if (file) {
                 editor.currentFilename = file[0];
+                // update main window title
+                ipcRenderer.send('window.title:change', editor.currentFilename);
                 fs.readFile(file[0], 'utf8', function (err,data) {
                     if (err) {
                         return console.log(err);
@@ -393,6 +398,8 @@
             );
             if (fileName) {
                 editor.currentFilename = fileName;
+                // update main window title
+                ipcRenderer.send('window.title:change', editor.currentFilename);
                 fs.writeFile(fileName, editor.getContent(), function(err) {
                     if (!err) {
                         toggleSave(false);

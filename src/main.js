@@ -1,15 +1,36 @@
-const {app, globalShortcut, BrowserWindow, Menu, MenuItem} = require('electron');
+const {app, globalShortcut, BrowserWindow, Menu, MenuItem, ipcMain} = require('electron');
+const os = require('os');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
+var titlePrefix = null;
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
     app.quit();
 });
 
+// Listen for sync message from renderer process
+ipcMain.on('window.title:change', (event, title) => {  
+    // do not change window title for Windows 7 and below
+    if (os.platform() === 'win32' && !isWindows10()) {
+        event.sender.send('ignore');
+        return;  
+    }
+    if (mainWindow && titlePrefix) {
+        if (title) {
+            mainWindow.setTitle(title + ' - ' + titlePrefix);
+        }
+        else {
+            mainWindow.setTitle(titlePrefix);
+        }      
+        event.sender.send('ok');  
+    }
+});
+
 app.on('ready', function() {
+    titlePrefix = app.getName() + ' ' + app.getVersion();
     var options = {
         width: 800, 
         height: 600, 
@@ -23,6 +44,7 @@ app.on('ready', function() {
     mainWindow.focus();
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
+        ipcMain.removeAllListeners('window.title:change');
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
@@ -195,3 +217,14 @@ app.on('ready', function() {
         menuItemsMap[submenuLabel].checked = checked;
     };
 });
+
+function isWindows10() {
+    var release = os.release();
+    if (release) {
+        var version = release.split('.');
+        if (version.length > 0) {
+            return true;
+        }
+    }
+    return false;
+}
