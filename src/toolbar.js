@@ -207,6 +207,9 @@
                 this.parentElement.btnRecord.deactivate('tb-record');  
                 this.parentElement.btnRecord.activate('tb-record-red');  
                 this.recorder = new Recorder();
+                if (editor.getContent().indexOf('web.init()') === -1) {
+                    editor.appendText('web.init();\n'); 
+                }
             }
         };
        
