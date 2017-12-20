@@ -63,9 +63,14 @@
                     for (var tag of this.tags)
                     {
                         if (tag.title === 'return') {
+                            var type = doctrine.type.stringify(tag.type, {compact:true});
+                            type = type.replace(/<|>/ig, function(m){
+                                return '&' + (m == '>' ? 'g' : 'l') + 't;';
+                            });
+
                             return { 
                                 description: tag.description.replace(/(\r\n|\n)/gm,''), 
-                                type: tag.type.name 
+                                type: type
                             };
                         }
                     }
@@ -75,18 +80,23 @@
                     for (var tag of this.tags)
                     {
                         if (tag.title === 'param') {
-                             
-                            var type;
-                            if (tag.type.type === 'OptionalType') {
-                                type = tag.type.expression.name;
+                            var optional;
+                            if (tag.type.type === 'OptionalType' || tag.type.type === 'RestType') {
+                                optional = true;
                             } else {
-                                type = tag.type.name;
+                                optional = false;
                             }
+
+                            var type = doctrine.type.stringify(tag.type, {compact:true});
+                            type = type.replace(/<|>/ig, function(m){
+                                return '&' + (m == '>' ? 'g' : 'l') + 't;';
+                            });
                             
                             params.push({ 
                                 description: tag.description.replace(/(\r\n|\n)/gm,''), 
                                 name: tag.name, 
-                                type: type 
+                                type: type,
+                                optional: optional
                             });
                         }
                     }
