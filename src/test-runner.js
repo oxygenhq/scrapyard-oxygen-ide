@@ -29,7 +29,7 @@
                 
                 // prepare launch options
                 var options = {};
-                options.debugPort = dbgPort;
+                options.debugPortIde = dbgPort;
                 options.allowRequire = true;    // allow using require by default
                 // prepare module parameters
                 var caps = {};
