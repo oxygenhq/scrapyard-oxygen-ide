@@ -6,6 +6,7 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var dns = require('dns');
 
 (function() {
     module.exports = Recorder;
@@ -29,8 +30,8 @@ var path = require('path');
         }
 
         this.httpSrv = http.createServer(onRequest);
-        this.httpSrv.listen(PORT_HTTP, 'localhost', function(){ });
-        
+        this.httpSrv.on('error', (err) => {console.log("Unable to bind recorder's HTTP listener. " + err)});
+
         var options = {
             key: fs.readFileSync(path.resolve(__dirname, RECORDER_DIR + 'cloudbeat-key.pem')),
             cert: fs.readFileSync(path.resolve(__dirname, RECORDER_DIR + 'cloudbeat-cert.pem')),
@@ -38,8 +39,16 @@ var path = require('path');
             rejectUnauthorized: false
         };
         this.httpsSrv = https.createServer(options, onRequest);
-        this.httpsSrv.listen(PORT_HTTPS, 'localhost', function(){ });
-        
+        this.httpSrv.on('error', (err) => {console.log("Unable to bind recorder's HTTPS listener " + err)});
+
+        // 'localhost' might be unavailable in certain situations
+        // check if it's resolvable and if not use 127.0.0.1
+        dns.lookup('localhost', (err, addr, family) => {
+            var hostname = !err ? 'localhost' : '127.0.0.1';
+            this.httpSrv.listen(PORT_HTTP, hostname, function(){ });
+            this.httpsSrv.listen(PORT_HTTPS, hostname, function(){ });
+        });
+
         var self = this;
         function onRequest(request, response) {
             response.setHeader('Access-Control-Allow-Origin', '*');
