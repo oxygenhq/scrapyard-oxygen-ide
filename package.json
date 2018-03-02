@@ -1,7 +1,7 @@
 {
   "name" : "oxygenide",
   "productName" : "Oxygen IDE",
-  "version" : "0.30.1",
+  "version" : "0.31.0",
   "description": "IDE for Oxygen automation framework.",
   "main" : "main.js",
   "devDependencies": {

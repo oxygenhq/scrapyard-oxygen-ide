@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.31.0 (2018-03-02)
+* Update oxygen-cli@0.27.0
+* Update ChromeDriver@2.35
+* Fix intellisense issues with complex types.
+* Fix recorder not working when localhost is not resolvable.
+
 ## v0.30.1 (2017-12-16)
 * Update oxygen-cli@0.23.0
 
