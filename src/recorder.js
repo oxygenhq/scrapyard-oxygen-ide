@@ -41,10 +41,20 @@ var dns = require('dns');
         this.httpsSrv = https.createServer(options, onRequest);
         this.httpSrv.on('error', (err) => {console.log("Unable to bind recorder's HTTPS listener " + err)});
 
+        // here be horrors...
         // 'localhost' might be unavailable in certain situations
-        // check if it's resolvable and if not use 127.0.0.1
+        // TODO: figure out a proper solution for this since this doesn't support IPv6
+        //       and we can't just bind on 0.0.0.0 for security reasons
+        //       and... browser extensions use 'localhost' to connect
         dns.lookup('localhost', (err, addr, family) => {
-            var hostname = !err ? 'localhost' : '127.0.0.1';
+            var hostname;
+            if (!err) { // not resolvable - use IPv4 loopback
+                hostname = '127.0.0.1';
+            } else if (family == 4 && addr !== '127.0.0.1') { // resolves to something other than 127.0.0.1
+                hostname = '127.0.0.1';
+            } else {
+                hostname = 'localhost';
+            }
             this.httpSrv.listen(PORT_HTTP, hostname, function(){ });
             this.httpsSrv.listen(PORT_HTTPS, hostname, function(){ });
         });
