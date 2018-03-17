@@ -239,9 +239,7 @@
             if (process.platform === 'win32') {
                 browsers.push(['Internet Explorer', 'ie']);
             }
-            // Selenium's firefox driver doesn't work with latest firefox versions.
-            // Need to migrate to Marionette driver.
-            //browsers.push(['Firefox', 'firefox']); 
+            browsers.push(['Firefox', 'firefox']); 
             for (var browser of browsers) {
                 var opt = document.createElement('option'); 
                 opt.text = browser[0];

@@ -379,16 +379,18 @@ function globalSettingsSave() {
 // kill any hanging selenium process (sometimes it doesn't die properly when exiting the IDE)
 // TODO: we need to remove Selenium completely.
 if (process.platform === 'win32') {
-    cp.execSync('wmic process where commandline="java -jar -Dwebdriver.ie.driver=IEDriverServer_x86.exe -Dwebdriver.chrome.driver=chromedriver.exe selenium-server-standalone-3.4.0.jar -port 44444" Call Terminate', {stdio: 'pipe'});
+    cp.execSync('wmic process where commandline="java -jar -Dwebdriver.ie.driver=IEDriverServer_x86.exe -Dwebdriver.chrome.driver=chromedriver.exe -Dwebdriver.gecko.driver=geckodriver.exe selenium-server-standalone-3.4.0.jar -port 44444" Call Terminate', {stdio: 'pipe'});
 } else {
     try{
-        cp.execSync('pkill -f "/usr/bin/java -jar -Dwebdriver.chrome.driver=chromedriver selenium-server-standalone-3.4.0.jar -port 44444"', {stdio: 'pipe'});
+        cp.execSync('pkill -f "/usr/bin/java -jar -Dwebdriver.chrome.driver=chromedriver -Dwebdriver.gecko.driver=geckodriver selenium-server-standalone-3.4.0.jar -port 44444"', {stdio: 'pipe'});
     } catch (e) {   // ignore. pkill returns 1 status if process doesn't exist
     }
 }
  
 // initialize Selenium server
 var selArgs = [selSettings.jar].concat(selSettings.args);
+var geckodriver = (process.platform === 'win32' ? 'geckodriver.exe' : 'geckodriver');
+selArgs.unshift('-Dwebdriver.gecko.driver=' + geckodriver);
 var chromedriver = (process.platform === 'win32' ? 'chromedriver.exe' : 'chromedriver');
 selArgs.unshift('-Dwebdriver.chrome.driver=' + chromedriver);
 if (process.platform === 'win32') {
