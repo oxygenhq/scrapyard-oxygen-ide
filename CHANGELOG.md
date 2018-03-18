@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.32.0 (2018-03-19)
+* Update oxygen-cli@0.28.0
+* Update ChromeDriver@2.37
+* Add Firefox support.
+* Add option for delaying the command execution.
+
 ## v0.31.0 (2018-03-02)
 * Update oxygen-cli@0.27.0
 * Update ChromeDriver@2.35
