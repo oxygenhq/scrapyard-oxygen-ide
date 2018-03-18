@@ -32,7 +32,7 @@ ipcMain.on('window.title:change', (event, title) => {
 app.on('ready', function() {
     titlePrefix = app.getName() + ' ' + app.getVersion();
     var options = {
-        width: 800, 
+        width: 860, 
         height: 600, 
         title: app.getName() + ' ' + app.getVersion() 
     };

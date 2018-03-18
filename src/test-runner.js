@@ -13,6 +13,7 @@
         
         // retrieve test settings from the UI
         var browserName = toolbar.targetDevice;
+        var delay = toolbar.delay;
         var modeMobile = toolbar.modeMob;
         var paramFilePath = runtimeSettings.paramsFilePath;
         var numOfIterations = runtimeSettings.iterations;
@@ -44,6 +45,9 @@
                     options.initDriver = true;
                     options.reopenBrowser = (runtimeSettings.reinitBrowser || false);
                     options.screenshots = 'never'; // FIXME: this option should be exposed in reports settings
+                    if (delay) {
+                        options.delay = delay;
+                    }
                 }       
 
                 var oxRunner = self.oxRunner = new require('oxygen-cli').Runner();

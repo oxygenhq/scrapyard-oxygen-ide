@@ -127,6 +127,35 @@
             var btnSettings = this.btnSettings = new ToolbarButton('tb-settings', false, false, 'Test Settings');
             this.add(btnSettings);
             btnSettings.setClickHandler(this.settings);
+            // separator
+            this.add(new ToolbarSeparator());
+            // delay field
+            var delayTxt = document.createElement('span');
+            delayTxt.setAttribute('style', 'float:left;');
+            delayTxt.innerHTML = 'Delay';
+            var delay = document.createElement('input');
+            delay.setAttribute('type', 'text');
+            delay.setAttribute('style', 'float:left;');
+            delay.setAttribute('size', '1');
+            delay.setAttribute('id', 'delay');
+            delay.onchange = function(e) {
+                var val = e.currentTarget.value;
+                if (val == '') {
+                    toolbar.delay = null;
+                    return;
+                }
+                var n = Math.floor(Number(val));
+                if (n !== Infinity && String(n) === val && n > 0) {
+                    toolbar.delay = val;
+                } else if (n !== Infinity && String(n) === val && n <= 0) {
+                    toolbar.delay = null;
+                } else {
+                    toolbar.delay = null;
+                    alert('"Delay" should be a number specifying the number of seconds to delay between each command.');
+                }
+            };
+            this.appendChild(delayTxt);
+            this.appendChild(delay);
             // record button
             var btnRecord= this.btnRecord = new ToolbarButton('tb-record', false, true);
             this.add(btnRecord);
